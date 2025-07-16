@@ -1,12 +1,13 @@
 import React from "react";
 import { Nav } from "./Nav";
 import Link from "next/link";
-import GlowEllipse from "./GlowEllipse";
+import GlowEclipse from "./GlowEclipse";
 const HeroSection = () => {
   return (
-    <div className="flex flex-col  bg-gradient-radial-to-bottom h-screen px-[64px] py-6  relative ">
+    <div className="flex flex-col  bg-gradient-radial-to-bottom h-screen px-[64px] py-6   ">
       <Nav />
       <main className="flex flex-col z-10 items-center justify-center gap-12 px-6 py-26 lg:py-54 text-center w-full">
+        {/* Headings */}
         <div className="flex flex-col gap-[24px]">
           <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight max-w-6xl ">
             Supercharge Your Brand With <br className="hidden sm:block" />
@@ -25,6 +26,7 @@ const HeroSection = () => {
             Get Started
           </button>
         </Link>
+        <GlowEclipse />
       </main>
     </div>
   );

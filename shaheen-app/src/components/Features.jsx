@@ -1,4 +1,5 @@
 import { Calendar } from "lucide-react";
+import FeaturesCard from "./FeaturesCard";
 
 const FeaturesSection = () => {
   // Feature data - can be easily modified or moved to props
@@ -30,7 +31,7 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <section className="bg-black text-white py-16 px-4 min-h-screen flex items-center">
+    <section className=" text-white py-16 px-4 min-h-screen flex items-center ">
       <div className="max-w-7xl mx-auto w-full">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -45,25 +46,7 @@ const FeaturesSection = () => {
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <div 
-              key={index}
-              className="bg-black border border-purple-500/30 rounded-2xl p-8 hover:border-purple-500/50 transition-colors duration-300"
-            >
-              {/* Calendar Icon */}
-              <div className="mb-6">
-                <Calendar className="w-12 h-12 text-white" strokeWidth={1.5} />
-              </div>
-              
-              {/* Feature Title */}
-              <h3 className="text-2xl font-semibold mb-4 text-white">
-                {feature.title}
-              </h3>
-              
-              {/* Feature Description */}
-              <p className="text-gray-300 leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
+           <FeaturesCard key={index} icon={<Calendar className="w-12 h-12 text-white" strokeWidth={1.5} />} title={feature.title} description={feature.description} />
           ))}
         </div>
       </div>

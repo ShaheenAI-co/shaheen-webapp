@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
       <body
         className={`inter.className font-normal antialiased`}
       >
-        <div className="max-sm:px-[28px] ">{children}</div>
+        {children}
       </body>
     </html>
   );

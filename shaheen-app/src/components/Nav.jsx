@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 export const Nav = () => {
   return (
-    <nav className="flex items-center justify-between ">
+    <nav className="flex items-center justify-between">
       {/* Logo */}
       <div className="flex items-center space-x-2">
         <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
@@ -12,19 +12,19 @@ export const Nav = () => {
       </div>
 
       {/* Navigation Links - Hidden on mobile */}
-      <div className="hidden lg:flex items-center space-x-8">
-        <a href="#" className="hover:text-gray-300 transition-colors">
+      <div className="hidden text-lg lg:flex items-center space-x-8">
+        <Link href="#" className="hover:text-gray-300 transition-colors">
           Home
-        </a>
-        <a href="#" className="hover:text-gray-300 transition-colors">
+        </Link>
+        <Link href="#" className="hover:text-gray-300 transition-colors">
           Pricing
-        </a>
-        <a href="#" className="hover:text-gray-300 transition-colors">
+        </Link>
+        <Link href="#" className="hover:text-gray-300 transition-colors">
           features
-        </a>
-        <a href="#" className="hover:text-gray-300 transition-colors">
+        </Link>
+        <Link href="#" className="hover:text-gray-300 transition-colors">
           About
-        </a>
+        </Link>
       </div>
 
       {/* Right side CTA's */}

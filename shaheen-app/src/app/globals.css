@@ -29,8 +29,36 @@ body {
   background: linear-gradient(
     to bottom,
     #000000 0%,
-    #200d42 26%,
-    #4f21a1 60%,
+    #200d42 36%,
+    #4f21a1 63%,
     #8979f5 90%
   );
+}
+
+.glow-ellipse {
+  border-radius: 50%;
+  box-shadow: -20px 20px 147px 0px #8451c5 inset;
+  -webkit-box-shadow: -20px 20px 147px 0px #8451c5 inset;
+  -moz-box-shadow: -20px 20px 147px 0px #8451c5 inset;
+  border: 2px solid #b48cde;
+}
+
+/* Glow Eclipse Load Animation */
+@keyframes glowEclipseLoad {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+    filter: blur(40px);
+  }
+  
+  
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+  }
+}
+
+.animate-glow-eclipse {
+  animation: glowEclipseLoad 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
