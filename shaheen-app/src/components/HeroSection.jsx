@@ -22,7 +22,7 @@ const HeroSection = () => {
 
         {/* Call to Action Button */}
         <Link href="/login">
-          <button className="bg-white text-black hover:bg-gray-100 transition-colors px-4 py-2 rounded-md text-lg font-medium">
+          <button className="bg-white text-black cursor-pointer hover:bg-gray-100 transition-colors px-4 py-2 rounded-md text-lg font-medium">
             Get Started
           </button>
         </Link>
