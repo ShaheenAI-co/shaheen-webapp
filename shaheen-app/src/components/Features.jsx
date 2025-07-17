@@ -1,4 +1,4 @@
-import { Calendar } from "lucide-react";
+
 import FeaturesCard from "./FeaturesCard";
 
 const FeaturesSection = () => {
