@@ -1,0 +1,19 @@
+{
+  "Logo": {
+    "name": "Shaheen AI"
+  },
+  "Heading": {
+    "title": "Supercharge your brand with AI powered content creation ",
+    "subhead": "Everything you need to grow online designed , scheduled and delivered by AI"
+  },
+  "NavLinks": {
+    "l-1": "Pricing",
+    "l-2": "Features",
+    "l-3": "About"
+  },
+  "NavCTA": {
+    "login" : "login",
+    "try" : "Try for free"
+  }
+  
+}
