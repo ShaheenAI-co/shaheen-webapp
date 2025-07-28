@@ -1,0 +1,29 @@
+{
+  "Logo": {
+    "name": "Shaheen AI"
+  },
+  "Heading": {
+    "title": "Say goodbye to social media Stress ",
+    "title2": "let Shaheen AI handle it all",
+    "subhead": "AI that creates and schedules engaging post for you"
+  },
+  "FormHeading": {
+    "title": "Join the waitlist",
+    "description": "Get early access to AI generated content and automated scheduling before anyone else"
+  },
+
+  "FormInput": {
+    "Email": "Email Address",
+    "Phone": "Phone No"
+  },
+  "FormPlaceholder": {
+    "Email": " you@gmail.com",
+    "Phone": "Enter Phone number"
+  },
+  "FormBtn": {
+    "title": "Join the waitlist"
+  },
+  "FormConfrmMsg": {
+    "msg": "Thank you for Joining , We will notify you when we launch "
+  }
+}

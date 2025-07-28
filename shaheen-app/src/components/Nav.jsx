@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import Logo from "./Logo";
 import { Button } from "./ui/button";
-import NavLinks from "./NavLinks";
+import NavLinks from "./NavLinks.jsx";
 import NavCTA from "./NavCTA";
 import { usePathname } from "next/navigation";
 

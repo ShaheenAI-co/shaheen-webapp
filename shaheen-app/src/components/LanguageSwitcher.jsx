@@ -29,7 +29,7 @@ const LanguageSwitch = () => {
   }, [pathname]);
 
   return (
-    <div className="hidden md:block outline-none focus:outline-none">
+    <div className="hidden md:block outline-none pl-2 focus:outline-none">
       <DropdownMenu>
         <DropdownMenuTrigger className = 'p-2'>
           <Globe strokeWidth="1px" size="20px" />
