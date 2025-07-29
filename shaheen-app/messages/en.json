@@ -14,6 +14,10 @@
   "NavCTA": {
     "login" : "login",
     "try" : "Try for free"
+  },
+  "SlideText": {
+    "phrase-1": "Elevate your brand",
+    "phrase-2": "Increase your sales"
   }
   
 }

@@ -11,23 +11,23 @@ const NavLinks = () => {
   const locale = pathname.split("/")[1] || "en"; // check the first part after /
   const isArabic = locale === "ar";
   return (
-    <div className="hidden text-lg lg:flex flex-1 justify-center  items-center space-x-8">
+    <div className="hidden text-lg lg:flex flex-1 justify-center  items-center gap-18">
       <Link href="#">
-        <Button variant="link" className="text-white font-light cursor-pointer">
+        <button variant="link" className="text-white font-light cursor-pointer">
           {t("l-2")}
-        </Button>
+        </button>
       </Link>
 
       <Link href="#">
-        <Button variant="link" className="text-white font-light cursor-pointer">
+        <button variant="link" className="text-white font-light cursor-pointer">
           {t("l-3")}
-        </Button>
+        </button>
       </Link>
 
       <Link href="#">
-        <Button variant="link" className="text-white font-light cursor-pointer">
+        <button variant="link" className="text-white font-light cursor-pointer">
           {t("l-1")}
-        </Button>
+        </button>
       </Link>
     </div>
   );

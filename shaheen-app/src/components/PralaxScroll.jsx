@@ -17,9 +17,9 @@ export default function ParallaxSection() {
   });
 
   return (
-    <main className=" flex items-center h-screen overflow-hidden">
+    <main className=" flex items-start md:items-center   overflow-hidden ">
       {/* Spacer div for scroll distance */}
-      <div className="h-[100vh]" />
+      {/* <div className="h-[100vh]" /> */}
 
       {/* Main parallax container */}
       <div ref={container}>
@@ -44,7 +44,7 @@ export default function ParallaxSection() {
       </div>
 
       {/* Another spacer for more scroll distance */}
-      <div className="h-[100vh]" />
+      {/* <div className="h-[100vh]" /> */}
     </main>
   );
 }
