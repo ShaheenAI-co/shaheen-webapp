@@ -1,19 +1,27 @@
+"use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import LanguageSwitch from "@/components/LanguageSwitcher";
+import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 
 const SignupForm = () => {
+  const t = useTranslations("Signup");
+  const pathname = usePathname(); // give you the url path
+  const locale = pathname.split("/")[1] || "en"; // check the first part after /
+  const isArabic = locale === "ar";
   return (
     <div className="flex-1 flex items-center justify-center p-4 md:p-8">
       <div className="w-full max-w-md space-y-4 md:space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-2xl md:text-3xl font-bold text-white">
-            Create An Account
+            {t("Heading")}
           </h2>
           <p className="text-gray-400 text-sm md:text-base">
-            enter your personal details to create an account
+            {t("Subheading")}
           </p>
         </div>
 
@@ -50,79 +58,89 @@ const SignupForm = () => {
               <span className="w-full border-t border-white" />
             </div>
             <div className="relative flex justify-center text-xs ">
-              <span className="bg-black px-2 text-gray-400">Or</span>
+              <span className="bg-black px-2 text-gray-400">
+                {t("seperatorText")}
+              </span>
             </div>
           </div>
 
           {/* Name Fields */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+          <div
+            dir={isArabic ? "rtl" : "ltr"}
+            className={`grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 ${isArabic ? "rtl" : ""}`}
+          >
             <div className="space-y-2">
               <Label
                 htmlFor="firstName"
                 className="text-white text-sm md:text-base"
               >
-                First Name
+                {t("FName")}
               </Label>
               <Input
                 id="firstName"
-                placeholder="eg. Ahmad"
-                className="bg-[#1A1A1A] text-base  text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 md:text-base"
+                placeholder={t("FNamePlaceholder")}
+                className={`bg-[#1A1A1A] h-10 md:h-12 text-base md:text-base text-white border-none placeholder:text-[#615F5F] ${
+                  isArabic ? "text-right placeholder:text-right" : ""
+                }`}
               />
             </div>
+
             <div className="space-y-2">
               <Label
                 htmlFor="lastName"
                 className="text-white text-sm md:text-base"
               >
-                Last Name
+                {t("LName")}
               </Label>
               <Input
                 id="lastName"
-                placeholder="eg. Mohamed"
-                className="bg-[#1A1A1A]  text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base"
+                placeholder={t("LNamePlaceholder")}
+                className={`bg-[#1A1A1A] h-10 md:h-12 text-base md:text-base text-white border-none placeholder:text-[#615F5F] ${
+                  isArabic ? "text-right placeholder:text-right" : ""
+                }`}
               />
             </div>
           </div>
 
           {/* Email Field */}
-          <div className="space-y-2 mt-6">
+          <div className="space-y-2 mt-6" dir={isArabic ? "rtl" : "ltr"}>
             <Label htmlFor="email" className="text-white text-sm md:text-base">
-              Email
+              {t("Email")}
             </Label>
             <Input
               id="email"
               type="email"
-              placeholder="eg. unknow@gmail.com"
+              placeholder={t("EmailPlaceholder")}
               className="bg-[#1A1A1A]  text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base"
             />
           </div>
 
           {/* Password Field */}
-          <div className="space-y-2 mb-6">
+          <div className="space-y-2 mb-6" dir={isArabic ? "rtl" : "ltr"}>
             <Label
               htmlFor="password"
               className="text-white text-sm md:text-base"
             >
-              Password
+              {t("Password")}
             </Label>
             <Input
               id="password"
               type="password"
-              placeholder="must be 8 characters"
+              placeholder={t("PasswordPlaceholder")}
               className="bg-[#1A1A1A]  text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base"
             />
           </div>
 
           {/* Sign Up Button */}
           <Button className="w-full bg-white text-black cursor-pointer hover:bg-white h-10 md:h-12 font-semibold text-sm md:text-base">
-            Sign Up
+            {t("SignupBtn")}
           </Button>
 
           {/* Login Link */}
           <p className="text-center text-gray-400 text-sm md:text-base">
-            Already have an account ?{" "}
+            {t("ExtraText")}{" "}
             <Link href="/Login" className="text-blue-500 hover:underline">
-              Login up
+              {t("ExternalLink")}
             </Link>
           </p>
         </form>

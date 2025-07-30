@@ -18,6 +18,40 @@
   "SlideText": {
     "phrase-1": "Elevate your brand",
     "phrase-2": "Increase your sales"
+  },
+  "Login":{
+    "Heading" : "Welcome Back 🎊",
+    "Subheading" : "Stand out let our AI do the magic",
+    "seperatorText" : "Or" ,
+    "Email" : "Email" , 
+    "EmailPlaceholder": "eg. unknow@gmail.com",
+    "Password" : "Password" ,
+    "PasswordPlaceholder" : "must be 8 characters" ,
+    "LoginBtn" : "Login" , 
+    "ExtraText" : "Don't have an account ? ",
+    "ExternalLink" : "Signup"
+  },
+  "Signup":{
+    "Heading" : "Create An Account",
+    "Subheading" : "enter your personal details to create an account",
+    "seperatorText" : "Or" ,
+    "FName": "First Name" , 
+    "FNamePlaceholder": "eg. Ahmad" ,
+    "LName": "Last Name" , 
+    "LNamePlaceholder": "eg. Mohamed" ,
+    "Email" : "Email" , 
+    "EmailPlaceholder": "eg. unknow@gmail.com",
+    "Password" : "Password" ,
+    "PasswordPlaceholder" : "must be 8 characters" ,
+    "SignupBtn" : "Signup" , 
+    "ExtraText" : "Already have an account ? ",
+    "ExternalLink" : "Login"
+  },
+  "LoginBanner" :{
+    "Text" : ""
+  },
+  "SignupBanner" :{
+    "Text" : " "
   }
   
 }
