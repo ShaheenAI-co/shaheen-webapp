@@ -6,7 +6,7 @@ import ProfileBtn from './ProfileBtn'
 
 const Topbar = () => {
   return (
-    <div className='flex justify-between items-center gap-4 py-6 px-8 bg-[#0C0C0C] border-b border-[#272729]'>
+    <div className='flex justify-between z-10 items-center gap-4 py-6 px-8 bg-[#000000] border-b border-[#272729]'>
         <div>
           <h1 className='text-2xl font-bold'>Dashboard</h1>
         </div>
