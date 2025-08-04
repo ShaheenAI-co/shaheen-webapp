@@ -1,7 +1,14 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NextIntProvider from "../NextIntProvider";
-
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 const inter = Inter({
   subsets: ["latin"], // or ['latin', 'cyrillic'] etc.
@@ -15,10 +22,9 @@ export const metadata = {
 };
 
 export default function LocaleLayout({ children, params }) {
-
   return (
-    <NextIntProvider params={params}>
-      {children}
-    </NextIntProvider>
+    <ClerkProvider>
+      <NextIntProvider params={params}>{children}</NextIntProvider>
+    </ClerkProvider>
   );
 }

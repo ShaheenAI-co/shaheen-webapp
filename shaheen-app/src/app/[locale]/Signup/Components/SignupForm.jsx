@@ -1,147 +1,163 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import LanguageSwitch from "@/components/LanguageSwitcher";
 import { useTranslations } from "next-intl";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useSignUp } from "@clerk/nextjs";
 
 const SignupForm = () => {
   const t = useTranslations("Signup");
-  const pathname = usePathname(); // give you the url path
-  const locale = pathname.split("/")[1] || "en"; // check the first part after /
+  const pathname = usePathname();
+  const router = useRouter();
+  const locale = pathname.split("/")[1] || "en";
   const isArabic = locale === "ar";
+
+  const { signUp, isLoaded, setActive } = useSignUp();
+
+  // Form state
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    if (!isLoaded) return;
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      // Create the user
+      const result = await signUp.create({
+        emailAddress: email,
+        password,
+        firstName,
+        lastName,
+      });
+
+      // Check if email verification is required
+      if (result.status === "missing_requirements") {
+        // Start email verification process
+        await signUp.prepareEmailAddressVerification({ 
+          strategy: "email_code" 
+        });
+        
+        // Redirect to verification page or show verification UI
+        router.push(`/${locale}/verify-email`);
+      } else if (result.status === "complete") {
+        // If no verification needed, set the session as active
+        await setActive({ session: result.createdSessionId });
+        
+        // Redirect to dashboard or wherever you want
+        router.push(`/${locale}/dashboard`);
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      
+      // Better error handling
+      if (err.errors && err.errors.length > 0) {
+        setError(err.errors[0].message);
+      } else if (err.message) {
+        setError(err.message);
+      } else {
+        setError("An error occurred during signup. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex-1 flex items-center justify-center p-4 md:p-8">
       <div className="w-full max-w-md space-y-4 md:space-y-6">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl md:text-3xl font-bold text-white">
-            {t("Heading")}
-          </h2>
-          <p className="text-gray-400 text-sm md:text-base">
-            {t("Subheading")}
-          </p>
+          <h2 className="text-2xl md:text-3xl font-bold text-white">{t("Heading")}</h2>
+          <p className="text-gray-400 text-sm md:text-base">{t("Subheading")}</p>
         </div>
 
-        <form className="space-y-3 md:space-y-4">
-          {/* Google Sign Up Button */}
-          <Button
-            variant="outline"
-            className="w-full bg-white border-none cursor-pointer text-black  h-10 md:h-12"
-          >
-            <svg className="w-4 h-4 md:w-5 md:h-5 mr-2" viewBox="0 0 24 24">
-              <path
-                fill="#4285F4"
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-              />
-              <path
-                fill="#34A853"
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              />
-              <path
-                fill="#FBBC05"
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-              />
-              <path
-                fill="#EA4335"
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-              />
-            </svg>
-            <span className="text-sm md:text-base">Google</span>
-          </Button>
-
-          {/* Divider */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-white" />
+        <form className="space-y-3 md:space-y-4" onSubmit={handleSignup}>
+          {/* Error */}
+          {error && (
+            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md">
+              <p className="text-red-500 text-sm">{error}</p>
             </div>
-            <div className="relative flex justify-center text-xs ">
-              <span className="bg-black px-2 text-gray-400">
-                {t("seperatorText")}
-              </span>
-            </div>
-          </div>
+          )}
 
-          {/* Name Fields */}
-          <div
-            dir={isArabic ? "rtl" : "ltr"}
-            className={`grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 ${isArabic ? "rtl" : ""}`}
-          >
+          {/* First & Last Name */}
+          <div dir={isArabic ? "rtl" : "ltr"} className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             <div className="space-y-2">
-              <Label
-                htmlFor="firstName"
-                className="text-white text-sm md:text-base"
-              >
-                {t("FName")}
-              </Label>
+              <Label htmlFor="firstName" className="text-white text-sm md:text-base">{t("FName")}</Label>
               <Input
                 id="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 placeholder={t("FNamePlaceholder")}
-                className={`bg-[#1A1A1A] h-10 md:h-12 text-base md:text-base text-white border-none placeholder:text-[#615F5F] ${
-                  isArabic ? "text-right placeholder:text-right" : ""
-                }`}
+                className={`bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] ${isArabic ? "text-right" : ""}`}
+                required
               />
             </div>
-
             <div className="space-y-2">
-              <Label
-                htmlFor="lastName"
-                className="text-white text-sm md:text-base"
-              >
-                {t("LName")}
-              </Label>
+              <Label htmlFor="lastName" className="text-white text-sm md:text-base">{t("LName")}</Label>
               <Input
                 id="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 placeholder={t("LNamePlaceholder")}
-                className={`bg-[#1A1A1A] h-10 md:h-12 text-base md:text-base text-white border-none placeholder:text-[#615F5F] ${
-                  isArabic ? "text-right placeholder:text-right" : ""
-                }`}
+                className={`bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] ${isArabic ? "text-right" : ""}`}
+                required
               />
             </div>
           </div>
 
-          {/* Email Field */}
+          {/* Email */}
           <div className="space-y-2 mt-6" dir={isArabic ? "rtl" : "ltr"}>
-            <Label htmlFor="email" className="text-white text-sm md:text-base">
-              {t("Email")}
-            </Label>
+            <Label htmlFor="email" className="text-white text-sm md:text-base">{t("Email")}</Label>
             <Input
               id="email"
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder={t("EmailPlaceholder")}
-              className="bg-[#1A1A1A]  text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base"
+              className="bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F]"
+              required
             />
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div className="space-y-2 mb-6" dir={isArabic ? "rtl" : "ltr"}>
-            <Label
-              htmlFor="password"
-              className="text-white text-sm md:text-base"
-            >
-              {t("Password")}
-            </Label>
+            <Label htmlFor="password" className="text-white text-sm md:text-base">{t("Password")}</Label>
             <Input
               id="password"
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder={t("PasswordPlaceholder")}
-              className="bg-[#1A1A1A]  text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base"
+              className="bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F]"
+              required
             />
           </div>
 
-          {/* Sign Up Button */}
-          <Button className="w-full bg-white text-black cursor-pointer hover:bg-white h-10 md:h-12 font-semibold text-sm md:text-base">
-            {t("SignupBtn")}
+          <div id="clerk-captcha"></div>
+
+          {/* Submit */}
+          <Button
+            type="submit"
+            disabled={!isLoaded || isLoading}
+            className="w-full bg-white text-black cursor-pointer hover:bg-white h-10 md:h-12 font-semibold text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? "Creating account..." : t("SignupBtn")}
           </Button>
 
-          {/* Login Link */}
+          {/* Already have account? */}
           <p className="text-center text-gray-400 text-sm md:text-base">
             {t("ExtraText")}{" "}
-            <Link href="/Login" className="text-blue-500 hover:underline">
-              {t("ExternalLink")}
-            </Link>
+            <Link href={`/${locale}/Login`} className="text-blue-500 hover:underline">{t("ExternalLink")}</Link>
           </p>
         </form>
       </div>
