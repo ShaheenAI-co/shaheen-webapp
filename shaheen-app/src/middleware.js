@@ -1,5 +1,7 @@
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
+import { clerkMiddleware } from '@clerk/nextjs/server'
+
 
 export default createMiddleware(routing);
 

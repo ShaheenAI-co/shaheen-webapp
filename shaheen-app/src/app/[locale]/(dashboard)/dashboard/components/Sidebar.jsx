@@ -62,12 +62,12 @@ export default function Sidebar() {
       </button>
       <nav
         className={`
-                fixed inset-y-0 left-0 z-[70] w-64  bg-[#0c0606] pt-4    transform transition-transform duration-200 ease-in-out
-                lg:translate-x-0 lg:static lg:w-64 border-r border-[#272729]
-                ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
+                fixed inset-y-0 left-0 z-[70] w-64 bg-[#0c0606] pt-4 transform transition-transform duration-200 ease-in-out border-r border-[#272729]
+                lg:translate-x-0 lg:z-[60]
+                ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
             `}
       >
-        <div className="h-full flex flex-col py-4 px-6   ">
+        <div className="h-full flex flex-col py-4 px-6 overflow-y-auto">
           {/* Logo */}
           <div className="flex flex-col gap-4 mb-6 border-b border-[#272729] pb-4">
             <Link href={`/dashboard`}>
