@@ -25,7 +25,7 @@ const HeroHeading = () => {
 
       <Link  href={`/${locale}/Signup`} >
         <Button variant="secondary" className="cursor-pointer">
-          Get Started
+          {t("CTA")}
         </Button>
       </Link>
     </main>

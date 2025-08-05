@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useSignIn } from "@clerk/nextjs";
 
-const LoginForm = () => {
+const SigninForm = () => {
   const t = useTranslations("Login");
   const pathname = usePathname();
   const router = useRouter();
@@ -194,4 +194,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SigninForm;

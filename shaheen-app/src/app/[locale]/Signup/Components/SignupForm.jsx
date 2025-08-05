@@ -22,12 +22,17 @@ const SignupForm = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rewritePassword, setRewritePassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSignup = async (e) => {
     e.preventDefault();
     if (!isLoaded) return;
+    if (password !== rewritePassword) {
+      setError("Passwords do not match.");
+      return;
+    }
 
     setIsLoading(true);
     setError("");
@@ -82,12 +87,7 @@ const SignupForm = () => {
         </div>
 
         <form className="space-y-3 md:space-y-4" onSubmit={handleSignup}>
-          {/* Error */}
-          {error && (
-            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md">
-              <p className="text-red-500 text-sm">{error}</p>
-            </div>
-          )}
+         
 
           {/* First & Last Name */}
           <div dir={isArabic ? "rtl" : "ltr"} className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
@@ -130,7 +130,7 @@ const SignupForm = () => {
           </div>
 
           {/* Password */}
-          <div className="space-y-2 mb-6" dir={isArabic ? "rtl" : "ltr"}>
+          <div className="space-y-2" dir={isArabic ? "rtl" : "ltr"}>
             <Label htmlFor="password" className="text-white text-sm md:text-base">{t("Password")}</Label>
             <Input
               id="password"
@@ -142,8 +142,28 @@ const SignupForm = () => {
               required
             />
           </div>
+          {/* Rewrite Password */}
+          <div className="space-y-2 mb-6" dir={isArabic ? "rtl" : "ltr"}>
+            <Label htmlFor="rewritePassword" className="text-white text-sm md:text-base">{isArabic ? "أعد كتابة كلمة المرور" : "Rewrite Password"}</Label>
+            <Input
+              id="rewritePassword"
+              type="password"
+              value={rewritePassword}
+              onChange={(e) => setRewritePassword(e.target.value)}
+              placeholder={isArabic ? "أعد كتابة كلمة المرور" : "Rewrite your password"}
+              className="bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base"
+              required
+            />
+          </div>
 
           <div id="clerk-captcha"></div>
+
+           {/* Error */}
+          {error && (
+            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md">
+              <p className="text-red-500 text-sm">{error}</p>
+            </div>
+          )}
 
           {/* Submit */}
           <Button
@@ -157,7 +177,7 @@ const SignupForm = () => {
           {/* Already have account? */}
           <p className="text-center text-gray-400 text-sm md:text-base">
             {t("ExtraText")}{" "}
-            <Link href={`/${locale}/Login`} className="text-blue-500 hover:underline">{t("ExternalLink")}</Link>
+            <Link href={`/${locale}/sign-in`} className="text-blue-500 hover:underline">{t("ExternalLink")}</Link>
           </p>
         </form>
       </div>

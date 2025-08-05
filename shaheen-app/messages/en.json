@@ -1,10 +1,11 @@
 {
   "Logo": {
-    "name": "Shaheen AI"
+    "name": "Shaheen.ai"
   },
   "Heading": {
     "title": "Supercharge your brand with AI powered content creation ",
-    "subhead": "Everything you need to grow online designed , scheduled and delivered by AI"
+    "subhead": "Everything you need to grow online designed , scheduled and delivered by AI",
+    "CTA" : "Get Started"
   },
   "NavLinks": {
     "l-1": "Pricing",
@@ -66,6 +67,20 @@
     "body-2" : "Upload the photo straight to our site. No editing, no setup  just a simple upload, and you're good to go. our AI will handle the rest from here." ,
     "Title-3" : "AI in Action",
     "body-3" : "Once your image is uploaded, our AI takes over  generating a polished background, engaging captions, and everything you need to create a high-quality, ready-to-post asset in seconds" 
+  },
+
+  "Faq": {
+    "Heading": "Frequently Asked Questions",
+    "Q-1": "How do I start ?",
+    "A-1": "Just sign up for a new account, then upload a photo of your product. Our AI will handle the rest.",
+    "Q-2": "Do I need design experience ?",
+    "A-2": "No, our platform is designed to be easy to use even if you have no prior experience.",
+    "Q-3": "How can I edit the content ?",
+    "A-3": "After the content is ready, you can edit it before publishing. You have full control.",
+    "Q-4": "Can I use it on mobile ?",
+    "A-4": "Yes, our platform is mobile-friendly. You can upload photos and edit content from anywhere.",
+    "Q-5": "Is there technical support ?",
+    "A-5": "Yes, we have a support team ready to help you anytime. You can contact us through the website or by email."
   }
   
 }

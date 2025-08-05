@@ -8,6 +8,7 @@ export default function RootLayout({ children }) {
   const dir = locale === "ar" ? "rtl" : "ltr";
   return (
     <html lang={locale} dir={dir}>
+   
       <body>{children}</body>
     </html>
   );

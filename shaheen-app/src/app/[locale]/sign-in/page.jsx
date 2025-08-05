@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import LeftPanel from "../../../components/LeftPanel";
-import LoginForm from "./components/LoginForm";
+import SigninForm from "./components/SigninForm";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 
@@ -14,7 +14,7 @@ const page = () => {
   return (
     <div className="min-h-screen bg-black md:p-4 p-2 flex flex-col md:flex-row" dir={isArabic ? "ltr" : "rtl"}>
       <LeftPanel phrase={t("Text")}/>
-      <LoginForm />
+      <SigninForm />
     </div>
   );
 };
