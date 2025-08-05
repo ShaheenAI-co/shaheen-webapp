@@ -14,7 +14,7 @@ const HowItWork = () => {
         <h2 className='text-xl lg:text-4xl font-bold satoshi-bold capitalize '>
             {t("Heading")}
         </h2>
-        <div className={`flex justify-center items-center gap-8 flex-wrap ${isArabic ? "flex-row-reverse" : ""}`}>
+        <div className={`flex justify-center items-center gap-8 flex-wrap `}>
             <Card title={t("Title-1")} body={t("body-1")}/>
             <Card title={t("Title-2")} body={t("body-2")}/>
             <Card title={t("Title-3")} body={t("body-3")}/>

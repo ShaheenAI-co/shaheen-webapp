@@ -7,9 +7,9 @@ const intlMiddleware = createMiddleware(routing);
 
 // Define protected routes (customize as needed)
 const isProtectedRoute = createRouteMatcher([
-  '/dashboard(.*)',
-  '/profile(.*)',
-  // Add other protected routes here
+ '/(en|ar)/dashboard(.*)',
+  '/(en|ar)/profile(.*)',
+
 
 ]);
 

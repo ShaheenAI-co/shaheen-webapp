@@ -10,6 +10,7 @@ export default function Slide({ src, direction, left, progress }) {
   const pathname = usePathname(); // give you the url path
   const locale = pathname.split("/")[1] || "en"; // check the first part after /
   const isArabic = locale === "ar";
+  
 
   // Convert direction to number (-1 for left, 1 for right)
   const directionMultiplier = direction === 'left' ? -1 : 1;
@@ -24,7 +25,7 @@ export default function Slide({ src, direction, left, progress }) {
 
   return (
     <motion.div 
-      style={{ x: translateX, left: left }} 
+      style={{ x: translateX, ...(isArabic ? { right: left } : { left: left }) }} 
       className="relative flex whitespace-nowrap"
     >
       {/* Repeat the phrase 3 times for continuous effect */}

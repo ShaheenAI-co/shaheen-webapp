@@ -90,12 +90,7 @@ const LoginForm = () => {
         </div>
 
         <form className="space-y-3 md:space-y-4" onSubmit={handleEmailSignIn}>
-          {/* Error Display */}
-          {error && (
-            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md">
-              <p className="text-red-500 text-sm">{error}</p>
-            </div>
-          )}
+       
 
           {/* Google Sign In Button */}
           <Button
@@ -168,6 +163,13 @@ const LoginForm = () => {
             />
           </div>
 
+             {/* Error Display */}
+          {error && (
+            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md">
+              <p className="text-red-500 text-sm">{error}</p>
+            </div>
+          )}
+
           {/* Sign In Button */}
           <Button 
             type="submit"
@@ -176,6 +178,8 @@ const LoginForm = () => {
           >
             {isLoading ? "Signing in..." : t("LoginBtn")}
           </Button>
+
+       
 
           {/* Signup Link */}
           <p className="text-center text-gray-400 text-sm md:text-base">

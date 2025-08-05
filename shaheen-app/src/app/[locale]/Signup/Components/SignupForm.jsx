@@ -98,7 +98,7 @@ const SignupForm = () => {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder={t("FNamePlaceholder")}
-                className={`bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] ${isArabic ? "text-right" : ""}`}
+                className={`bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base${isArabic ? " text-right" : ""}`}
                 required
               />
             </div>
@@ -109,7 +109,7 @@ const SignupForm = () => {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 placeholder={t("LNamePlaceholder")}
-                className={`bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] ${isArabic ? "text-right" : ""}`}
+                className={`bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base${isArabic ? " text-right" : ""}`}
                 required
               />
             </div>
@@ -124,7 +124,7 @@ const SignupForm = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={t("EmailPlaceholder")}
-              className="bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F]"
+              className="bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base"
               required
             />
           </div>
@@ -138,7 +138,7 @@ const SignupForm = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder={t("PasswordPlaceholder")}
-              className="bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F]"
+              className="bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base"
               required
             />
           </div>

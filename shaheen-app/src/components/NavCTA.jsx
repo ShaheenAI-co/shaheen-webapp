@@ -23,7 +23,7 @@ const NavCTA = () => {
   return (
     <div
       className={`hidden lg:flex items-center justify-center
-       space-x-4 ${isArabic ? "flex-row-reverse" : ""} `}
+       space-x-4  `}
     >
       <LanguageSwitch />
 

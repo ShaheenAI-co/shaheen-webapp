@@ -18,9 +18,7 @@ export const Nav = () => {
 
   return (
     <nav
-      className={`flex items-center w-full justify-between py-2   ${
-        isArabic ? "flex-row-reverse" : ""
-      } `}
+      className={`flex items-center w-full justify-between py-2    `}
     >
       <Logo />
       <NavLinks />
