@@ -35,10 +35,51 @@ const postSize = [
 
 const page = () => {
   const [post, setPost] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handlePostSize = (value) => {
     setPost(value);
     console.log(value);
+  };
+
+  const handleFileChange = (files) => {
+    setSelectedFile(files[0]?.file || null);
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      setUploadStatus("Please select an image first");
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadStatus("Uploading...");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const response = await fetch("/api/s3-upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setUploadStatus("Upload successful! File uploaded to S3");
+        console.log("Uploaded file:", result.fileName);
+      } else {
+        setUploadStatus(`Upload failed: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      setUploadStatus("Upload failed: Network error");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -130,14 +171,27 @@ const page = () => {
           </div>
 
           <div className="w-full flex items-center justify-center h-[300px]">
-            <ImageUpload/>
+            <ImageUpload onFileChange={handleFileChange}/>
           </div>
 
+          {uploadStatus && (
+            <div className="w-full flex justify-center items-center py-2">
+              <div className={`text-sm ${uploadStatus.includes('successful') ? 'text-green-500' : uploadStatus.includes('failed') ? 'text-red-500' : 'text-blue-500'}`}>
+                {uploadStatus}
+              </div>
+            </div>
+          )}
+
           <div className="w-full flex justify-center items-center py-4">
-        <Button className={`tex-white capitalize  cursor-pointer   px-6 py-2 bg-[#7F4BF3] hover:bg-[#804bf3cf] `} size={22}>
-          upload
-        </Button>
-      </div>
+            <Button 
+              className={`text-white capitalize cursor-pointer px-6 py-2 bg-[#7F4BF3] hover:bg-[#804bf3cf] ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`} 
+              size={22}
+              onClick={handleUpload}
+              disabled={isUploading}
+            >
+              {isUploading ? 'Uploading...' : 'Upload'}
+            </Button>
+          </div>
         </div>
       </div>
 

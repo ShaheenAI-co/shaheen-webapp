@@ -14,6 +14,15 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
+  // Skip internationalization for API routes
+  if (req.nextUrl.pathname.startsWith('/api/')) {
+    // For API routes, only apply authentication if needed
+    if (isProtectedRoute(req)) {
+      await auth.protect();
+    }
+    return;
+  }
+
   // Protect routes that require authentication
   if (isProtectedRoute(req)) {
     await auth.protect();
