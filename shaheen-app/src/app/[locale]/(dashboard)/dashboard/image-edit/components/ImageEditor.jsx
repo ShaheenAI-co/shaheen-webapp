@@ -3,7 +3,6 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { ImageUpload } from "./ImagePrev";
 import { TextOverlay } from "./TextOverlay";
 import { TextControls } from "./TextControls";
-
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Download, Plus, Type, Settings, Menu } from "lucide-react";

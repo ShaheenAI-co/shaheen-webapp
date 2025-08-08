@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTranslations } from "next-intl";
+import { insertUserToSupabase } from "../../../../lib/supabase/users";
 
 export default function VerifyEmailPage() {
   const t = useTranslations("Signup");
@@ -22,16 +23,35 @@ export default function VerifyEmailPage() {
     if (!isLoaded) return;
     setIsLoading(true);
     setError("");
+
     try {
       const result = await signUp.attemptEmailAddressVerification({ code });
+
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
+
+        // Insert user into Supabase after successful verification
+        const userData = {
+          firstName: result.firstName,
+          lastName: result.lastName,
+          email: result.emailAddress,
+        };
+        await insertUserToSupabase(result.createdUserId, userData);
+
         router.push(`/${locale}/dashboard`);
       } else {
-        setError(isArabic ? "رمز التحقق غير صحيح أو انتهت صلاحيته." : "Invalid or expired verification code.");
+        setError(
+          isArabic
+            ? "رمز التحقق غير صحيح أو انتهت صلاحيته."
+            : "Invalid or expired verification code."
+        );
       }
     } catch (err) {
-      setError(isArabic ? "رمز التحقق غير صحيح أو انتهت صلاحيته." : "Invalid or expired verification code.");
+      setError(
+        isArabic
+          ? "رمز التحقق غير صحيح أو انتهت صلاحيته."
+          : "Invalid or expired verification code."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -64,7 +84,9 @@ export default function VerifyEmailPage() {
               id="code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder={isArabic ? "أدخل رمز التحقق" : "Enter verification code"}
+              placeholder={
+                isArabic ? "أدخل رمز التحقق" : "Enter verification code"
+              }
               className="bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base"
               required
             />
@@ -79,8 +101,8 @@ export default function VerifyEmailPage() {
                 ? "جاري التحقق..."
                 : "Verifying..."
               : isArabic
-              ? "تحقق"
-              : "Verify"}
+                ? "تحقق"
+                : "Verify"}
           </Button>
         </form>
       </div>

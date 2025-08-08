@@ -7,6 +7,8 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useSignUp } from "@clerk/nextjs";
+import { supabaseClient } from "../../../../../utils/supabaseClient";
+import { insertUserToSupabase } from "../../../../../lib/supabase/users";
 
 const SignupForm = () => {
   const t = useTranslations("Signup");
@@ -26,6 +28,7 @@ const SignupForm = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Handle form submission CLERK
   const handleSignup = async (e) => {
     e.preventDefault();
     if (!isLoaded) return;
@@ -38,7 +41,7 @@ const SignupForm = () => {
     setError("");
 
     try {
-      // Create the user
+      // Step 1: Create the Clerk user
       const result = await signUp.create({
         emailAddress: email,
         password,
@@ -46,26 +49,13 @@ const SignupForm = () => {
         lastName,
       });
 
-      // Check if email verification is required
-      if (result.status === "missing_requirements") {
-        // Start email verification process
-        await signUp.prepareEmailAddressVerification({ 
-          strategy: "email_code" 
-        });
-        
-        // Redirect to verification page or show verification UI
-        router.push(`/${locale}/verify-email`);
-      } else if (result.status === "complete") {
-        // If no verification needed, set the session as active
-        await setActive({ session: result.createdSessionId });
-        
-        // Redirect to dashboard or wherever you want
-        router.push(`/${locale}/dashboard`);
-      }
+      console.log("Clerk user created:", result.createdUserId);
+
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+
+      router.push(`/${locale}/verify-email`);
     } catch (err) {
       console.error("Signup error:", err);
-      
-      // Better error handling
       if (err.errors && err.errors.length > 0) {
         setError(err.errors[0].message);
       } else if (err.message) {
@@ -82,17 +72,27 @@ const SignupForm = () => {
     <div className="flex-1 flex items-center justify-center p-4 md:p-8">
       <div className="w-full max-w-md space-y-4 md:space-y-6">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl md:text-3xl font-bold text-white">{t("Heading")}</h2>
-          <p className="text-gray-400 text-sm md:text-base">{t("Subheading")}</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-white">
+            {t("Heading")}
+          </h2>
+          <p className="text-gray-400 text-sm md:text-base">
+            {t("Subheading")}
+          </p>
         </div>
 
         <form className="space-y-3 md:space-y-4" onSubmit={handleSignup}>
-         
-
           {/* First & Last Name */}
-          <div dir={isArabic ? "rtl" : "ltr"} className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+          <div
+            dir={isArabic ? "rtl" : "ltr"}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4"
+          >
             <div className="space-y-2">
-              <Label htmlFor="firstName" className="text-white text-sm md:text-base">{t("FName")}</Label>
+              <Label
+                htmlFor="firstName"
+                className="text-white text-sm md:text-base"
+              >
+                {t("FName")}
+              </Label>
               <Input
                 id="firstName"
                 value={firstName}
@@ -103,7 +103,12 @@ const SignupForm = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lastName" className="text-white text-sm md:text-base">{t("LName")}</Label>
+              <Label
+                htmlFor="lastName"
+                className="text-white text-sm md:text-base"
+              >
+                {t("LName")}
+              </Label>
               <Input
                 id="lastName"
                 value={lastName}
@@ -117,7 +122,9 @@ const SignupForm = () => {
 
           {/* Email */}
           <div className="space-y-2 mt-6" dir={isArabic ? "rtl" : "ltr"}>
-            <Label htmlFor="email" className="text-white text-sm md:text-base">{t("Email")}</Label>
+            <Label htmlFor="email" className="text-white text-sm md:text-base">
+              {t("Email")}
+            </Label>
             <Input
               id="email"
               type="email"
@@ -131,7 +138,12 @@ const SignupForm = () => {
 
           {/* Password */}
           <div className="space-y-2" dir={isArabic ? "rtl" : "ltr"}>
-            <Label htmlFor="password" className="text-white text-sm md:text-base">{t("Password")}</Label>
+            <Label
+              htmlFor="password"
+              className="text-white text-sm md:text-base"
+            >
+              {t("Password")}
+            </Label>
             <Input
               id="password"
               type="password"
@@ -144,13 +156,20 @@ const SignupForm = () => {
           </div>
           {/* Rewrite Password */}
           <div className="space-y-2 mb-6" dir={isArabic ? "rtl" : "ltr"}>
-            <Label htmlFor="rewritePassword" className="text-white text-sm md:text-base">{isArabic ? "أعد كتابة كلمة المرور" : "Rewrite Password"}</Label>
+            <Label
+              htmlFor="rewritePassword"
+              className="text-white text-sm md:text-base"
+            >
+              {isArabic ? "أعد كتابة كلمة المرور" : "Rewrite Password"}
+            </Label>
             <Input
               id="rewritePassword"
               type="password"
               value={rewritePassword}
               onChange={(e) => setRewritePassword(e.target.value)}
-              placeholder={isArabic ? "أعد كتابة كلمة المرور" : "Rewrite your password"}
+              placeholder={
+                isArabic ? "أعد كتابة كلمة المرور" : "Rewrite your password"
+              }
               className="bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base"
               required
             />
@@ -158,7 +177,7 @@ const SignupForm = () => {
 
           <div id="clerk-captcha"></div>
 
-           {/* Error */}
+          {/* Error */}
           {error && (
             <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md">
               <p className="text-red-500 text-sm">{error}</p>
@@ -177,7 +196,12 @@ const SignupForm = () => {
           {/* Already have account? */}
           <p className="text-center text-gray-400 text-sm md:text-base">
             {t("ExtraText")}{" "}
-            <Link href={`/${locale}/sign-in`} className="text-blue-500 hover:underline">{t("ExternalLink")}</Link>
+            <Link
+              href={`/${locale}/sign-in`}
+              className="text-blue-500 hover:underline"
+            >
+              {t("ExternalLink")}
+            </Link>
           </p>
         </form>
       </div>
