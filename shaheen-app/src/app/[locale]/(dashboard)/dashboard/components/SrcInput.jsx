@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useId, useState } from "react"
-import { LoaderCircleIcon, MicIcon, SearchIcon } from "lucide-react"
+import { LoaderCircleIcon, SearchIcon } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"

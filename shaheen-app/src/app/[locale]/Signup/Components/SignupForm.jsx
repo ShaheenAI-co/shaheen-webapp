@@ -7,8 +7,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useSignUp } from "@clerk/nextjs";
-import { supabaseClient } from "../../../../../utils/supabaseClient";
-import { insertUserToSupabase } from "../../../../../lib/supabase/users";
+
 
 const SignupForm = () => {
   const t = useTranslations("Signup");

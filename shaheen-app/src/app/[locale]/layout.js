@@ -1,14 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NextIntProvider from "../NextIntProvider";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({
   subsets: ["latin"], // or ['latin', 'cyrillic'] etc.

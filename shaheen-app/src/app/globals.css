@@ -90,6 +90,15 @@ body {
   font-weight: 700;
 }
 
+.inner-shadow-combined {
+  box-shadow: 
+    inset -48px 44px 84px -48px #B52CFF,
+    inset -32px 68px 84px -32px #826CFF,
+    inset 20px -20px 50px -10px rgba(0, 0, 0, 0.5);
+  mix-blend-mode: lighten;
+}
+
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);

@@ -1,17 +1,17 @@
-'use client'
+"use client";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
-import { useTranslations } from "next-intl"
+} from "@/components/ui/accordion";
+import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 
 export default function AccordionComponent() {
-  const t = useTranslations("Faq")
-    const pathname = usePathname(); // give you the url path
-    const locale = pathname.split("/")[1] || "en"; // check the first part after /
+  const t = useTranslations("Faq");
+  const pathname = usePathname(); // give you the url path
+  const locale = pathname.split("/")[1] || "en"; // check the first part after /
 
   const items = [
     {
@@ -39,12 +39,17 @@ export default function AccordionComponent() {
       title: t("Q-5"),
       content: t("A-5"),
     },
-  ]
+  ];
   return (
-    <div className="space-y-4 px-5  lg:w-[1200px] flex flex-col gap-6 lg:mx-auto my-10">
-      <h2 className="lg:text-4xl text-xl w-full text-center font-bold">
-        {t("Heading")}
-      </h2>
+    <div className="space-y-4 px-5  lg:w-[1200px] flex flex-col gap-6 lg:mx-auto my-40">
+
+      <div className="flex flex-col items-center text-center  gap-4">
+        <h2 className="text-2xl lg:text-5xl font-bold satoshi-bold leading-tight max-sm:w-[300px]  max-w-[500px]  capitalize ">Frequently Asked Questions</h2>
+        <p className=" max-w-[500px] max-sm:w-[300px] text-base md:text-lg font-normal text-muted-foreground ">
+          Still have questions ? We have answers
+        </p>
+      </div>
+
       <Accordion
         type="single"
         collapsible
@@ -55,17 +60,17 @@ export default function AccordionComponent() {
           <AccordionItem
             value={item.id}
             key={item.id}
-            className=" has-focus-visible:border-ring  has-focus-visible:ring-ring/50 rounded-md border lg:p-4 px-3 py-2 outline-none last:border-b has-focus-visible:ring-[3px]"
+            className=" lg:p-4 px-3 py-2 outline-none border-b-1"
           >
-            <AccordionTrigger className="py-2 lg:text-lg text-base leading-6 hover:no-underline focus-visible:ring-0">
+            <AccordionTrigger className="py-2 lg:text-lg text-base leading-6 hover:no-underline ">
               {item.title}
             </AccordionTrigger>
-            <AccordionContent className="text-muted-foreground text-sm lg:text-base pb-2">
+            <AccordionContent className="text-muted-foreground font-normal text-sm lg:text-base pb-2">
               {item.content}
             </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
     </div>
-  )
+  );
 }

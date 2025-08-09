@@ -1,14 +1,22 @@
-import React from 'react'
-import AnimatedText from './AnimatedText'
-import HowItWork from './HowItWork'
+import React from "react";
+import AnimatedText from "./AnimatedText";
+import HowItWork from "./HowItWork";
+import FeaturesBento from "./FeaturesBento";
+import AccordionComponent from "./Accordion";
+import PriceCards from "@/components/PriceCards";
+import Pricing from "./Pricing";
 
 const Content = () => {
   return (
-    <div className="w-full  flex flex-col  gap-8 px-6 md:px-[64px] lg:py-54 py-20  text-2xl font-bold">
-        <AnimatedText/>
-        <HowItWork/>
-      </div>
-  )
-}
+    <div className="w-full  flex flex-col  gap-8 px-6 md:px-[64px] lg:py-54 py-20 bg-[#06040D]  text-2xl font-bold">
+      <AnimatedText />
+      <HowItWork />
+      <FeaturesBento />
+      <Pricing />
 
-export default Content
+      <AccordionComponent />
+    </div>
+  );
+};
+
+export default Content;

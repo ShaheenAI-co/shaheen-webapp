@@ -10,7 +10,7 @@ const HowItWork = () => {
     const locale = pathname.split("/")[1] || "en"; // check the first part after /
     const isArabic = locale === "ar";
   return (
-    <div className='flex flex-col justify-center items-center mt-12 gap-10 md:gap-16 px-4 lg:px-34 '>
+    <div className='flex flex-col justify-center items-center bg-[#06040D]  mt-32 gap-10 md:gap-16 px-4 lg:px-34 '>
         <h2 className='text-xl lg:text-4xl font-bold satoshi-bold capitalize '>
             {t("Heading")}
         </h2>

@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export default function Component() {
+export default function Component({onClick}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,7 +33,9 @@ export default function Component() {
           <DropdownMenuItem>Option 3</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Logout</DropdownMenuItem>
+        <DropdownMenuItem>
+          <button className={`w-full bg-red-500`} onClick={onClick} >Logout</button>
+          </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
