@@ -13,17 +13,22 @@ const s3Client = new S3Client({
 async function uploadFileToS3(buffer, fileName) {
 
     const fileBuffer = buffer;
+    const timestamp = Date.now();
+    const key = "uploads/" + fileName + "-" + timestamp;
     
     const params = {
         Bucket: process.env.AWS_BUCKET_NAME,
-        Key: "uploads/" + fileName + "-" + Date.now(),
+        Key: key,
         Body: fileBuffer,
         ContentType: "image/jpeg"
     }
 
     const command = new PutObjectCommand(params);
     await s3Client.send(command);
-    return fileName;
+    
+    // Return both the fileName and the full S3 URL
+    const s3Url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+    return { fileName, s3Url };
 }
 
 export async function POST(request) {
@@ -37,9 +42,9 @@ export async function POST(request) {
 		} 
 
 		const buffer = Buffer.from(await file.arrayBuffer());
-		const fileName = await uploadFileToS3(buffer, file.name);
+		const { fileName, s3Url } = await uploadFileToS3(buffer, file.name);
 
-		return NextResponse.json({ success: true, fileName});
+		return NextResponse.json({ success: true, fileName, s3Url });
     } catch (error) {
 		console.error('Upload error:', error);
 		return NextResponse.json({ 
