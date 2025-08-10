@@ -12,7 +12,7 @@ export default function Phrase({ src , text }) {
       <p className={` md:text-[7.5vw] text-[11.5vw] ${isArabic ? "alexandria-font " : " "} `}>{text}</p>
       
       {/* Circular image */}
-      <span className="relative md:h-[7.5vw] h-[14.5vw]  aspect-[4/2]    rounded-md overflow-hidden">
+      <span className="relative md:h-[7.5vw] h-[16.5vw]  aspect-[6/4]    rounded-md overflow-hidden">
         <Image 
           style={{ objectFit: "cover" }} 
           src={src} 

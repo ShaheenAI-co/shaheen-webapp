@@ -5,6 +5,7 @@ import FeaturesBento from "./FeaturesBento";
 import AccordionComponent from "./Accordion";
 import PriceCards from "@/components/PriceCards";
 import Pricing from "./Pricing";
+import FinalCta from "./FinalCta";
 
 const Content = () => {
   return (
@@ -15,6 +16,10 @@ const Content = () => {
       <Pricing />
 
       <AccordionComponent />
+      <FinalCta />
+
+
+
     </div>
   );
 };

@@ -15,9 +15,9 @@ const HowItWork = () => {
             {t("Heading")}
         </h2>
         <div className={`flex justify-center items-center gap-8 flex-wrap `}>
-            <Card title={t("Title-1")} body={t("body-1")}/>
-            <Card title={t("Title-2")} body={t("body-2")}/>
-            <Card title={t("Title-3")} body={t("body-3")}/>
+            <Card title={t("Title-1")} body={t("body-1")} imgSrc={`/images/productV2.png`}/>
+            <Card title={t("Title-2")} body={t("body-2")} imgSrc={`/images/Ai-placeholder.png`}/>
+            <Card title={t("Title-3")} body={t("body-3")} imgSrc={`/images/product-final.png`}/>
         </div>
     </div>
   )

@@ -62,11 +62,11 @@
   "Cards": {
     "Heading" : "how it works" , 
     "Title-1" : "Snap a Quick Photo",
-    "body-1" : "Grab your phone and take a clean shot of your product. Make sure there is good lighting natural light near a window works great. The clearer the photo, the better your final result will look. No fancy camera needed" ,
+    "body-1" : "Use your phone to take a clear, well lit photo of your product. Natural light near a window works best no fancy camera needed" ,
     "Title-2" : "Upload It",
     "body-2" : "Upload the photo straight to our site. No editing, no setup  just a simple upload, and you're good to go. our AI will handle the rest from here." ,
     "Title-3" : "AI in Action",
-    "body-3" : "Once your image is uploaded, our AI takes over  generating a polished background, engaging captions, and everything you need to create a high-quality, ready-to-post asset in seconds" 
+    "body-3" : "Once your image is uploaded, our AI takes over  generating a polished background, engaging captions, and everything you need to create a high quality, ready to post asset in seconds" 
   },
 
   "Faq": {

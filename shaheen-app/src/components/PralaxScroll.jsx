@@ -17,26 +17,26 @@ export default function ParallaxSection() {
   });
 
   return (
-    <main className=" flex items-start md:items-center   overflow-hidden ">
+    <main className=" flex items-start md:items-center    overflow-hidden ">
       {/* Spacer div for scroll distance */}
       {/* <div className="h-[100vh]" /> */}
 
       {/* Main parallax container */}
       <div ref={container}>
         <Slide
-          src={Picture1}
+          src={`/images/bagV2.png`}
           direction={"left"}
           left={"-40%"}
           progress={scrollYProgress}
         />
         <Slide
-          src={Picture1}
+          src={`/images/perfume.png`}
           direction={"right"}
           left={"-25%"}
           progress={scrollYProgress}
         />
         <Slide
-          src={Picture1}
+          src={`/images/productV3.png`}
           direction={"left"}
           left={"-55%"}
           progress={scrollYProgress}

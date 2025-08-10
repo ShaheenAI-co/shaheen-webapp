@@ -14,7 +14,7 @@ import {
 
 export default function FeaturesBento() {
   return (
-    <div className="min-h-screen flex flex-col items-center gap-15 mt-54 bg-black p-6">
+    <div className="min-h-screen flex flex-col items-center gap-15 mt-25 md:mt-54 p-6">
 
        <div className="flex flex-col items-center text-center  gap-4">
           <h2 className="text-2xl lg:text-5xl font-bold satoshi-bold leading-tight max-sm:w-[300px]  max-w-[500px]  capitalize ">
