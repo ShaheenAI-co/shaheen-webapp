@@ -1,7 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { createClient } from '@supabase/supabase-js';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -11,15 +10,6 @@ const supabase = createClient(
 
 // Initialize Google Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
-
-// Initialize S3 client
-const s3Client = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-});
 
 export async function POST(request) {
   try {
@@ -103,33 +93,11 @@ export async function POST(request) {
           }
 
           const vmResult = await vmResponse.json();
-          const generatedImageUrl = vmResult.image_url;
+          const s3ImageUrl = vmResult.s3_url; // VM now returns S3 URL directly
 
-          // Download the generated image
-          const imageResponse = await fetch(generatedImageUrl);
-          if (!imageResponse.ok) {
-            throw new Error('Failed to download generated image');
+          if (!s3ImageUrl) {
+            throw new Error('VM did not return S3 URL');
           }
-
-          const imageBuffer = await imageResponse.arrayBuffer();
-          const imageKey = `generated/${userId}/${Date.now()}_${promptKey}_${i}.jpg`;
-
-          // Upload to S3
-          const uploadCommand = new PutObjectCommand({
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: imageKey,
-            Body: Buffer.from(imageBuffer),
-            ContentType: 'image/jpeg',
-            ACL: 'public-read',
-          });
-
-          await s3Client.send(uploadCommand);
-
-          // Clear the image buffer from memory after S3 upload
-          imageBuffer = null;
-
-          // Construct the S3 URL
-          const s3ImageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageKey}`;
 
           // Add record to generated_assets table
           const { data: asset, error: insertError } = await supabase
