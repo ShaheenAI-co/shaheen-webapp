@@ -9,8 +9,7 @@ const intlMiddleware = createMiddleware(routing);
 const isProtectedRoute = createRouteMatcher([
  '/(en|ar)/dashboard(.*)',
   '/(en|ar)/profile(.*)',
-
-
+  // '/api/s3-upload(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
