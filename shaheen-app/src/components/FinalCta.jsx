@@ -5,13 +5,13 @@ import Link from "next/link";
 
 export default function FinalCta() {
   return (
-    <div className="relative flex flex-col items-center justify-center border border-gray-400 min-h-[500px] bg-black text-white md:p-8 rounded-2xl overflow-hidden shadow-lg mx-auto w-[350px] md:w-[800px] lg:w-[1300px] backdrop-blur-lg mt-20 mb-20">
+    <div className="relative flex flex-col items-center justify-center border border-gray-400 min-h-[400px] bg-black text-white md:p-8 rounded-2xl overflow-hidden shadow-lg mx-auto w-[300px] md:w-[800px] lg:w-[1200px] backdrop-blur-lg  md:mt-20 mb-20">
 
         {/* Heading */}
       <div className="relative z-10 flex flex-col items-center gap-6 text-center space-y-6">
         <div className="flex flex-col items-center gap-4">
-            <h1 className="text-3xl md:text-6xl satoshi-bold max-sm:w-[300px]  leading-tight max-w-3xl">You Could've Posted by Now Let's Go</h1>
-            <p className="text-base md:text-lg max-sm:w-[250px] font-normal text-gray-300 ">
+            <h1 className="text-2xl md:text-6xl satoshi-bold max-sm:w-[250px]  leading-tight max-w-3xl">You Could've Posted by Now Let's Go</h1>
+            <p className="text-base md:text-lg max-sm:w-[200px] font-normal text-gray-300 ">
               Let our AI do the writing while you focus on growing your brand
             </p>
         </div>

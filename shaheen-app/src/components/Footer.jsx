@@ -10,7 +10,7 @@ const Footer = () => {
                 <span>©</span>
                 <p>Shaheen.ai 2025</p>
             </div>
-            <div className='flex gap-6 capitalize text-sm flex-wrap'>
+            <div className='flex gap-6 capitalize max-sm:justify-center text-sm flex-wrap'>
                 <p>Terms of service</p>
                 <p>Privacy Policy</p>
                 <p>cookie policy</p>

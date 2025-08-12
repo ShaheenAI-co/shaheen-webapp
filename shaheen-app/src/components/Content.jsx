@@ -10,7 +10,7 @@ import FinalCta from "./FinalCta";
 const Content = () => {
   return (
     <div className="w-full  flex flex-col  gap-8 px-6 md:px-[64px] lg:py-54 py-20 bg-[#06040D]  text-2xl font-bold">
-      <AnimatedText />
+      {/*<AnimatedText />*/}
       <HowItWork />
       <FeaturesBento />
       <Pricing />

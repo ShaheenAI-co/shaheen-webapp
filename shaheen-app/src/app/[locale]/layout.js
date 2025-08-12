@@ -14,7 +14,7 @@ export const metadata = {
   description: "Your social media partner",
 };
 
-export default function LocaleLayout({ children, params }) {
+export default async function LocaleLayout({ children, params }) {
   return (
     <ClerkProvider>
       <NextIntProvider params={params}>{children}</NextIntProvider>

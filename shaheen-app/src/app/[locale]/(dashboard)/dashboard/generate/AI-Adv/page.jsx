@@ -1,9 +1,11 @@
 "use client";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import ImageUpload from "@/components/ImageUpload";
+import { insertPostToSupabase } from "../../../../../../../lib/supabase/post";
+import { useUser } from "@clerk/nextjs";
 
 const postSize = [
   {
@@ -34,10 +36,21 @@ const postSize = [
 ];
 
 const page = () => {
+  const { user, isLoaded } = useUser();
+
   const [post, setPost] = useState("");
+  const [postTitle, setPostTitle] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [productInfo, setProductInfo] = useState({
+    title: "",
+    description: "",
+  });
+
+  useEffect(() => {
+    console.log(productInfo);
+  }, [productInfo]);
 
   const handlePostSize = (value) => {
     setPost(value);
@@ -48,6 +61,14 @@ const page = () => {
     setSelectedFile(files[0]?.file || null);
   };
 
+  const handlePostSubmit = async () => {
+    if (!post || !productInfo.name || !productInfo.description) {
+      setUploadStatus("Please fill in all fields before submitting.");
+      return;
+    }
+
+  }
+
   const handleUpload = async () => {
     if (!selectedFile) {
       setUploadStatus("Please select an image first");
@@ -56,6 +77,7 @@ const page = () => {
 
     setIsUploading(true);
     setUploadStatus("Uploading...");
+
 
     try {
       const formData = new FormData();
@@ -71,6 +93,8 @@ const page = () => {
       if (result.success) {
         setUploadStatus("Upload successful! File uploaded to S3");
         console.log("Uploaded file:", result.fileName);
+    insertPostToSupabase(user.id,postTitle, productInfo, post);
+
       } else {
         setUploadStatus(`Upload failed: ${result.error}`);
       }
@@ -94,6 +118,7 @@ const page = () => {
         </p>
       </div>
 
+      {/* Post Size Selection Card */}
       <div className="mt-12 border rounded-lg overflow-hidden">
         <div
           className={cn(
@@ -114,9 +139,7 @@ const page = () => {
           </div>
 
           <div className="p-4">
-
             <div className="w-full  flex flex-col rounded-md gap-6 px-4 py-6  bg-[#181717] border-2 border-[#272729] ">
-
               {/* Second Card Heading */}
 
               <div className="flex gap-4 items-end">
@@ -140,19 +163,77 @@ const page = () => {
                   </div>
                 ))}
               </div>
-
             </div>
           </div>
-
-          <div className="w-full flex justify-center items-center py-4">
-        <Button className={`tex-white  cursor-pointer   px-6 py-2 bg-[#7F4BF3] hover:bg-[#804bf3cf] `} size={22}>
-          Next
-        </Button>
-      </div>
         </div>
       </div>
 
+      {/* Product Info Section */}
+      <div className="mt-12 border rounded-lg overflow-hidden">
+        <div
+          className={cn(
+            "w-full text-white flex flex-col gap-8  py-9  ",
+            "bg-[#0C0C0C] border-[#464545]  "
+          )}
+        >
+          <div className={`flex flex-col gap-2 px-8 `}>
+            <h2 className="capitalize font-semibold text-lg ">product info</h2>
+            <h3 className="text-base text-[#626264] ">
+              give us the details of your product to generate the advertisement
+              post
+            </h3>
+          </div>
 
+          <div className="w-full flex items-center justify-start gap-6 px-8 ">
+            <div className="flex flex-col w-[15vw]   gap-2">
+              <label className="capitalize">post title </label>
+              <input
+                type="text"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="Enter post name"
+                value={postTitle}
+                onChange={(e) => setPostTitle(e.target.value)
+                }
+              />
+            </div>
+
+          <div className="w-full flex items-center justify-start gap-6 px-8 ">
+            <div className="flex flex-col w-[15vw]   gap-2">
+              <label className="capitalize">product name </label>
+              <input
+                type="text"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="Enter product name"
+                value={productInfo.name}
+                onChange={(e) =>
+                  setProductInfo({ ...productInfo, title: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="flex flex-col w-[15vw]   gap-2">
+              <label className="capitalize">product description </label>
+              <input
+                type="text"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="Enter product description"
+                value={productInfo.description}
+                onChange={(e) =>
+                  setProductInfo({
+                    ...productInfo,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+      {/* Image Upload Section */}
       <div className="mt-12 border rounded-lg overflow-hidden">
         <div
           className={cn(
@@ -160,43 +241,43 @@ const page = () => {
             "bg-[#0C0C0C] border-[#464545]  "
           )}
         >
-
           <div className={`flex flex-col gap-2 px-8`}>
             <h2 className="capitalize font-semibold text-lg ">
               Upload product image
             </h2>
             <h3 className="text-base text-[#626264] ">
-              Take a picture of your product with your phone and upload it 
+              Take a picture of your product with your phone and upload it
             </h3>
           </div>
 
           <div className="w-full flex items-center justify-center h-[300px]">
-            <ImageUpload onFileChange={handleFileChange}/>
+            <ImageUpload onFileChange={handleFileChange} />
           </div>
 
           {uploadStatus && (
             <div className="w-full flex justify-center items-center py-2">
-              <div className={`text-sm ${uploadStatus.includes('successful') ? 'text-green-500' : uploadStatus.includes('failed') ? 'text-red-500' : 'text-blue-500'}`}>
+              <div
+                className={`text-sm ${uploadStatus.includes("successful") ? "text-green-500" : uploadStatus.includes("failed") ? "text-red-500" : "text-blue-500"}`}
+              >
                 {uploadStatus}
               </div>
             </div>
           )}
 
           <div className="w-full flex justify-center items-center py-4">
-            <Button 
-              className={`text-white capitalize cursor-pointer px-6 py-2 bg-[#7F4BF3] hover:bg-[#804bf3cf] ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`} 
+            <Button
+              className={`text-white capitalize cursor-pointer px-6 py-2 bg-[#7F4BF3] hover:bg-[#804bf3cf] ${isUploading ? "opacity-50 cursor-not-allowed" : ""}`}
               size={22}
               onClick={handleUpload}
               disabled={isUploading}
             >
-              {isUploading ? 'Uploading...' : 'Upload'}
+              {isUploading ? "Uploading..." : "Upload"}
             </Button>
           </div>
         </div>
       </div>
 
-
-    </div>
+  </div>
   );
 };
 

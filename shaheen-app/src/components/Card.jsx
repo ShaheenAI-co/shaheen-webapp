@@ -10,7 +10,7 @@ const HowCard = ({title , body,imgSrc}) => {
     const locale = pathname.split("/")[1] || "en"; // check the first part after /
     const isArabic = locale === "ar";
   return (
-    <Card className="bg-black  overflow-hidden  border-gray-400 w-[350px] md:w-[23vw] h-[500px] md:h-[550px] shadow-[inset_0px_-66px_64px_-48px_#B52CFF,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten" dir={isArabic ? "rtl" : "ltr"}>
+    <Card className="bg-black  overflow-hidden  border-gray-400  md:w-[350px] max-w-[400px] h-[500px] md:h-[550px] shadow-[inset_0px_-66px_64px_-48px_#B52CFF,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten" dir={isArabic ? "rtl" : "ltr"}>
       <CardContent className="flex flex-col px-4 md:px-6  gap-8">
         <div className="w-full overflow-hidden flex justify-center items-center  relative h-[300px] rounded-md">
           <Image
