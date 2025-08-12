@@ -27,11 +27,11 @@ const NavCTA = () => {
     >
       <LanguageSwitch />
 
-      <Link  href={`/${locale}/sign-in`} className="pr-2">
-        <Button variant="secondary" className=" cursor-pointer capitalize">
-          {t("login")}
-        </Button>
-      </Link>
+<Button variant="secondary" className=" cursor-pointer flex justify-center  capitalize" asChild>
+  <Link href={`/${locale}/sign-in`}>
+    {t("login")}
+  </Link>
+</Button>
 
       {/* <Link href="/signup" className="pr-2">
         <Button variant="secondary">{t("try")}</Button>
