@@ -1,23 +1,29 @@
+"use client";
 import { Button } from "@/components/ui/button"
 import CurvedBand from "./CurvedRect";
 import Link from "next/link";
-
+import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 
 export default function FinalCta() {
+  const t = useTranslations("FinalCta");
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
+
   return (
     <div className="relative flex flex-col items-center justify-center border border-white/25 min-h-[400px] bg-black text-white md:p-8 rounded-sm overflow-hidden shadow-lg mx-auto w-[300px] md:w-[800px] lg:w-[1200px] backdrop-blur-lg  md:mt-20 mb-20">
 
         {/* Heading */}
       <div className="relative z-10 flex flex-col items-center gap-6 text-center space-y-6">
         <div className="flex flex-col items-center gap-4">
-            <h1 className="text-2xl md:text-6xl satoshi-bold max-sm:w-[250px]  leading-tight max-w-3xl">You Could've Posted by Now Let's Go</h1>
+            <h1 className="text-2xl md:text-6xl satoshi-bold max-sm:w-[250px]  leading-tight max-w-3xl">{t("title")}</h1>
             <p className="text-base md:text-lg max-sm:w-[200px] font-normal text-gray-300 ">
-              Let our AI do the writing while you focus on growing your brand
+              {t("subtitle")}
             </p>
         </div>
-        <Link href="/Signup" className="w-full max-w-md">
+        <Link href={`/${locale}/Signup`} className="w-full max-w-md">
             <Button variant="secondary" className="cursor-pointer  font-semibold py-3 px-6 rounded-md transition-all duration-200">
-              Get Started
+              {t("button")}
             </Button>
         </Link>
       </div>

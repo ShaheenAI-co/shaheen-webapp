@@ -14,7 +14,8 @@
   },
   "NavCTA": {
     "login" : "login",
-    "try" : "Try for free"
+    "try" : "Try for free",
+    "dashboard" : "Dashboard"
   },
   "SlideText": {
     "phrase-1": "Elevate your brand",
@@ -67,6 +68,12 @@
     "body-2" : "Upload the photo straight to our site. No editing, no setup  just a simple upload, and you're good to go. our AI will handle the rest from here." ,
     "Title-3" : "Ready to post",
     "body-3" : "Shaheen generates a polished background with engaging captions , You can edit it before publishing, so you have full control over the final look" 
+  },
+
+  "FinalCta": {
+    "title": "You Could've Posted by Now Let's Go",
+    "subtitle": "Let our AI do the writing while you focus on growing your brand",
+    "button": "Get Started"
   },
 
   "Faq": {

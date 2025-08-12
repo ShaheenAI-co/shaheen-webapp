@@ -14,6 +14,7 @@ import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import LanguageSwitch from "./LanguageSwitcher";
 import { Button } from "./ui/button";
+import { useUser } from "@clerk/nextjs";
 
 const NavMobile = () => {
   const t = useTranslations("NavLinks");
@@ -21,6 +22,8 @@ const NavMobile = () => {
   const pathname = usePathname(); // give you the url path
   const locale = pathname.split("/")[1] || "en"; // check the first part after /
   const isArabic = locale === "ar";
+  const { isSignedIn, isLoaded } = useUser();
+
   return (
     <div className="md:hidden max-sm:block">
       <Sheet>
@@ -37,14 +40,27 @@ const NavMobile = () => {
               >
                 <LanguageSwitch />
 
-                <Link href="/login" className="pr-2">
-                  <Button
-                    variant="secondary"
-                    className=" cursor-pointer capitalize"
-                  >
-                    {l("login")}
-                  </Button>
-                </Link>
+                {isLoaded && (
+                  isSignedIn ? (
+                    <Link href={`/${locale}/dashboard`} className="pr-2">
+                      <Button
+                        variant="secondary"
+                        className=" cursor-pointer capitalize"
+                      >
+                        {l("dashboard")}
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link href={`/${locale}/sign-in`} className="pr-2">
+                      <Button
+                        variant="secondary"
+                        className=" cursor-pointer capitalize"
+                      >
+                        {l("login")}
+                      </Button>
+                    </Link>
+                  )
+                )}
 
           
               </div>

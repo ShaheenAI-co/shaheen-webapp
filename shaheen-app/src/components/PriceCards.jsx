@@ -5,9 +5,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Check } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export default function Component() {
   const [isYearly, setIsYearly] = useState(false)
+  const pathname = usePathname()
+  const locale = pathname.split("/")[1] || "en"
 
   // Pricing data
   const pricing = {
@@ -85,13 +89,15 @@ export default function Component() {
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
-              <Button variant="outline" className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800">
-                Sign Up Now
-              </Button>
+              <Link href={`/${locale}/Signup`}>
+                <Button variant="outline" className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800">
+                  Sign Up Now
+                </Button>
+              </Link>
               <p className="text-center text-gray-400 text-sm">Always free</p>
               
               <div className="space-y-4">
-                <p className="font-semibold">Free plan includes:</p>
+                <p className="font-semibold">What's included:</p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3">
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
@@ -99,19 +105,19 @@ export default function Component() {
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-300">2 active projects</span>
+                    <span className="text-gray-300">Up to 5 projects</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-300">Basic task management</span>
+                    <span className="text-gray-300">Basic workflows</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-300">Real-time collaboration</span>
+                    <span className="text-gray-300">Community support</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-300">7-day version history (Cloud backup)</span>
+                    <span className="text-gray-300">7-day version history</span>
                   </li>
                 </ul>
               </div>
@@ -140,9 +146,11 @@ export default function Component() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6 space-y-6">
-                <Button className="w-full h-12 bg-white text-blue-600 hover:bg-gray-100 font-semibold">
-                  Start Free Trial
-                </Button>
+                <Link href={`/${locale}/Signup`}>
+                  <Button className="w-full h-12 bg-white text-blue-600 hover:bg-gray-100 font-semibold">
+                    Start Free Trial
+                  </Button>
+                </Link>
                 <p className="text-center text-blue-100 text-sm">
                   Billed {isYearly ? 'annually' : 'monthly'}
                 </p>
@@ -196,9 +204,11 @@ export default function Component() {
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
-              <Button variant="outline" className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800">
-                Start Free Trial
-              </Button>
+              <Link href={`/${locale}/Signup`}>
+                <Button variant="outline" className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800">
+                  Start Free Trial
+                </Button>
+              </Link>
               <p className="text-center text-gray-400 text-sm">
                 Billed {isYearly ? 'annually' : 'monthly'}
               </p>
@@ -251,9 +261,11 @@ export default function Component() {
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
-              <Button variant="outline" className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800">
-                Contact Sales
-              </Button>
+              <Link href={`/${locale}/Signup`}>
+                <Button variant="outline" className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800">
+                  Contact Sales
+                </Button>
+              </Link>
               <p className="text-center text-gray-400 text-sm">
                 Billed {isYearly ? 'annually' : 'monthly'}
               </p>

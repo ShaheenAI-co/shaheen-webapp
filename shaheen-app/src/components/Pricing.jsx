@@ -1,8 +1,14 @@
+"use client";
 import { Button } from "@/components/ui/button"
 import { User, Cloud, Check } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export default function Pricing() {
+  const pathname = usePathname()
+  const locale = pathname.split("/")[1] || "en"
+
   return (
     <div className="min-h-screen w-full text-white flex flex-col items-center justify mt-25 md:mt-51  gap-20 p-4 sm:p-6 lg:p-8">
 
@@ -38,9 +44,11 @@ export default function Pricing() {
                 <p className="font-normal text-base mb-8 capitalize"> For freelancers and small teams </p>
             </div>
 
-            <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
-              get startup plan
-            </Button>
+            <Link href={`/${locale}/Signup`}>
+              <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
+                get startup plan
+              </Button>
+            </Link>
 
                 {/* Features List */}
             <div className="mt-2 pt-8 border-t border-gray-800">
@@ -95,9 +103,11 @@ export default function Pricing() {
                 <p className="font-normal text-base mb-8">Perfect for growing businesses</p>
             </div>
 
-            <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
-              get business plan
-            </Button>
+            <Link href={`/${locale}/Signup`}>
+              <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
+                get business plan
+              </Button>
+            </Link>
 
                 {/* Features List */}
             <div className="mt-2 pt-8 border-t border-gray-800">
@@ -152,9 +162,11 @@ export default function Pricing() {
                 <p className="font-normal text-base mb-8">Best for high volume marketing teams</p>
             </div>
 
-            <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
-              get enterprise plan
-            </Button>
+            <Link href={`/${locale}/Signup`}>
+              <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
+                get enterprise plan
+              </Button>
+            </Link>
 
                 {/* Features List */}
             <div className="mt-2 pt-8 border-t border-gray-800">
@@ -186,9 +198,6 @@ export default function Pricing() {
 
           </div>
         </div>
-
-      
-
 
       </div>
     </div>

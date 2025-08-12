@@ -9,12 +9,14 @@ import { usePathname } from "next/navigation";
 import NavMobile from "./NavMobile";
 import LanguageSwitch from "./LanguageSwitcher";
 import { useTranslations } from "next-intl";
+import { useUser } from "@clerk/nextjs";
 
 export const Nav = () => {
   const t = useTranslations("NavCTA");
   const pathname = usePathname(); // give you the url path
   const locale = pathname.split("/")[1] || "en"; // check the first part after /
   const isArabic = locale === "ar";
+  const { isSignedIn, isLoaded } = useUser();
 
   return (
     <nav
@@ -28,11 +30,21 @@ export const Nav = () => {
       <div className="flex lg:hidden gap-4">
         <LanguageSwitch />
 
-        <Link href="/login" className="pr-2">
-          <Button variant="secondary" className=" cursor-pointer  capitalize">
-            {t("login")}
-          </Button>
-        </Link>
+        {isLoaded && (
+          isSignedIn ? (
+            <Link href={`/${locale}/dashboard`} className="pr-2">
+              <Button variant="secondary" className=" cursor-pointer  capitalize">
+                {t("dashboard")}
+              </Button>
+            </Link>
+          ) : (
+            <Link href={`/${locale}/sign-in`} className="pr-2">
+              <Button variant="secondary" className=" cursor-pointer  capitalize">
+                {t("login")}
+              </Button>
+            </Link>
+          )
+        )}
       </div>
     </nav>
   );
