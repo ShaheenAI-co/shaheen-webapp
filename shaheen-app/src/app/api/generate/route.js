@@ -20,12 +20,12 @@ export async function POST(request) {
     }
 
     // Parse request body
-    const { input_image_url, size, brand, post_id } = await request.json();
+    const { input_image_url, size, post_id } = await request.json();
 
     // Validate required fields
-    if (!input_image_url || !size || !brand || !post_id) {
+    if (!input_image_url || !size || !post_id) {
       return Response.json(
-        { error: 'Missing required fields: input_image_url, size, brand, post_id' },
+        { error: 'Missing required fields: input_image_url, size, post_id' },
         { status: 400 }
       );
     }
@@ -42,19 +42,16 @@ export async function POST(request) {
     // Generate 2 different prompts using Google Gemini
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
     
-    const promptGenerationText = `Analyze this image and create 2 different detailed image generation prompts for a brand customization service. 
+    const promptGenerationText = `Analyze this image and create 2 different detailed image generation prompts for image customization. 
     
     Image URL: ${input_image_url}
-    Brand Name: ${brand.name}
-    Brand Theme Color: ${brand.theme_color}
     Target Size: ${size}
     
     Create 2 distinct prompts that each describe:
     1. The original image content and style
-    2. How to adapt it for the brand ${brand.name}
-    3. Incorporate the theme color ${brand.theme_color}
-    4. Maintain the same composition and style
-    5. Ensure the output is suitable for ${size} dimensions
+    2. How to enhance and customize the image
+    3. Maintain the same composition and style
+    4. Ensure the output is suitable for ${size} dimensions
     
     Return the response in this exact JSON format:
     {
