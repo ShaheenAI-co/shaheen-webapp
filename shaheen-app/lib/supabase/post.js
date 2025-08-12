@@ -10,9 +10,9 @@ export async function getPosts({userId , token}) {
 }
 
 
-export const insertPostToSupabase = async (clerkUserId,postTitle, postData , postSz) => {
+export const insertPostToSupabase = async (clerkUserId, postTitle, postData, postSz, originalImageUrl) => {
     try {
-      console.log("inserting post info ....", { clerkUserId, postData });
+      console.log("inserting post info ....", { clerkUserId, postData, originalImageUrl });
 
       const supabase = await supabaseClient();
 
@@ -21,12 +21,13 @@ export const insertPostToSupabase = async (clerkUserId,postTitle, postData , pos
       const { data, error } = await supabase.from("posts").insert([
         {
           clerk_id: clerkUserId,
-          post_title:postTitle,
-          product_description:{
-            product_title:postData.title,
-            product_desc:postData.description
+          post_title: postTitle,
+          product_description: {
+            product_title: postData.title,
+            product_desc: postData.description
           },
           post_size: postSz,
+          original_image_url: originalImageUrl,
         },
       ]);
 

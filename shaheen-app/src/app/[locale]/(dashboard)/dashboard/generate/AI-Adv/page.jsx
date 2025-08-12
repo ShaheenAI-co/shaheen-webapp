@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import ImageUpload from "@/components/ImageUpload";
 import { insertPostToSupabase } from "../../../../../../../lib/supabase/post";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const postSize = [
   {
@@ -37,11 +38,12 @@ const postSize = [
 
 const page = () => {
   const { user, isLoaded } = useUser();
+  const router = useRouter();
 
   const [post, setPost] = useState("");
   const [postTitle, setPostTitle] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationStatus, setGenerationStatus] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [productInfo, setProductInfo] = useState({
     title: "",
@@ -61,50 +63,96 @@ const page = () => {
     setSelectedFile(files[0]?.file || null);
   };
 
-  const handlePostSubmit = async () => {
-    if (!post || !productInfo.name || !productInfo.description) {
-      setUploadStatus("Please fill in all fields before submitting.");
-      return;
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      setUploadStatus("Please select an image first");
+  const handleGenerate = async () => {
+    if (!post || !postTitle || !productInfo.title || !productInfo.description || !selectedFile) {
+      setGenerationStatus("Please fill in all fields and select an image before generating.");
       return;
     }
 
-    setIsUploading(true);
-    setUploadStatus("Uploading...");
+    setIsGenerating(true);
+    setGenerationStatus("Starting generation process...");
 
     try {
+      // Step 1: Upload image to S3
+      setGenerationStatus("Uploading image to S3...");
       const formData = new FormData();
       formData.append("file", selectedFile);
 
-      const response = await fetch("/api/s3-upload", {
+      const s3Response = await fetch("/api/s3-upload", {
         method: "POST",
         body: formData,
       });
 
-      const s3Url = await response.json();
+      const s3Result = await s3Response.json();
 
-
-
-
-
-
-      if (s3Url.success) {
-        setUploadStatus("Upload successful! File uploaded to S3");
-        console.log("Uploaded file:", s3Url.fileName);
-        insertPostToSupabase(user.id, postTitle, productInfo, post);
-      } else {
-        setUploadStatus(`Upload failed: ${s3Url.error}`);
+      if (!s3Result.success) {
+        throw new Error(`S3 upload failed: ${s3Result.error}`);
       }
+
+      const originalImageUrl = s3Result.s3Url;
+      setGenerationStatus("Image uploaded successfully. Creating post...");
+
+      // Step 2: Create post in Supabase
+      const postData = {
+        title: productInfo.title,
+        description: productInfo.description,
+      };
+
+      const supabaseResult = await insertPostToSupabase(
+        user.id,
+        postTitle,
+        postData,
+        post,
+        originalImageUrl
+      );
+
+      if (!supabaseResult || !supabaseResult[0]) {
+        throw new Error("Failed to create post in database");
+      }
+
+      const postId = supabaseResult[0].id;
+      setGenerationStatus("Post created. Generating AI content...");
+
+      // Step 3: Call generate API
+      setGenerationStatus("Calling AI generation API...");
+      
+      // Format size for API (remove spaces and ensure proper format)
+      const formattedSize = post.replace(/\s/g, "");
+      
+      const generateResponse = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          input_image_url: originalImageUrl,
+          size: formattedSize,
+          post_id: postId,
+        }),
+      });
+
+      if (!generateResponse.ok) {
+        throw new Error(`Generation API error: ${generateResponse.status}`);
+      }
+
+      const generateResult = await generateResponse.json();
+
+      if (!generateResult.success) {
+        throw new Error(`Generation failed: ${generateResult.error}`);
+      }
+
+      setGenerationStatus(`Generation completed successfully! Generated ${generateResult.total_generated} images.`);
+      
+      // Redirect to generated_images page after a short delay
+      setTimeout(() => {
+        router.push("/dashboard/generated_images");
+      }, 2000);
+
     } catch (error) {
-      console.error("Upload error:", error);
-      setUploadStatus("Upload failed: Network error");
+      console.error("Generation error:", error);
+      setGenerationStatus(`Generation failed: ${error.message}`);
     } finally {
-      setIsUploading(false);
+      setIsGenerating(false);
     }
   };
 
@@ -154,14 +202,16 @@ const page = () => {
               {/* Post Size Cards */}
 
               <div className="w-full flex gap-4 flex-wrap">
-                {postSize.map((post) => (
+                {postSize.map((postItem) => (
                   <div
-                    key={post.title}
-                    className="w-[200px] h-[200px] flex justify-center items-center flex-col gap-2 border-1 rounded-md hover:bg-purple-300/5 cursor-pointer"
-                    onClick={() => handlePostSize(post.size)}
+                    key={postItem.title}
+                    className={`w-[200px] h-[200px] flex justify-center items-center flex-col gap-2 border-1 rounded-md hover:bg-purple-300/5 cursor-pointer ${
+                      post === postItem.size ? "bg-purple-300/10 border-purple-500" : ""
+                    }`}
+                    onClick={() => handlePostSize(postItem.size)}
                   >
-                    <h4 className="text-lg font-semibold">{post.title}</h4>
-                    <p>{`(${post.size})`}</p>
+                    <h4 className="text-lg font-semibold">{postItem.title}</h4>
+                    <p>{`(${postItem.size})`}</p>
                   </div>
                 ))}
               </div>
@@ -205,7 +255,7 @@ const page = () => {
                   type="text"
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Enter product name"
-                  value={productInfo.name}
+                  value={productInfo.title}
                   onChange={(e) =>
                     setProductInfo({ ...productInfo, title: e.target.value })
                   }
@@ -253,24 +303,34 @@ const page = () => {
             <ImageUpload onFileChange={handleFileChange} />
           </div>
 
-          {uploadStatus && (
+          {generationStatus && (
             <div className="w-full flex justify-center items-center py-2">
               <div
-                className={`text-sm ${uploadStatus.includes("successful") ? "text-green-500" : uploadStatus.includes("failed") ? "text-red-500" : "text-blue-500"}`}
+                className={`text-sm ${generationStatus.includes("successfully") ? "text-green-500" : generationStatus.includes("failed") ? "text-red-500" : "text-blue-500"}`}
               >
-                {uploadStatus}
+                {generationStatus}
+              </div>
+            </div>
+          )}
+
+          {/* Progress Steps */}
+          {isGenerating && (
+            <div className="w-full flex justify-center items-center py-2">
+              <div className="flex items-center gap-2 text-sm text-blue-500">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                <span>Processing...</span>
               </div>
             </div>
           )}
 
           <div className="w-full flex justify-center items-center py-4">
             <Button
-              className={`text-white capitalize cursor-pointer px-6 py-2 bg-[#7F4BF3] hover:bg-[#804bf3cf] ${isUploading ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`text-white capitalize cursor-pointer px-6 py-2 bg-[#7F4BF3] hover:bg-[#804bf3cf] ${isGenerating ? "opacity-50 cursor-not-allowed" : ""}`}
               size={22}
-              onClick={handleUpload}
-              disabled={isUploading}
+              onClick={handleGenerate}
+              disabled={isGenerating || !post || !postTitle || !productInfo.title || !productInfo.description || !selectedFile}
             >
-              {isUploading ? "Uploading..." : "Upload"}
+              {isGenerating ? "Generating..." : "Generate"}
             </Button>
           </div>
         </div>
