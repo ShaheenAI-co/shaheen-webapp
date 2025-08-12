@@ -30,6 +30,15 @@ export async function POST(request) {
       );
     }
 
+    // Parse size into width and height
+    const [width, height] = size.split('x').map(Number);
+    if (!width || !height) {
+      return Response.json(
+        { error: 'Invalid size format. Expected format: "widthxheight" (e.g., "1024x1024")' },
+        { status: 400 }
+      );
+    }
+
     // Generate 2 different prompts using Google Gemini
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
     
@@ -81,10 +90,10 @@ export async function POST(request) {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              input_image_url,
               prompt: prompt,
-              size,
-              brand,
+              width: width,
+              height: height,
+              image_url: input_image_url,
             }),
           });
 
@@ -92,11 +101,12 @@ export async function POST(request) {
             throw new Error(`VM API error: ${vmResponse.status}`);
           }
 
-          const vmResult = await vmResponse.json();
-          const s3ImageUrl = vmResult.s3_url; // VM now returns S3 URL directly
+          // VM returns a .txt file, read the content to get the asset URL
+          const txtContent = await vmResponse.text();
+          const assetUrl = txtContent.trim(); // Remove any whitespace/newlines
 
-          if (!s3ImageUrl) {
-            throw new Error('VM did not return S3 URL');
+          if (!assetUrl) {
+            throw new Error('VM returned empty text file');
           }
 
           // Add record to generated_assets table
@@ -104,7 +114,7 @@ export async function POST(request) {
             .from('generated_assets')
             .insert({
               post_id: post_id,
-              image_url: s3ImageUrl,
+              image_url: assetUrl,
             })
             .select()
             .single();
@@ -116,12 +126,12 @@ export async function POST(request) {
 
           generatedAssets.push({
             asset_id: asset.asset_id,
-            image_url: s3ImageUrl,
+            image_url: assetUrl,
             prompt: promptKey,
             iteration: i
           });
 
-          console.log(`Generated image ${i} for ${promptKey}: ${s3ImageUrl}`);
+          console.log(`Generated image ${i} for ${promptKey}: ${assetUrl}`);
           
         } catch (error) {
           console.error(`Error generating image ${i} for ${promptKey}:`, error);
