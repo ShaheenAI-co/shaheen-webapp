@@ -43,9 +43,45 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* Cross-platform normalization - ADD THIS SECTION */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* Prevent automatic text scaling on mobile/different DPI */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  
+  /* Ensure consistent font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  
+  /* Force consistent line height calculation */
+  line-height: 1.15;
+}
+
 body {
   background: #000000;
   color: white;
+  
+  /* Enhanced font smoothing for cross-platform consistency */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  
+  /* Prevent font feature inconsistencies */
+  font-feature-settings: 'liga' 1, 'kern' 1;
+  -webkit-font-feature-settings: 'liga' 1, 'kern' 1;
+  -moz-font-feature-settings: 'liga' 1, 'kern' 1;
+  font-variant-ligatures: common-ligatures;
+  font-kerning: normal;
+  
+  /* Ensure consistent margins */
+  margin: 0;
+  padding: 0;
 }
 
 .bg-gradient-radial-to-bottom {
@@ -86,8 +122,11 @@ body {
 }
 
 .satoshi-bold {
-  font-family: "Satoshi-Bold", sans-serif;
+  font-family: "Satoshi-Bold", "Segoe UI", "Arial", "Helvetica", sans-serif; /* Added fallbacks */
   font-weight: 700;
+  /* Add font smoothing for custom fonts */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 :root {
@@ -159,16 +198,7 @@ body {
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-/* @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-} */
-
-/* Alexandria font import */
+/* Alexandria font import with enhanced loading */
 @font-face {
   font-family: "Alexandria";
   src: url("/fonts/Alexandria-VariableFont_wght.ttf") format("truetype");
@@ -178,8 +208,12 @@ body {
 }
 
 .alexandria-font {
-  font-family: "Alexandria", "Arial", "Helvetica", sans-serif;
+  font-family: "Alexandria", "Segoe UI", "system-ui", "-apple-system", "BlinkMacSystemFont", "Arial", "Helvetica", sans-serif; /* Enhanced fallback stack */
   font-weight: 400;
+  /* Add font smoothing for custom fonts */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 @layer base {
@@ -189,5 +223,20 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Additional cross-platform fixes */
+  h1, h2, h3, h4, h5, h6 {
+    /* Ensure consistent heading rendering */
+    font-kerning: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Fix for potential button/input inconsistencies */
+  button, input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+    -webkit-font-smoothing: inherit;
+    -moz-osx-font-smoothing: inherit;
+  }
 }
-

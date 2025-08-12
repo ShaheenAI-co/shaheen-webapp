@@ -18,7 +18,7 @@ export default function Pricing() {
       <div className="flex flex-col lg:flex-row gap-8  w-full justify-center items-center">
 
         {/*  Card 1 */}
-        <div className="relative overflow-hidden rounded-sm border-1  border-gray-400 bg-black backdrop-blur-lg  w-[300px] h-[550px] md:w-[350px] md:h-[600px] pt-4 pb-12 shadow-[inset_-48px_44px_84px_-48px_#B52CFF,inset_-32px_68px_84px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten">
+        <div className="relative overflow-hidden rounded-sm border-1  border-white/25 bg-black backdrop-blur-lg  w-[300px] h-[550px] md:w-[350px] md:h-[600px] pt-4 pb-12 shadow-[inset_-48px_44px_84px_-48px_#B52CFF,inset_-32px_68px_84px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten">
         
        
           
@@ -38,8 +38,8 @@ export default function Pricing() {
                 <p className="font-normal text-base mb-8 capitalize"> For freelancers and small teams </p>
             </div>
 
-            <Button className="w-full bg-[#5514B0] hover:bg-[#712ecd] cursor-pointer text-white font-semibold py-6 rounded-md transition-all duration-200">
-              Choose this plan
+            <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
+              get startup plan
             </Button>
 
                 {/* Features List */}
@@ -75,7 +75,7 @@ export default function Pricing() {
 
 
         {/*  Card 2 */}
-        <div className="relative overflow-hidden rounded-sm border-1 border-gray-400 bg-black backdrop-blur-lg  w-[300px] h-[550px] md:w-[350px] md:h-[600px] pt-4 pb-12  shadow-[inset_102px_-46px_84px_-48px_#B52CFF,inset_108px_-32px_84px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten">
+        <div className="relative overflow-hidden rounded-sm border-1 border-white/25 bg-black backdrop-blur-lg  w-[300px] h-[550px] md:w-[350px] md:h-[600px] pt-4 pb-12  shadow-[inset_102px_-46px_84px_-48px_#B52CFF,inset_108px_-32px_84px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten">
         
        
           
@@ -95,8 +95,8 @@ export default function Pricing() {
                 <p className="font-normal text-base mb-8">Perfect for growing businesses</p>
             </div>
 
-            <Button className="w-full bg-[#5514B0] hover:bg-[#712ecd] cursor-pointer text-white font-semibold py-6 rounded-md transition-all duration-200">
-              Choose this plan
+            <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
+              get business plan
             </Button>
 
                 {/* Features List */}
@@ -132,7 +132,7 @@ export default function Pricing() {
 
 
         {/*  Card 3 */}
-        <div className="relative overflow-hidden rounded-sm border-1 border-gray-400 bg-black backdrop-blur-lg  w-[300px] h-[550px] md:w-[350px] md:h-[600px] pt-4 pb-12  shadow-[inset_-88px_-60px_84px_-48px_#B52CFF,inset_-88px_-60px_84px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten">
+        <div className="relative overflow-hidden rounded-sm border-1 border-white/25 bg-black backdrop-blur-lg  w-[300px] h-[550px] md:w-[350px] md:h-[600px] pt-4 pb-12  shadow-[inset_-88px_-60px_84px_-48px_#B52CFF,inset_-88px_-60px_84px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten">
         
        
           
@@ -152,8 +152,8 @@ export default function Pricing() {
                 <p className="font-normal text-base mb-8">Best for high volume marketing teams</p>
             </div>
 
-            <Button className="w-full bg-[#5514B0] hover:bg-[#712ecd] cursor-pointer text-white font-semibold py-6 rounded-md transition-all duration-200">
-              Choose this plan
+            <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
+              get enterprise plan
             </Button>
 
                 {/* Features List */}

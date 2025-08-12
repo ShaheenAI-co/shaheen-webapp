@@ -10,6 +10,13 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+      <link rel="stylesheet" href="/fonts/inter.css" />
+      <link rel="icon" href="/favicon.ico" />
+      <title>Shaheen AI</title>
+      <meta name="description" content="Your social media partner" />
+    </head>
    
       <body>{children}</body>
     </html>

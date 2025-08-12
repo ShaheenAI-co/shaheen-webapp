@@ -14,7 +14,7 @@ export default function Home() {
 
         {/* Large card - spans differently on different screen sizes */}
 
-      <div className="md:col-span-1 lg:col-span-1 md:row-span-2 lg:row-span-2 bg-black border border-gray-400 shadow-[inset_0px_-246px_64px_-48px_#a43dee85,inset_0px_-308px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col justify-between p-8 min-h-[400px] md:min-h-[500px] ">
+      <div className="md:col-span-1 lg:col-span-1 md:row-span-2 lg:row-span-2 bg-black border border-white/25 shadow-[inset_0px_-246px_64px_-48px_#432C81,inset_0px_-308px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col justify-between p-8 min-h-[400px] md:min-h-[500px] ">
 
          
 
@@ -36,7 +36,7 @@ export default function Home() {
 
 
         {/* Card 2 */}
-        <div className="md:col-span-1 lg:col-span-1 md:row-span-1 lg:row-span-1  bg-black border border-gray-400 shadow-[inset_0px_-126px_64px_-48px_#a43dee85,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col  p-6 min-h-[200px]">
+        <div className="md:col-span-1 lg:col-span-1 md:row-span-1 lg:row-span-1  bg-black border border-white/25 shadow-[inset_0px_-126px_64px_-48px_#a43dee85,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col  p-6 min-h-[200px]">
 
 
           <h2 className="text-white text-lg font-semibold mb-2">AI Recruitment</h2>
@@ -45,7 +45,7 @@ export default function Home() {
 
 
         {/* Card 3 */}
-        <div className="md:col-span-1 lg:col-span-1 md:row-span-1 lg:row-span-1  bg-black border border-gray-400 shadow-[inset_0px_-126px_64px_-48px_#a43dee85,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col  p-6 min-h-[200px]">
+        <div className="md:col-span-1 lg:col-span-1 md:row-span-1 lg:row-span-1  bg-black border border-white/25 shadow-[inset_0px_-126px_64px_-48px_#a43dee85,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col  p-6 min-h-[200px]">
 
 
           <h2 className="text-white text-lg font-semibold mb-2">AI Recruitment</h2>
@@ -54,7 +54,7 @@ export default function Home() {
 
 
         {/* Card 4 */}
-         <div className="md:col-span-1 lg:col-span-1 md:row-span-1 lg:row-span-1  bg-black border border-gray-400 shadow-[inset_0px_-126px_64px_-48px_#a43dee85,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col  p-6 min-h-[200px]">
+         <div className="md:col-span-1 lg:col-span-1 md:row-span-1 lg:row-span-1  bg-black border border-white/25 shadow-[inset_0px_-126px_64px_-48px_#a43dee85,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col  p-6 min-h-[200px]">
 
 
           <h2 className="text-white text-lg font-semibold mb-2">AI Recruitment</h2>
@@ -63,7 +63,7 @@ export default function Home() {
 
 
         {/* Card 5 */}
-         <div className="md:col-span-1 lg:col-span-1 md:row-span-1 lg:row-span-1  bg-black border border-gray-400 shadow-[inset_0px_-126px_64px_-48px_#a43dee85,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col  p-6 min-h-[200px]">
+         <div className="md:col-span-1 lg:col-span-1 md:row-span-1 lg:row-span-1  bg-black border border-white/25 shadow-[inset_0px_-126px_64px_-48px_#a43dee85,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col  p-6 min-h-[200px]">
 
 
           <h2 className="text-white text-lg font-semibold mb-2">AI Recruitment</h2>
@@ -71,7 +71,7 @@ export default function Home() {
         </div>
 
         {/* Card 6 */}
-        <div className="md:col-span-2 lg:col-span-2 md:row-span-1 lg:row-span-1  bg-black border border-gray-400 shadow-[inset_0px_-126px_64px_-48px_#a43dee85,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex  p-6 min-h-[150px]">
+        <div className="md:col-span-2 lg:col-span-2 md:row-span-1 lg:row-span-1  bg-black border border-white/25 shadow-[inset_0px_-126px_64px_-48px_#432C81,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex  p-6 min-h-[150px]">
 
 
           <div>
@@ -82,7 +82,7 @@ export default function Home() {
 
         
         {/* Card 7 */}
-         <div className="md:col-span-1 lg:col-span-1 md:row-span-1 lg:row-span-1  bg-black border border-gray-400 shadow-[inset_0px_-126px_64px_-48px_#a43dee85,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col  p-6 min-h-[200px]">
+         <div className="md:col-span-1 lg:col-span-1 md:row-span-1 lg:row-span-1  bg-black border border-white/25 shadow-[inset_0px_-126px_64px_-48px_#a43dee85,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten rounded-sm relative overflow-hidden flex flex-col  p-6 min-h-[200px]">
 
 
           <h2 className="text-white text-lg font-semibold mb-2">AI Recruitment</h2>
