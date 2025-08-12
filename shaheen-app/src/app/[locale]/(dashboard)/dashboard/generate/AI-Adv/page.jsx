@@ -66,8 +66,7 @@ const page = () => {
       setUploadStatus("Please fill in all fields before submitting.");
       return;
     }
-
-  }
+  };
 
   const handleUpload = async () => {
     if (!selectedFile) {
@@ -78,7 +77,6 @@ const page = () => {
     setIsUploading(true);
     setUploadStatus("Uploading...");
 
-
     try {
       const formData = new FormData();
       formData.append("file", selectedFile);
@@ -88,15 +86,19 @@ const page = () => {
         body: formData,
       });
 
-      const result = await response.json();
+      const s3Url = await response.json();
 
-      if (result.success) {
+
+
+
+
+
+      if (s3Url.success) {
         setUploadStatus("Upload successful! File uploaded to S3");
-        console.log("Uploaded file:", result.fileName);
-    insertPostToSupabase(user.id,postTitle, productInfo, post);
-
+        console.log("Uploaded file:", s3Url.fileName);
+        insertPostToSupabase(user.id, postTitle, productInfo, post);
       } else {
-        setUploadStatus(`Upload failed: ${result.error}`);
+        setUploadStatus(`Upload failed: ${s3Url.error}`);
       }
     } catch (error) {
       console.error("Upload error:", error);
@@ -192,45 +194,42 @@ const page = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="Enter post name"
                 value={postTitle}
-                onChange={(e) => setPostTitle(e.target.value)
-                }
+                onChange={(e) => setPostTitle(e.target.value)}
               />
             </div>
 
-          <div className="w-full flex items-center justify-start gap-6 px-8 ">
-            <div className="flex flex-col w-[15vw]   gap-2">
-              <label className="capitalize">product name </label>
-              <input
-                type="text"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Enter product name"
-                value={productInfo.name}
-                onChange={(e) =>
-                  setProductInfo({ ...productInfo, title: e.target.value })
-                }
-              />
-            </div>
+            <div className="w-full flex items-center justify-start gap-6 px-8 ">
+              <div className="flex flex-col w-[15vw]   gap-2">
+                <label className="capitalize">product name </label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="Enter product name"
+                  value={productInfo.name}
+                  onChange={(e) =>
+                    setProductInfo({ ...productInfo, title: e.target.value })
+                  }
+                />
+              </div>
 
-            <div className="flex flex-col w-[15vw]   gap-2">
-              <label className="capitalize">product description </label>
-              <input
-                type="text"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Enter product description"
-                value={productInfo.description}
-                onChange={(e) =>
-                  setProductInfo({
-                    ...productInfo,
-                    description: e.target.value,
-                  })
-                }
-              />
+              <div className="flex flex-col w-[15vw]   gap-2">
+                <label className="capitalize">product description </label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="Enter product description"
+                  value={productInfo.description}
+                  onChange={(e) =>
+                    setProductInfo({
+                      ...productInfo,
+                      description: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
-            
           </div>
         </div>
-      </div>
-
       </div>
 
       {/* Image Upload Section */}
@@ -276,8 +275,7 @@ const page = () => {
           </div>
         </div>
       </div>
-
-  </div>
+    </div>
   );
 };
 
