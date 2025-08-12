@@ -14,26 +14,12 @@ export const metadata = {
   description: "Your social media partner",
 };
 
-// In your layout component or _document.js
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
-/>;
+
 
 export default async function LocaleLayout({ children, params }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
-        />
-      </head>
-      <body className={inter.className}>
-        <ClerkProvider>
-          <NextIntProvider params={params}>{children}</NextIntProvider>
-        </ClerkProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <NextIntProvider params={params}>{children}</NextIntProvider>
+    </ClerkProvider>
   );
 }
