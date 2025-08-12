@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function FinalCta() {
   return (
-    <div className="relative flex flex-col items-center justify-center border border-gray-400 min-h-[400px] bg-black text-white md:p-8 rounded-2xl overflow-hidden shadow-lg mx-auto w-[300px] md:w-[800px] lg:w-[1200px] backdrop-blur-lg  md:mt-20 mb-20">
+    <div className="relative flex flex-col items-center justify-center border border-gray-400 min-h-[400px] bg-black text-white md:p-8 rounded-sm overflow-hidden shadow-lg mx-auto w-[300px] md:w-[800px] lg:w-[1200px] backdrop-blur-lg  md:mt-20 mb-20">
 
         {/* Heading */}
       <div className="relative z-10 flex flex-col items-center gap-6 text-center space-y-6">
