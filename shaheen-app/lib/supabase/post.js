@@ -29,7 +29,7 @@ export const insertPostToSupabase = async (clerkUserId, postTitle, postData, pos
           post_size: postSz,
           original_image_url: originalImageUrl,
         },
-      ]);
+      ]).select();
 
       if (error) {
         console.error("Supabase insertion error details:", {

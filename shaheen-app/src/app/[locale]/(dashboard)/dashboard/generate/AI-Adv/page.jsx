@@ -106,11 +106,15 @@ const page = () => {
         originalImageUrl
       );
 
-      if (!supabaseResult || !supabaseResult[0]) {
+      console.log("Supabase result:", supabaseResult);
+
+      if (!supabaseResult || supabaseResult.length === 0) {
+        console.error("Supabase result validation failed:", { supabaseResult });
         throw new Error("Failed to create post in database");
       }
 
       const postId = supabaseResult[0].id;
+      console.log("Post ID:", postId);
       setGenerationStatus("Post created. Generating AI content...");
 
       // Step 3: Call generate API
