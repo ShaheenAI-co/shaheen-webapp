@@ -42,3 +42,5 @@ export const insertUserToSupabase = async (clerkUserId, userData) => {
     }
   };
 
+
+
