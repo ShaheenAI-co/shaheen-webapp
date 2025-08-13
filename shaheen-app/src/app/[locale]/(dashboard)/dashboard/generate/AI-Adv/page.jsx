@@ -107,14 +107,25 @@ const page = () => {
       );
 
       console.log("Supabase result:", supabaseResult);
+      console.log("Supabase result type:", typeof supabaseResult);
+      console.log("Supabase result length:", supabaseResult?.length);
+      console.log("Supabase result keys:", supabaseResult ? Object.keys(supabaseResult) : 'undefined');
 
       if (!supabaseResult || supabaseResult.length === 0) {
         console.error("Supabase result validation failed:", { supabaseResult });
         throw new Error("Failed to create post in database");
       }
 
-      const postId = supabaseResult[0].id;
+      const postId = supabaseResult[0].post_id;
       console.log("Post ID:", postId);
+      console.log("Post ID type:", typeof postId);
+      console.log("Full first result object:", supabaseResult[0]);
+      
+      if (!postId) {
+        console.error("Post ID is undefined or null:", { postId, supabaseResult });
+        throw new Error("Post ID is missing from database response");
+      }
+      
       setGenerationStatus("Post created. Generating AI content...");
 
       // Step 3: Call generate API
@@ -122,21 +133,30 @@ const page = () => {
       
       // Format size for API (remove spaces and ensure proper format)
       const formattedSize = post.replace(/\s/g, "");
+      console.log("Formatted size for API:", formattedSize);
+      
+      const apiPayload = {
+        input_image_url: originalImageUrl,
+        size: formattedSize,
+        post_id: postId,
+      };
+      console.log("API payload being sent:", apiPayload);
       
       const generateResponse = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          input_image_url: originalImageUrl,
-          size: formattedSize,
-          post_id: postId,
-        }),
+        body: JSON.stringify(apiPayload),
       });
 
+      console.log("Generate API response status:", generateResponse.status);
+      console.log("Generate API response headers:", Object.fromEntries(generateResponse.headers.entries()));
+
       if (!generateResponse.ok) {
-        throw new Error(`Generation API error: ${generateResponse.status}`);
+        const errorText = await generateResponse.text();
+        console.error("Generate API error response:", errorText);
+        throw new Error(`Generation API error: ${generateResponse.status} - ${errorText}`);
       }
 
       const generateResult = await generateResponse.json();
@@ -147,10 +167,10 @@ const page = () => {
 
       setGenerationStatus(`Generation completed successfully! Generated ${generateResult.total_generated} images.`);
       
-      // Redirect to generated_images page after a short delay
-      setTimeout(() => {
-        router.push("/dashboard/generated_images");
-      }, 2000);
+      // TEMPORARILY DISABLED: Redirect to generated_images page after a short delay
+      // setTimeout(() => {
+      //   router.push("/dashboard/generated_images");
+      // }, 2000);
 
     } catch (error) {
       console.error("Generation error:", error);
