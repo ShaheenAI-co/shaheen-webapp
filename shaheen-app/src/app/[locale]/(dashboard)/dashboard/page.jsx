@@ -46,7 +46,7 @@ const Dashboardpage = () => {
       
       <div className="flex gap-6 mt-8 flex-wrap">
         {DashboardCards.map((card, index) => (
-          <Card key={index} className={cn("w-[250px] text-white", "bg-[#0C0C0C] border-[#464545] ")}>
+          <Card key={index} className={cn("w-[250px] text-white", " bg-white/10 border border-white/20 backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] ")}>
             <CardHeader>
               <h2 className="text-base text-[#626264]  capitalize  ">
                 {card.title}
@@ -55,16 +55,17 @@ const Dashboardpage = () => {
             <CardContent>
               <div className="flex items-center justify-between gap-2">
                 <p className="text-3xl font-bold capitalize satoshi-bold ">{card.value}</p>
-                <card.icon size={64} strokeWidth={1} className="text-[#7F4BF3]" />
+                <card.icon size={64} strokeWidth={1} className="text-white" />
               </div>
             </CardContent>
           </Card>
         ))}
+  
       </div>
-
+        
 
       <div className="mt-8">
-        <Card className={cn("w-[800px] text-white", "bg-[#0C0C0C] border-[#464545] ")}>
+        <Card className={cn("w-[800px] text-white", " bg-white/10 border border-white/20 backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] ")}>
           <CardHeader>
             <CardTitle>
               <h2 className="text-base   capitalize font-normal ">

@@ -7,7 +7,7 @@ import {
   Sparkle,
   Calendar,
   Brush,
-  FileImage
+  FileImage,
 } from "lucide-react";
 
 import { Home } from "lucide-react";
@@ -16,136 +16,142 @@ import { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import SidebarBtn from "./SidebarBtn";
 
-const items = [
+const dashPages = [
   {
-    name: "Project",
-    href: "/dashboard/projects",
-    icon: FileImage,
+    name: "dashboard",
+    href: "/dashboard",
+    icon: "/icons/Home.svg",
   },
   {
-    name: "Brands",
-    href: "/dashboard/brands",
-    icon: FolderClosed,
+    name: "posts",
+    href: "/dashboard",
+    icon: "/icons/Paper_File.svg",
   },
   {
-    name: "Retouch",
-    href: "/dashboard/retouch",
-    icon: Brush,
+    name: "brands",
+    href: "/dashboard",
+    icon: "/icons/Folder_File_Project.svg",
+  },
+];
+
+const features = [
+  {
+    name: "AI advertisement",
+    href: "/dashboard",
+    icon: "/icons/Image_.svg",
   },
   {
-    name: "Schedule",
-    href: "/dashboard/schedule",
-    icon: Calendar,
+    name: "video ad",
+    href: "/dashboard",
+    icon: "/icons/Video_Player.svg",
+  },
+  {
+    name: "social media ads",
+    href: "/dashboard",
+    icon: "/icons/Social.svg",
+  },
+  {
+    name: "retouch",
+    href: "/dashboard",
+    icon: "/icons/Brush.svg",
   },
 ];
 
 export default function Sidebar() {
   const t = useTranslations("Logo");
-  const pathname = usePathname(); // give you the url path
-  const locale = pathname.split("/")[1] || "en"; // check the first part after /
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
   const isArabic = locale === "ar";
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activePage, setActivePage] = useState("dashboard");
 
-  function handleNavigation() {
-    setIsMobileMenuOpen(false);
-  }
+  const handleActivePage = (page) => {
+    setActivePage(page);
+  };
 
   return (
-    <>
-      <button
-        type="button"
-        className=" lg:hidden fixed top-4 left-4 z-[70] p-2 rounded-lg bg-white  shadow-md"
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      >
-        <Menu className="h-5 w-5 text-gray-600 dark:text-gray-300" />
-      </button>
-      <nav
-        className={`
-                fixed inset-y-0 left-0 z-[70] w-64 bg-[#0c0606] pt-4 transform transition-transform duration-200 ease-in-out border-r border-[#272729]
-                lg:translate-x-0 lg:z-[60]
-                ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-            `}
-      >
-        <div className="h-full flex flex-col py-4 px-6 overflow-y-auto">
-          {/* Logo */}
-          <div className="flex flex-col gap-4 mb-6 border-b border-[#272729] pb-4">
-            <Link href={`/dashboard`}>
-              <header
-                className={`  z-10 flex  items-center justify-start gap-2 px-2 ${
-                  isArabic ? "flex-row-reverse alexandria-font" : ""
-                } `}
+    <div className="w-[250px] h-screen bg-[#09090A]  px-5 pt-5 pb-6 flex flex-col justify-between">
+     
+      {/* SIDEBAR */}
+      <div >
+        {/* LOGO */}
+        <div>
+          <div className="px-4 border-b border-white/5 pt-2 pb-3">
+            <header
+              className={`  z-10 flex  items-center  gap-2 ${
+                isArabic ? "flex-row-reverse alexandria-font" : ""
+              } `}
+            >
+              <Image
+                src="/Logo/logo-light.png"
+                alt="Logo"
+                width={20}
+                height={20}
+                className="max-sm:w-[20px] max-sm:h-[30px]"
+              />
+              <h1
+                className={`text-white text-sm md:text-xl  satoshi-bold   ${isArabic ? "hidden" : ""} `}
               >
+                {t("name")}
+              </h1>
+              {isArabic && (
                 <Image
-                  src="/Logo/logo-light.png"
+                  src="/Logo/arabic-logo-Ar.png"
+                  width={100}
+                  height={100}
                   alt="Logo"
-                  width={20}
-                  height={20}
-                  className="max-sm:w-[20px] max-sm:h-[30px]"
+                  className="max-sm:w-[60px] max-sm:h-[30px]"
                 />
-                <h1
-                  className={`text-white text-sm md:text-xl   satoshi-bold ${isArabic ? "hidden" : ""} `}
-                >
-                  {t("name")}
-                </h1>
-                {isArabic && (
-                  <Image
-                    src="/Logo/arabic-logo-Ar.png"
-                    width={100}
-                    height={100}
-                    alt="Logo"
-                    className="max-sm:w-[60px] max-sm:h-[30px]"
-                  />
-                )}
-              </header>
-              <span className="bg-[#3c3c3c] h-[2px] w-full rounded-md"></span>
-            </Link>
-          </div>
-
-          {/* Dashboard items */}
-
-          <div className="flex flex-col gap-8">
-            <Link
-              href={`/dashboard/generate`}
-              className="flex items-center gap-4 bg-[#7F4BF3]   rounded-md py-3 px-4 hover:transition-all duration-300  text-white"
-            >
-              <Sparkle className="h-4 w-4 text-white" />
-              <span>Generate</span>
-            </Link>
-            <div className="flex flex-col gap-4  ">
-              {items.map((item) => (
-                <Link
-                  href={item.href}
-                  className="flex items-center gap-4  hover:bg-[#9261FA] rounded-md py-2 px-4 hover:transition-all duration-300  text-white"
-                  key={item.name}
-                >
-                  <item.icon className="h-4 w-4 text-white" />
-                  <span>{item.name}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Settings */}
-
-          <div className=" justify-self-end mt-auto">
-            <Link
-              href={`/dashboard/setting`}
-              className="flex items-center gap-4 font-bold hover:bg-[#272729] rounded-md py-2 px-4  text-white"
-            >
-              <Settings className="h-4 w-4 text-white" />
-              <span>Settings</span>
-            </Link>
+              )}
+            </header>
           </div>
         </div>
-      </nav>
 
-      {isMobileMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-[65] lg:hidden"
-          onClick={() => setIsMobileMenuOpen(false)}
+        {/* NAVIGATION */}
+        <div className="flex flex-col mt-5 gap-2">
+          {/* PAGE SELECTOR */}
+          <div className=" pb-4 flex flex-col gap-2 border-b border-white/10">
+            {dashPages.map((page) => (
+              <SidebarBtn
+                key={page.name}
+                activePage={activePage}
+                handleActivePage={handleActivePage}
+                href={page.href}
+                icon={page.icon}
+                name={page.name}
+                onClick={() => handleActivePage(page.name)}
+              />
+            ))}
+          </div>
+
+          {/* FEATURES */}
+          <div className=" pb-4 flex flex-col gap-2 ">
+            {features.map((page) => (
+              <SidebarBtn
+                key={page.name}
+                activePage={activePage}
+                handleActivePage={handleActivePage}
+                href={page.href}
+                icon={page.icon}
+                name={page.name}
+                onClick={() => handleActivePage(page.name)}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div>
+        <SidebarBtn
+          activePage={activePage}
+          handleActivePage={handleActivePage}
+          href="/dashboard/settings"
+          icon="/icons/Settings_icon.svg"
+          name="settings"
         />
-      )}
-    </>
+      </div>
+    </div>
   );
 }

@@ -15,7 +15,7 @@ const Topbar = () => {
     }
   };
   return (
-    <div className="flex justify-between z-10 items-center gap-4 py-6 px-8 bg-[#000000] border-b border-[#272729]">
+    <div className="flex justify-between z-10 items-center gap-4 py-6 px-12 bg-[#0f0f0f] ">
       <div>
         <h1 className="text-2xl font-bold">Dashboard</h1>
       </div>
