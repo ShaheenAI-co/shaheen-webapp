@@ -39,7 +39,7 @@ const dashPages = [
 const features = [
   {
     name: "AI advertisement",
-    href: "/dashboard",
+    href: "/dashboard/generate/AI-Adv",
     icon: "/icons/Image_.svg",
   },
   {
@@ -64,17 +64,16 @@ export default function Sidebar() {
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
   const isArabic = locale === "ar";
-  const [activePage, setActivePage] = useState("dashboard");
+  const [activePage, setActivePage] = useState("");
 
   const handleActivePage = (page) => {
     setActivePage(page);
   };
 
   return (
-    <div className="w-[250px] h-screen bg-[#09090A]  px-5 pt-5 pb-6 flex flex-col justify-between">
-     
+    <div className="w-[250px] h-screen bg-[#09090A] fixed  px-5 pt-5 pb-6 flex flex-col justify-between max-sm:left-[-100%] transition-all duration-300 ">
       {/* SIDEBAR */}
-      <div >
+      <div>
         {/* LOGO */}
         <div>
           <div className="px-4 border-b border-white/5 pt-2 pb-3">
@@ -126,7 +125,7 @@ export default function Sidebar() {
           </div>
 
           {/* FEATURES */}
-          <div className=" pb-4 flex flex-col gap-2 ">
+          <div className=" pb-4 flex flex-col gap-2 border-b border-white/10 ">
             {features.map((page) => (
               <SidebarBtn
                 key={page.name}
@@ -139,6 +138,18 @@ export default function Sidebar() {
               />
             ))}
           </div>
+        </div>
+
+        {/* SCHEDULE POST */}
+        <div className=" pt-4 flex flex-col gap-2">
+          <SidebarBtn
+            activePage={activePage}
+            handleActivePage={handleActivePage}
+            href="/dashboard"
+            icon="/icons/Calendar.svg"
+            name="Schedule_Post"
+            onClick={() => handleActivePage(page.name)}
+          />
         </div>
       </div>
 

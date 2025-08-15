@@ -227,3 +227,22 @@ body {
   mix-blend-mode: multiply; /* Let it blend with the first */
   pointer-events: none;
 }
+
+.gradient-purple-dark {
+  background: linear-gradient(
+    to bottom,
+    #8a38f5 0%,
+    #8951d2 22%,
+    #9154e1 62%,
+    #180630 100%
+  );
+}
+.bg-gradient-radial-to-bottom {
+  background: linear-gradient(
+    to bottom,
+    #000000 0%,
+    #200d42 30%,
+    #4f21a1 53%,
+    #8979f5 80%
+  );
+}

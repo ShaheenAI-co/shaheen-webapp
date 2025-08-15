@@ -11,75 +11,103 @@ import {
 import { cn } from "@/lib/utils";
 import { FolderClosed, Brush, Calendar } from "lucide-react";
 import TableComponent from "./components/Table";
+import Image from "next/image";
+import Topbar from "./components/Topbar";
 
 const DashboardCards = [
   {
     title: "Total Projects",
     value: 0,
-    icon: FolderClosed,
+    icon: "/icons/Paper_File.svg",
   },
   {
     title: "Total Brands",
     value: 0,
-    icon: FolderClosed,
+    icon: "/icons/Folder_File_Project.svg",
   },
   {
-    title: "Total Retouch",
+    title: "Schedule Post",
     value: 0,
-    icon: Brush,
+    icon: "/icons/Calendar.svg",
   },
-  {
-    title: "Total Schedule",
-    value: 0,
-    icon: Calendar,
-  }
-]
+];
+
+const SchedulePost = [" post"];
 
 const Dashboardpage = () => {
   return (
-    <div className="px-12 mt-6 h-screen ">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-2xl font-bold capitalize satoshi-bold ">
-          Welcome back , <span className="text-[#7F4BF3]">Ahmad</span> {" "}
-        </h2>
-      </div>
-      
-      <div className="flex gap-6 mt-8 flex-wrap">
-        {DashboardCards.map((card, index) => (
-          <Card key={index} className={cn("w-[250px] text-white", " bg-white/10 border border-white/20 backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] ")}>
+    <div className="px-12 pt-6  min-h-screen ">
+      <Topbar icon="/icons/Home.svg" title="dashboard" />
+
+      <div className="mt-6"
+      >
+        {/* GREETINGS */}
+        <div className="flex flex-col gap-2">
+          <h2 className="text-3xl font-bold capitalize satoshi-bold ">
+            Welcome back , <span className="text-[#7F4BF3] italic">Ahmad</span>{" "}
+          </h2>
+        </div>
+
+        {/* DASHBOARD CARDS */}
+        <div className="flex gap-6 mt-8 flex-wrap">
+          {DashboardCards.map((card, index) => (
+            <Card
+              key={index}
+              className={cn(
+                "w-[250px] text-white",
+                " bg-white/10 border border-white/20 backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] "
+              )}
+            >
+              <CardHeader>
+                <h2 className="text-base text-[#626264]  capitalize  ">
+                  {card.title}
+                </h2>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-3xl font-bold capitalize satoshi-bold ">
+                    {card.value}
+                  </p>
+                  <Image
+                    src={card.icon}
+                    alt={card.title}
+                    width={64}
+                    height={64}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* TABLE */}
+        <div className="mt-8">
+          <Card
+            className={cn(
+              "w-[800px] text-white",
+              " bg-white/10 border border-white/20 h-[400px] backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] "
+            )}
+          >
             <CardHeader>
-              <h2 className="text-base text-[#626264]  capitalize  ">
-                {card.title}
-              </h2>
+              <CardTitle>
+                <h2 className="text-base   capitalize font-normal ">
+                  Scheduled Posts
+                </h2>
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-3xl font-bold capitalize satoshi-bold ">{card.value}</p>
-                <card.icon size={64} strokeWidth={1} className="text-white" />
+            <CardContent
+              className={`flex flex-col justify-center items-center h-full gap-2`}
+            >
+              <div className="flex justify-center items-center h-full">
+                <h2 className="text-sm text-white/50">No scheduled post</h2>
               </div>
             </CardContent>
           </Card>
-        ))}
-  
-      </div>
-        
+        </div>
 
-      <div className="mt-8">
-        <Card className={cn("w-[800px] text-white", " bg-white/10 border border-white/20 backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] ")}>
-          <CardHeader>
-            <CardTitle>
-              <h2 className="text-base   capitalize font-normal ">
-                Total Brands
-              </h2>
-            </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <TableComponent />
-            </CardContent>
-        </Card>
+
       </div>
 
-      
     </div>
   );
 };
