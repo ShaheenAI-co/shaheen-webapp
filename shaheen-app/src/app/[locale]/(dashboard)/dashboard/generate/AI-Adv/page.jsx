@@ -198,6 +198,8 @@ const page = () => {
 
   return (
     <div className=" py-6 bg-[#0f0f0f] min-h-screen">
+
+
       {/* TOPBAR */}
       <div className="px-12">
         <Topbar icon="/icons/Image_.svg" title="AI Advertisement" />
@@ -205,10 +207,11 @@ const page = () => {
 
       {/* CONTENT */}
       <div className="mt-6 px-8">
+
         {/* POST SIZE */}
         <div className="flex flex-col gap-6   bg-white/5 border border-white/10 rounded-2xl px-4 py-6  ">
           <div className="w-full flex flex-col gap-2   ">
-            <h3 className="font-bold text-lg">select post size</h3>
+            <h3 className="font-bold text-lg capitalize">select post size</h3>
             <p className="text-white/35">select from one of the post sizes</p>
           </div>
 
@@ -229,12 +232,13 @@ const page = () => {
         {/* PRODUCT INFO */}
         <div className="flex flex-col gap-4   bg-white/5 border border-white/10 rounded-2xl px-4 py-6 mt-6 ">
           <div className="w-full flex flex-col gap-2   ">
-            <h3 className="font-bold text-lg">product info</h3>
+            <h3 className="font-bold text-lg capitalize">product info</h3>
             <p className="text-white/35">enter the product info</p>
           </div>
 
           <div className="flex flex-col gap-6">
             <div className="flex justify-between items-center flex-wrap gap-4">
+              {/* POST TITLE */}
               <div className="flex items-center gap-2">
                 <h4 className="capitalize">post title</h4>
                 <input
@@ -246,6 +250,7 @@ const page = () => {
                 />
               </div>
 
+              {/* PRODUCT NAME */}
               <div className="flex items-center gap-2">
                 <h4 className="capitalize">product name</h4>
                 <input
@@ -255,6 +260,20 @@ const page = () => {
                   value={productInfo.title}
                   onChange={(e) =>
                     setProductInfo({ ...productInfo, title: e.target.value })
+                  }
+                />
+              </div>
+
+              {/* PRODUCT CATEGORY */}
+              <div className="flex items-center gap-2">
+                <h4 className="capitalize">product category</h4>
+                <input
+                  className="bg-[#0F0F0F] w-[300px] px-4 py-3 rounded-lg outline-purple-500"
+                  type="text"
+                  placeholder="eg. Shoes"
+                  value={productInfo.category}
+                  onChange={(e) =>
+                    setProductInfo({ ...productInfo, category: e.target.value })
                   }
                 />
               </div>
@@ -281,7 +300,7 @@ const page = () => {
         {/* IMAGE UPLOAD */}
         <div className="flex flex-col gap-6    bg-white/5 border border-white/10 rounded-2xl px-4 py-6 mt-6 ">
           <div className="w-full flex flex-col gap-2   ">
-            <h3 className="font-bold text-lg">image upload</h3>
+            <h3 className="font-bold text-lg capitalize">image upload</h3>
             <p className="text-white/35">upload the product image</p>
           </div>
 
@@ -300,6 +319,7 @@ const page = () => {
         </div>
 
       </div>
+      
     </div>
   );
 };
