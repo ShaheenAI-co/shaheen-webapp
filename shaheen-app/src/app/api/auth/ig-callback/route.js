@@ -16,112 +16,97 @@ export async function GET(req) {
 
   try {
     // For Instagram Business API, we need to exchange the code for an access token
-    // using the Facebook Graph API since Instagram Business API tokens are managed through Facebook
+    // using the Instagram Graph API endpoint
     const tokenRes = await fetch(
-      `https://graph.facebook.com/v19.0/oauth/access_token?` +
-        new URLSearchParams({
+      `https://api.instagram.com/oauth/access_token`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
           client_id: process.env.FB_APP_ID || '1274014204192589',
           client_secret: process.env.FB_APP_SECRET,
+          grant_type: 'authorization_code',
           redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL || 'https://shaheen-webapp.vercel.app'}/api/auth/ig-callback`,
           code: code,
         })
+      }
     );
 
     if (!tokenRes.ok) {
-      throw new Error(`Token exchange failed: ${tokenRes.status}`);
+      const errorText = await tokenRes.text();
+      console.error("Instagram token exchange failed:", errorText);
+      throw new Error(`Token exchange failed: ${tokenRes.status} - ${errorText}`);
     }
 
     const tokenData = await tokenRes.json();
-    console.log("Short-lived access token response:", tokenData);
+    console.log("Instagram access token response:", tokenData);
 
-    if (tokenData.error) {
-      throw new Error(`Facebook API error: ${tokenData.error.message}`);
+    if (tokenData.error_type) {
+      throw new Error(`Instagram API error: ${tokenData.error_message || tokenData.error_type}`);
+    }
+
+    // According to the docs, the response has a 'data' array with the first item containing our token
+    const shortLivedToken = tokenData.data && tokenData.data[0] ? tokenData.data[0].access_token : tokenData.access_token;
+    const userId = tokenData.data && tokenData.data[0] ? tokenData.data[0].user_id : tokenData.user_id;
+    
+    if (!shortLivedToken) {
+      throw new Error('No access token received from Instagram');
     }
 
     // Now exchange the short-lived token for a long-lived token (60 days)
     const longLivedTokenRes = await fetch(
-      `https://graph.facebook.com/v19.0/oauth/access_token?` +
-        new URLSearchParams({
-          grant_type: 'fb_exchange_token',
-          client_id: process.env.FB_APP_ID || '1274014204192589',
-          client_secret: process.env.FB_APP_SECRET,
-          fb_exchange_token: tokenData.access_token,
-        })
+      `https://graph.instagram.com/access_token?` +
+      new URLSearchParams({
+        grant_type: 'ig_exchange_token',
+        client_secret: process.env.FB_APP_SECRET,
+        access_token: shortLivedToken,
+      })
     );
 
     if (!longLivedTokenRes.ok) {
-      throw new Error(`Long-lived token exchange failed: ${longLivedTokenRes.status}`);
+      const errorText = await longLivedTokenRes.text();
+      console.error("Long-lived token exchange failed:", errorText);
+      throw new Error(`Long-lived token exchange failed: ${longLivedTokenRes.status} - ${errorText}`);
     }
 
     const longLivedTokenData = await longLivedTokenRes.json();
-    console.log("Long-lived access token response:", longLivedTokenData);
+    console.log("Long-lived token response:", longLivedTokenData);
 
-    if (longLivedTokenData.error) {
-      throw new Error(`Facebook API error: ${longLivedTokenData.error.message}`);
+    if (longLivedTokenData.error_type) {
+      throw new Error(`Instagram API error: ${longLivedTokenData.error_message || longLivedTokenData.error_type}`);
     }
 
-    // Get user's Facebook pages with long-lived tokens
-    const pagesRes = await fetch(
-      `https://graph.facebook.com/v19.0/me/accounts?access_token=${longLivedTokenData.access_token}`
+    // Get the user's Instagram business account information using the long-lived token
+    const userRes = await fetch(
+      `https://graph.instagram.com/me?fields=id,username,account_type&access_token=${longLivedTokenData.access_token}`
     );
 
-    if (!pagesRes.ok) {
-      throw new Error(`Failed to fetch pages: ${pagesRes.status}`);
+    if (!userRes.ok) {
+      throw new Error(`Failed to fetch Instagram user info: ${userRes.status}`);
     }
 
-    const pagesData = await pagesRes.json();
-    console.log("Pages data:", pagesData);
+    const userData = await userRes.json();
+    console.log("Instagram user data:", userData);
 
-    // Get Instagram business accounts for each page and exchange for long-lived page tokens
-    const instagramAccounts = [];
-    for (const page of pagesData.data || []) {
-      try {
-        // Exchange page token for long-lived page token
-        const pageTokenRes = await fetch(
-          `https://graph.facebook.com/v19.0/oauth/access_token?` +
-            new URLSearchParams({
-              grant_type: 'fb_exchange_token',
-              client_id: process.env.FB_APP_ID || '1274014204192589',
-              client_secret: process.env.FB_APP_SECRET,
-              fb_exchange_token: page.access_token,
-            })
-        );
+    // Create Instagram account data structure
+    const instagramAccount = {
+      instagram_business_account_id: userData.id,
+      username: userData.username,
+      page_access_token: longLivedTokenData.access_token, // Use the long-lived token
+      page_token_expires_in: longLivedTokenData.expires_in || 5184000, // 60 days in seconds
+      page_name: userData.username,
+      isLongLived: true
+    };
 
-        if (pageTokenRes.ok) {
-          const pageTokenData = await pageTokenRes.json();
-          
-          // Get Instagram business account for this page
-          const igRes = await fetch(
-            `https://graph.facebook.com/v19.0/${page.id}?fields=instagram_business_account&access_token=${longLivedTokenData.access_token}`
-          );
-          
-          if (igRes.ok) {
-            const igData = await igRes.json();
-            if (igData.instagram_business_account) {
-              instagramAccounts.push({
-                page_id: page.id,
-                page_name: page.name,
-                page_access_token: pageTokenData.access_token, // Long-lived page token
-                page_token_expires_in: pageTokenData.expires_in,
-                instagram_business_account_id: igData.instagram_business_account.id,
-                isLongLived: true
-              });
-            }
-          }
-        }
-      } catch (err) {
-        console.error(`Error fetching Instagram data for page ${page.id}:`, err);
-      }
-    }
-
-    // Store the complete data with long-lived tokens (in production, save to your database)
-    const userData = {
-      access_token: longLivedTokenData.access_token, // Long-lived user token
-      token_type: longLivedTokenData.token_type,
-      expires_in: longLivedTokenData.expires_in, // ~5184000 seconds (60 days)
+    // Store the complete data (in production, save to your database)
+    const responseData = {
+      access_token: longLivedTokenData.access_token, // Use the long-lived token
+      token_type: longLivedTokenData.token_type || 'Bearer',
+      expires_in: longLivedTokenData.expires_in || 5184000, // ~5184000 seconds (60 days)
       isLongLived: true,
-      pages: pagesData.data || [],
-      instagram_accounts: instagramAccounts,
+      instagram_accounts: [instagramAccount],
       timestamp: new Date().toISOString()
     };
 
@@ -130,7 +115,7 @@ export async function GET(req) {
       JSON.stringify({
         success: true,
         message: "Instagram Business login successful with long-lived tokens!",
-        data: userData
+        data: responseData
       }), 
       { 
         status: 200,
@@ -168,54 +153,69 @@ export async function POST(req) {
       );
     }
 
-    // Exchange code for short-lived access token using Facebook Graph API
+    // Exchange code for access token using Instagram API
     const tokenRes = await fetch(
-      `https://graph.facebook.com/v19.0/oauth/access_token?` +
-        new URLSearchParams({
+      `https://api.instagram.com/oauth/access_token`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
           client_id: process.env.FB_APP_ID || '1274014204192589',
           client_secret: process.env.FB_APP_SECRET,
+          grant_type: 'authorization_code',
           redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL || 'https://shaheen-webapp.vercel.app'}/api/auth/ig-callback`,
           code: code,
         })
+      }
     );
 
     if (!tokenRes.ok) {
-      throw new Error(`Token exchange failed: ${tokenRes.status}`);
+      const errorText = await tokenRes.text();
+      throw new Error(`Token exchange failed: ${tokenRes.status} - ${errorText}`);
     }
 
     const tokenData = await tokenRes.json();
     
-    if (tokenData.error) {
-      throw new Error(`Facebook API error: ${tokenData.error.message}`);
+    if (tokenData.error_type) {
+      throw new Error(`Instagram API error: ${tokenData.error_message || tokenData.error_type}`);
     }
 
-    // Exchange for long-lived token
+    // According to the docs, the response has a 'data' array with the first item containing our token
+    const shortLivedToken = tokenData.data && tokenData.data[0] ? tokenData.data[0].access_token : tokenData.access_token;
+    
+    if (!shortLivedToken) {
+      throw new Error('No access token received from Instagram');
+    }
+
+    // Now exchange the short-lived token for a long-lived token (60 days)
     const longLivedTokenRes = await fetch(
-      `https://graph.facebook.com/v19.0/oauth/access_token?` +
-        new URLSearchParams({
-          grant_type: 'fb_exchange_token',
-          client_id: process.env.FB_APP_ID || '1274014204192589',
-          client_secret: process.env.FB_APP_SECRET,
-          fb_exchange_token: tokenData.access_token,
-        })
+      `https://graph.instagram.com/access_token?` +
+      new URLSearchParams({
+        grant_type: 'ig_exchange_token',
+        client_secret: process.env.FB_APP_SECRET,
+        access_token: shortLivedToken,
+      })
     );
 
     if (!longLivedTokenRes.ok) {
-      throw new Error(`Long-lived token exchange failed: ${longLivedTokenRes.status}`);
+      const errorText = await longLivedTokenRes.text();
+      throw new Error(`Long-lived token exchange failed: ${longLivedTokenRes.status} - ${errorText}`);
     }
 
     const longLivedTokenData = await longLivedTokenRes.json();
-
-    if (longLivedTokenData.error) {
-      throw new Error(`Facebook API error: ${longLivedTokenData.error.message}`);
+    
+    if (longLivedTokenData.error_type) {
+      throw new Error(`Instagram API error: ${longLivedTokenData.error_message || longLivedTokenData.error_type}`);
     }
 
     return new Response(
       JSON.stringify({
         success: true,
         access_token: longLivedTokenData.access_token,
-        token_type: longLivedTokenData.token_type,
-        expires_in: longLivedTokenData.expires_in, // ~5184000 seconds (60 days)
+        token_type: longLivedTokenData.token_type || 'Bearer',
+        expires_in: longLivedTokenData.expires_in || 5184000, // ~5184000 seconds (60 days)
         isLongLived: true
       }), 
       { 

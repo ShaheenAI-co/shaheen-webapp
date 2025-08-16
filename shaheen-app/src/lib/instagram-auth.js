@@ -8,10 +8,10 @@ export class InstagramAuthService {
     this.redirectUri = `${typeof window !== 'undefined' ? window.location.origin : ''}/api/auth/ig-callback`;
   }
 
-  // Get Instagram OAuth URL using the correct Instagram Business API endpoint
-  // Only requesting essential permissions: basic profile and content publishing
+  // Get Instagram OAuth URL using the Instagram Business API endpoint as provided by Meta
+  // Using the new scope values as documented by Meta (replacing deprecated business_* scopes)
   getAuthUrl(state = 'instagram_login') {
-    const scope = 'instagram_business_basic,instagram_business_content_publish';
+    const scope = 'instagram_business_basic,instagram_business_content_publish,instagram_business_manage_messages,instagram_business_manage_comments';
     
     return `https://www.instagram.com/oauth/authorize?` +
       new URLSearchParams({
@@ -47,16 +47,15 @@ export class InstagramAuthService {
     }
   }
 
-  // Exchange short-lived token for long-lived token (60 days)
+  // Exchange short-lived token for long-lived token (60 days) using Instagram API
   async exchangeForLongLivedToken(shortLivedToken) {
     try {
       const response = await fetch(
-        `https://graph.facebook.com/v19.0/oauth/access_token?` +
+        `https://graph.instagram.com/access_token?` +
         new URLSearchParams({
-          grant_type: 'fb_exchange_token',
-          client_id: this.clientId,
+          grant_type: 'ig_exchange_token',
           client_secret: this.clientSecret,
-          fb_exchange_token: shortLivedToken,
+          access_token: shortLivedToken,
         })
       );
 
@@ -66,13 +65,13 @@ export class InstagramAuthService {
 
       const data = await response.json();
       
-      if (data.error) {
-        throw new Error(`Facebook API error: ${data.error.message}`);
+      if (data.error_type) {
+        throw new Error(`Instagram API error: ${data.error_message || data.error_type}`);
       }
 
       return {
         access_token: data.access_token,
-        token_type: data.token_type,
+        token_type: data.token_type || 'Bearer',
         expires_in: data.expires_in, // This will be ~5184000 seconds (60 days)
         isLongLived: true
       };
@@ -82,65 +81,31 @@ export class InstagramAuthService {
     }
   }
 
-  // Get long-lived page access tokens for Instagram business accounts
-  async getLongLivedPageTokens(userAccessToken) {
+  // Get Instagram business account info (Instagram Business API doesn't use page tokens)
+  async getInstagramBusinessAccount(userAccessToken) {
     try {
-      // First get user's Facebook pages
-      const pagesResponse = await fetch(
-        `https://graph.facebook.com/v19.0/me/accounts?access_token=${userAccessToken}`
+      // For Instagram Business API, we get the account info directly
+      const response = await fetch(
+        `https://graph.instagram.com/me?fields=id,username,account_type&access_token=${userAccessToken}`
       );
 
-      if (!pagesResponse.ok) {
-        throw new Error('Failed to fetch pages');
+      if (!response.ok) {
+        throw new Error('Failed to fetch Instagram business account');
       }
 
-      const pagesData = await pagesResponse.json();
-      const longLivedTokens = [];
-
-      // Exchange each page token for a long-lived one
-      for (const page of pagesData.data || []) {
-        try {
-          const tokenResponse = await fetch(
-            `https://graph.facebook.com/v19.0/oauth/access_token?` +
-            new URLSearchParams({
-              grant_type: 'fb_exchange_token',
-              client_id: this.clientId,
-              client_secret: this.clientSecret,
-              fb_exchange_token: page.access_token,
-            })
-          );
-
-          if (tokenResponse.ok) {
-            const tokenData = await tokenResponse.json();
-            
-            // Get Instagram business account for this page
-            const igResponse = await fetch(
-              `https://graph.facebook.com/v19.0/${page.id}?fields=instagram_business_account&access_token=${userAccessToken}`
-            );
-
-            if (igResponse.ok) {
-              const igData = await igResponse.json();
-              
-              if (igData.instagram_business_account) {
-                longLivedTokens.push({
-                  page_id: page.id,
-                  page_name: page.name,
-                  page_access_token: tokenData.access_token,
-                  page_token_expires_in: tokenData.expires_in,
-                  instagram_business_account_id: igData.instagram_business_account.id,
-                  isLongLived: true
-                });
-              }
-            }
-          }
-        } catch (err) {
-          console.error(`Error getting long-lived token for page ${page.id}:`, err);
-        }
-      }
-
-      return longLivedTokens;
+      const data = await response.json();
+      
+      // Return in the same format expected by the rest of the system
+      return [{
+        page_id: data.id,
+        page_name: data.username,
+        page_access_token: userAccessToken,
+        page_token_expires_in: 5184000, // 60 days in seconds
+        instagram_business_account_id: data.id,
+        isLongLived: true
+      }];
     } catch (error) {
-      console.error('Error getting long-lived page tokens:', error);
+      console.error('Error getting Instagram business account:', error);
       throw error;
     }
   }
@@ -223,8 +188,29 @@ export class InstagramAuthService {
         return updatedCredentials;
       }
 
-      // If we have a long-lived token that's expired, user needs to re-authenticate
-      throw new Error('Long-lived token has expired. Please reconnect your Instagram account.');
+      // If we have a long-lived token that's expired, try to refresh it
+      if (tokenData.access_token && tokenData.isLongLived) {
+        try {
+          const refreshedToken = await this.refreshLongLivedToken(tokenData.access_token);
+          
+          // Update stored credentials
+          const updatedCredentials = {
+            ...tokenData,
+            ...refreshedToken,
+            timestamp: new Date().toISOString()
+          };
+          
+          this.storeCredentials(updatedCredentials);
+          return updatedCredentials;
+        } catch (refreshError) {
+          console.error('Failed to refresh token:', refreshError);
+          // If refresh fails, user needs to re-authenticate
+          throw new Error('Long-lived token has expired and could not be refreshed. Please reconnect your Instagram account.');
+        }
+      }
+
+      // If we can't handle this token type, user needs to re-authenticate
+      throw new Error('Token type not supported for refresh. Please reconnect your Instagram account.');
     } catch (error) {
       console.error('Error refreshing token:', error);
       throw error;
@@ -234,37 +220,70 @@ export class InstagramAuthService {
   // Get Instagram user profile using Instagram Graph API
   async getUserProfile(accessToken) {
     try {
-      // For Instagram Business API, we need to use the Facebook Graph API
-      // First get the user's Instagram business account ID
-      const response = await fetch(`https://graph.facebook.com/v19.0/me/accounts?access_token=${accessToken}`);
+      // For Instagram Business API, use the Instagram Graph API
+      const response = await fetch(`https://graph.instagram.com/me?fields=id,username,account_type&access_token=${accessToken}`);
       
       if (!response.ok) {
-        throw new Error('Failed to fetch user accounts');
+        throw new Error('Failed to fetch Instagram user info');
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Error fetching user profile:', error);
+      console.error('Error fetching Instagram user profile:', error);
       throw error;
     }
   }
 
   // Get Instagram business accounts
-  async getBusinessAccounts(accessToken, pageId) {
+  async getBusinessAccounts(accessToken) {
     try {
+      // For Instagram Business API, we get the account info directly
       const response = await fetch(
-        `https://graph.facebook.com/v19.0/${pageId}?fields=instagram_business_account&access_token=${accessToken}`
+        `https://graph.instagram.com/me?fields=id,username,account_type&access_token=${accessToken}`
       );
       
       if (!response.ok) {
-        throw new Error('Failed to fetch business accounts');
+        throw new Error('Failed to fetch Instagram business account');
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Error fetching business accounts:', error);
+      console.error('Error fetching Instagram business account:', error);
+      throw error;
+    }
+  }
+
+  // Refresh a long-lived access token for another 60 days
+  async refreshLongLivedToken(longLivedToken) {
+    try {
+      const response = await fetch(
+        `https://graph.instagram.com/refresh_access_token?` +
+        new URLSearchParams({
+          grant_type: 'ig_refresh_token',
+          access_token: longLivedToken,
+        })
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to refresh long-lived token');
+      }
+
+      const data = await response.json();
+      
+      if (data.error_type) {
+        throw new Error(`Instagram API error: ${data.error_message || data.error_type}`);
+      }
+
+      return {
+        access_token: data.access_token,
+        token_type: data.token_type || 'Bearer',
+        expires_in: data.expires_in, // Another 60 days
+        isLongLived: true
+      };
+    } catch (error) {
+      console.error('Error refreshing long-lived token:', error);
       throw error;
     }
   }
