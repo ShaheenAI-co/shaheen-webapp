@@ -4,7 +4,7 @@ This document describes the Instagram Business API integration implemented in th
 
 ## 🎉 **App Status: APPROVED by Meta**
 
-Your Facebook App (ID: `1274014204192589`) has been approved for Instagram Business API access with **essential permissions only**.
+Your Facebook  App (ID: `1274014204192589`) has been approved for Instagram Business API access with **essential permissions only**.
 
 ## Features
 
