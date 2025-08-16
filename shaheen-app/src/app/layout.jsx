@@ -7,10 +7,8 @@ export default function RootLayout({ children }) {
   const locale = pathname.split("/")[1] || "en";
   const dir = locale === "ar" ? "rtl" : "ltr";
 
-
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
-   
       <body>{children}</body>
     </html>
   );

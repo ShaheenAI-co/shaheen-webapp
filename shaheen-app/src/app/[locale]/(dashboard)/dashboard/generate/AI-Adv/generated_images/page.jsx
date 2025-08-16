@@ -25,39 +25,34 @@ const GeneratedImages = () => {
 
   return (
     <div className="py-6 bg-[#0f0f0f] min-h-screen">
-
       {/* TOPBAR */}
       <div className="px-12">
         <Topbar icon="/icons/Image_.svg" title="AI Advertisement" />
       </div>
 
       <div className="mt-6 px-8">
-
         <div className="flex flex-col gap-6   bg-white/5 border border-white/10 rounded-2xl px-4 py-6  ">
-
           <div className="w-full flex flex-col gap-2   ">
             <h3 className="font-bold text-lg capitalize">generated images</h3>
-            <p className="text-white/35">select from one of the generated images</p>
+            <p className="text-white/35">
+              select from one of the generated images
+            </p>
           </div>
 
           <div className="w-full flex items-center gap-6 relative  flex-wrap">
-
             <div className="w-[250px] h-[350px] bg-white/10 rounded-lg relative">
-              <img src="/images/Ai-placeholder.png" alt="generated image" className="w-full  h-full object-cover rounded-lg" />
+              <img
+                src="/images/Ai-placeholder.png"
+                alt="generated image"
+                className="w-full  h-full object-cover rounded-lg"
+              />
               <Button className="bg-purple-500 absolute bottom- right-4 mx-auto text-white px-4 py-3 rounded-lg">
                 select
               </Button>
             </div>
-
           </div>
-
-
         </div>
-
-
       </div>
-
-
     </div>
   );
 };

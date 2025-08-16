@@ -198,8 +198,6 @@ const page = () => {
 
   return (
     <div className=" py-6 bg-[#0f0f0f] min-h-screen">
-
-
       {/* TOPBAR */}
       <div className="px-12">
         <Topbar icon="/icons/Image_.svg" title="AI Advertisement" />
@@ -207,7 +205,6 @@ const page = () => {
 
       {/* CONTENT */}
       <div className="mt-6 px-8">
-
         {/* POST SIZE */}
         <div className="flex flex-col gap-6   bg-white/5 border border-white/10 rounded-2xl px-4 py-6  ">
           <div className="w-full flex flex-col gap-2   ">
@@ -317,9 +314,7 @@ const page = () => {
             </Button>
           </div>
         </div>
-
       </div>
-      
     </div>
   );
 };

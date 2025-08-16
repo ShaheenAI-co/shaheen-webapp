@@ -11,7 +11,6 @@ const page = () => {
       </div>
 
       <div className="w-full flex flex-col mt-6 px-12">
-
         {/* EXPORT BUTTON */}
         <div className="w-full flex justify-end ">
           <button className="bg-[#6123B8] font-bold capitalize text-white px-4 cursor-pointer py-3  rounded-lg">
@@ -20,7 +19,6 @@ const page = () => {
         </div>
 
         <div className="w-full flex gap-6 items-center flex-col lg:flex-row border border-white/10 bg-white/5 rounded-lg p-4 h-[800px]    mt-6">
-
           {/* IMAGE */}
           <div className=" w-[50%] h-full flex items-center justify-center rounded-lg p-2">
             <Image
@@ -35,8 +33,6 @@ const page = () => {
           {/* INFO */}
           <div className=" w-[50%] h-full  flex items-center justify-center rounded-lg p-2">
             <div className="w-[500px] h-[500px] bg-[#0F0F0F] rounded-lg flex flex-col items-center ">
-
-
               {/* HEADING */}
               <div className="flex flex-col gap-8 px-11 py-6 ">
                 <h1 className="text-white text-5xl satoshi-bold capitalize text-center">
@@ -49,10 +45,8 @@ const page = () => {
               </div>
 
               <div className="flex flex-col w-full  rounded-lg h-full items-center justify-center gap-8">
-               
-               {/* CAPTION */}
+                {/* CAPTION */}
                 <div className="flex flex-col gap-2 w-full justify-center items-center">
-
                   <p className="capitalize">post caption</p>
                   <textarea
                     name=""
@@ -72,17 +66,10 @@ const page = () => {
                   <button className="border border-[#6123B8] font-semibold capitalize text-white px-4 cursor-pointer py-3  rounded-lg">
                     regenerate
                   </button>
-
                 </div>
-
               </div>
-
-
-
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
