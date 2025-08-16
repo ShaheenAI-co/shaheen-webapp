@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Twitter Post Scheduler Test{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-5 fw-bold mb-3">
+                <i class="fab fa-twitter me-3 text-primary"></i>Twitter Dashboard
+            </h1>
+            <p class="lead text-muted">Your connected Twitter account and posting tools</p>
+        </div>
+    </div>
+
+    <!-- Account Info -->
+    <div class="row mb-5">
+        <div class="col-md-6 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>Connected Account
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Debug info (remove in production) -->
+                    <div class="alert alert-info mb-3">
+                        <small><strong>Debug:</strong> user_info = {{ user_info | tojson }}</small>
+                    </div>
+                    
+                    {% if user_info and user_info.get('data') %}
+                        {% set user_data = user_info.get('data', {}) %}
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fab fa-twitter fa-2x text-primary"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">{{ user_data.get('name', 'Unknown') }}</h6>
+                                <p class="text-muted mb-0">@{{ user_data.get('username', 'unknown') }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="border-end">
+                                    <h6 class="text-muted mb-1">User ID</h6>
+                                    <p class="mb-0 fw-bold">{{ user_data.get('id', 'N/A') }}</p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h6 class="text-muted mb-1">Account Type</h6>
+                                <p class="mb-0 fw-bold">Personal</p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="fas fa-exclamation-triangle fa-2x text-warning mb-3"></i>
+                            <p class="text-muted">User information not available</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Tweet Section -->
+    <div class="row mb-5">
+        <div class="col-md-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-paper-plane me-2"></i>Post a Tweet
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="tweetForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="tweetText" class="form-label">Tweet Content</label>
+                            <textarea 
+                                class="form-control" 
+                                id="tweetText" 
+                                name="tweet_text" 
+                                rows="4" 
+                                maxlength="280" 
+                                placeholder="What's happening?"
+                                required
+                            ></textarea>
+                            <div class="form-text">
+                                <span id="charCount">0</span>/280 characters
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="imageUpload" class="form-label">Add Image (Optional)</label>
+                            <input 
+                                type="file" 
+                                class="form-control" 
+                                id="imageUpload" 
+                                name="image" 
+                                accept="image/*"
+                            />
+                            <div class="form-text">
+                                Supported formats: JPG, PNG, GIF. Max size: 5MB
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg" id="postButton">
+                                <i class="fas fa-paper-plane me-2"></i>Post Tweet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Recent Activity
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="activityLog">
+                        <div class="text-center py-3">
+                            <i class="fas fa-info-circle fa-2x text-muted mb-3"></i>
+                            <p class="text-muted">No recent activity. Post your first tweet to see it here!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tweetForm = document.getElementById('tweetForm');
+    const tweetText = document.getElementById('tweetText');
+    const charCount = document.getElementById('charCount');
+    const postButton = document.getElementById('postButton');
+    const activityLog = document.getElementById('activityLog');
+
+    // Character counter
+    tweetText.addEventListener('input', function() {
+        const remaining = 280 - this.value.length;
+        charCount.textContent = this.value.length;
+        
+        if (remaining < 20) {
+            charCount.className = 'form-text text-warning';
+        } else if (remaining < 0) {
+            charCount.className = 'form-text text-danger';
+        } else {
+            charCount.className = 'form-text';
+        }
+    });
+
+    // Form submission
+    tweetForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const tweetContent = formData.get('tweet_text').trim();
+        
+        if (!tweetContent) {
+            alert('Please enter tweet content');
+            return;
+        }
+        
+        if (tweetContent.length > 280) {
+            alert('Tweet is too long. Maximum 280 characters allowed.');
+            return;
+        }
+        
+        // Disable button and show loading state
+        postButton.disabled = true;
+        postButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Posting...';
+        
+        // Make API call
+        fetch('/post-tweet', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success message with media info
+                let successMsg = `Tweet posted successfully! Tweet ID: ${data.tweet_id || 'N/A'}`;
+                if (data.media_count && data.media_count > 0) {
+                    successMsg += ` (with ${data.media_count} image${data.media_count > 1 ? 's' : ''})`;
+                }
+                
+                showActivity('success', successMsg, tweetContent);
+                
+                // Reset form
+                tweetForm.reset();
+                charCount.textContent = '0';
+                charCount.className = 'form-text';
+                
+                // Show flash message
+                showFlashMessage('success', data.message);
+            } else {
+                throw new Error(data.error || 'Failed to post tweet');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showActivity('error', `Failed to post tweet: ${error.message}`, tweetContent);
+            showFlashMessage('error', error.message);
+        })
+        .finally(() => {
+            // Re-enable button
+            postButton.disabled = false;
+            postButton.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Post Tweet';
+        });
+    });
+
+    function showActivity(type, message, content) {
+        const timestamp = new Date().toLocaleTimeString();
+        const iconClass = type === 'success' ? 'fa-check-circle text-success' : 'fa-exclamation-triangle text-danger';
+        
+        const activityItem = document.createElement('div');
+        activityItem.className = 'border-bottom pb-3 mb-3';
+        activityItem.innerHTML = `
+            <div class="d-flex align-items-start">
+                <div class="me-3">
+                    <i class="fas ${iconClass} fa-lg"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <h6 class="mb-0">${type === 'success' ? 'Tweet Posted' : 'Tweet Failed'}</h6>
+                        <small class="text-muted">${timestamp}</small>
+                    </div>
+                    <p class="mb-1">${message}</p>
+                    ${content ? `<small class="text-muted">Content: "${content.substring(0, 100)}${content.length > 100 ? '...' : ''}"</small>` : ''}
+                </div>
+            </div>
+        `;
+        
+        // Remove the "no activity" message if it exists
+        const noActivity = activityLog.querySelector('.text-center');
+        if (noActivity) {
+            noActivity.remove();
+        }
+        
+        // Add new activity at the top
+        activityLog.insertBefore(activityItem, activityLog.firstChild);
+    }
+
+    function showFlashMessage(type, message) {
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle';
+        
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert ${alertClass} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            <i class="fas ${iconClass} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        // Add to flash messages container
+        const flashContainer = document.querySelector('.flash-messages');
+        if (flashContainer) {
+            flashContainer.appendChild(alertDiv);
+        }
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+});
+</script>
+{% endblock %}

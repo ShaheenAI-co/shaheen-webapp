@@ -12,6 +12,8 @@ import { cn } from "../../../../lib/utils";
 import { FolderClosed, Brush, Calendar } from "lucide-react";
 import Image from "next/image";
 import Topbar from "./components/Topbar";
+import InstagramConnectionStatus from "@/components/InstagramConnectionStatus";
+import InstagramPostScheduler from "@/components/InstagramPostScheduler";
 
 const DashboardCards = [
   {
@@ -76,6 +78,16 @@ const Dashboardpage = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* INSTAGRAM CONNECTION STATUS */}
+        <div className="mt-8">
+          <InstagramConnectionStatus />
+        </div>
+
+        {/* INSTAGRAM POST SCHEDULER */}
+        <div className="mt-8">
+          <InstagramPostScheduler />
         </div>
 
         {/* TABLE */}
