@@ -110,17 +110,42 @@ export async function GET(req) {
       timestamp: new Date().toISOString()
     };
 
-    // Return success with user data
+    // Redirect user back to dashboard with success message
+    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://shaheen-webapp.vercel.app'}/dashboard?instagram_success=true&message=${encodeURIComponent('Instagram Business login successful with long-lived tokens!')}`;
+    
     return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Instagram Business login successful with long-lived tokens!",
-        data: responseData
-      }), 
+      `<!DOCTYPE html>
+      <html>
+        <head>
+          <title>Instagram Login Success</title>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+        </head>
+        <body>
+          <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif;">
+            <div style="text-align: center; padding: 2rem;">
+              <h2 style="color: #10b981;">✅ Instagram Login Successful!</h2>
+              <p>Redirecting you back to the dashboard...</p>
+              <div style="margin-top: 1rem;">
+                <a href="${dashboardUrl}" style="color: #3b82f6; text-decoration: none;">Click here if you're not redirected automatically</a>
+              </div>
+            </div>
+          </div>
+          <script>
+            // Store the Instagram data in localStorage for the frontend to pick up
+            localStorage.setItem('instagram_auth_data', '${JSON.stringify(responseData).replace(/'/g, "\\'")}');
+            
+            // Redirect to dashboard
+            setTimeout(() => {
+              window.location.href = '${dashboardUrl}';
+            }, 2000);
+          </script>
+        </body>
+      </html>`,
       { 
         status: 200,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'text/html'
         }
       }
     );
