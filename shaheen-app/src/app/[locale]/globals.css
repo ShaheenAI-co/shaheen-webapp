@@ -53,12 +53,12 @@ html {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  
+
   /* Ensure consistent font rendering */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  
+
   /* Force consistent line height calculation */
   line-height: 1.15;
 }
@@ -66,19 +66,25 @@ html {
 body {
   background: #000000;
   color: white;
-  
+
   /* Enhanced font smoothing for cross-platform consistency */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  
+
   /* Prevent font feature inconsistencies */
-  font-feature-settings: 'liga' 1, 'kern' 1;
-  -webkit-font-feature-settings: 'liga' 1, 'kern' 1;
-  -moz-font-feature-settings: 'liga' 1, 'kern' 1;
+  font-feature-settings:
+    "liga" 1,
+    "kern" 1;
+  -webkit-font-feature-settings:
+    "liga" 1,
+    "kern" 1;
+  -moz-font-feature-settings:
+    "liga" 1,
+    "kern" 1;
   font-variant-ligatures: common-ligatures;
   font-kerning: normal;
-  
+
   /* Ensure consistent margins */
   margin: 0;
   padding: 0;
@@ -208,7 +214,8 @@ body {
 }
 
 .alexandria-font {
-  font-family: "Alexandria", "Segoe UI", "system-ui", "-apple-system", "BlinkMacSystemFont", "Arial", "Helvetica", sans-serif; /* Enhanced fallback stack */
+  font-family: "Alexandria", "Segoe UI", "system-ui", "-apple-system",
+    "BlinkMacSystemFont", "Arial", "Helvetica", sans-serif; /* Enhanced fallback stack */
   font-weight: 400;
   /* Add font smoothing for custom fonts */
   -webkit-font-smoothing: antialiased;
@@ -223,20 +230,38 @@ body {
   body {
     @apply bg-background text-foreground;
   }
-  
+
   /* Additional cross-platform fixes */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     /* Ensure consistent heading rendering */
     font-kerning: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   /* Fix for potential button/input inconsistencies */
-  button, input, textarea, select {
+  button,
+  input,
+  textarea,
+  select {
     font-family: inherit;
     font-size: inherit;
     -webkit-font-smoothing: inherit;
     -moz-osx-font-smoothing: inherit;
   }
+}
+
+.gradient-purple-dark {
+  background: linear-gradient(
+    to bottom,
+    #8a38f5 0%,
+    #8951d2 22%,
+    #9154e1 62%,
+    #180630 100%
+  );
 }

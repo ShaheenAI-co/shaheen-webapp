@@ -7,6 +7,7 @@ import { fetchImageUrlsByPostId } from '../../../../../../../../lib/supabase/gen
 
 const page = () => {
     const [images, setImages] = useState([])
+    
 
     useEffect(() => {
 

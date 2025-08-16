@@ -5,19 +5,9 @@ import { GradientBars } from "@/components/ui/gradient-bars";
 
 export default function DashboardLayout({ children }) {
   return (
-    <div className="relative    bg-[#000000]  ">
+    <div className="flex bg-[#141414] overflow-scroll">
       <Sidebar />
-
-      <div className=" flex flex-col flex-1  ml-0 lg:ml-64">
-        <Topbar />
-      <GradientBars/>
-        <main className=" flex-1 bg-[#0a06126b] z-10 rounded-lg ">
-
-          {children}
-        </main>
-      </div>
-
-      
+      <main className=" flex-1 bg-[#0f0f0f] ml-[250px] max-sm:ml-0 ">{children}</main>
     </div>
   );
 }
