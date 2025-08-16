@@ -1,5 +1,5 @@
 // src/lib/supabase-instagram.js
-import { supabaseClient } from '@/utils/supabaseClient';
+import { supabaseClient } from '../../utils/supabaseClient';
 
 export class SupabaseInstagramService {
   constructor() {
