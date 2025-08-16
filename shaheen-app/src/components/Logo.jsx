@@ -14,14 +14,14 @@ const Logo = () => {
         isArabic ? "flex-row-reverse alexandria-font" : ""
       } `}
     >
-      <Image src="/Logo/logo-light.png" alt="Logo" width={25} height={25} className="max-sm:w-[20px] max-sm:h-[30px]" />
+      <Image src="/Logo/logo-light.png" alt="Logo" width={20} height={20} className="max-sm:w-[20px] max-sm:h-[30px]" />
       <h1
-        className={`text-white text-sm md:text-xl    ${isArabic ? "hidden" : ""} `}
+        className={`text-white text-sm md:text-xl font-bold   ${isArabic ? "hidden" : ""} `}
       >
         {t("name")}
       </h1>
       {isArabic && (
-        <Image src="/Logo/arabic-logo-Ar.png" width={100} height={100} alt="Logo" className="max-sm:w-[60px] max-sm:h-[30px]" />
+        <Image src="/Logo/arabic-logo-Ar.png" width={80} height={80} alt="Logo" className="max-sm:w-[60px] max-sm:h-[30px]" />
       )}
     </header>
   );

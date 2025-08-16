@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React from "react";
 import Link from "next/link";
 import SignupForm from "./Components/SignupForm";
@@ -12,8 +12,11 @@ const page = () => {
   const locale = pathname.split("/")[1] || "en"; // check the first part after /
   const isArabic = locale === "ar";
   return (
-    <div className="min-h-screen bg-black md:p-4 p-2 flex flex-col md:flex-row" dir={isArabic ? "ltr" : "rtl"}>
-      <LeftPanel phrase={t("Text")}/>
+    <div
+      className="min-h-screen bg-black md:p-4 p-2 flex flex-col md:flex-row"
+      dir={isArabic ? "ltr" : "rtl"}
+    >
+      <LeftPanel phrase={t("Text")} />
       <SignupForm />
     </div>
   );

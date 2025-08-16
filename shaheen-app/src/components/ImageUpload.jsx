@@ -1,13 +1,60 @@
-"use client"
+"use client";
 
-import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from "lucide-react"
+import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from "lucide-react";
+import { useFileUpload } from "@/Hooks/use-file-upload";
+import { Button } from "@/components/ui/button";
 
-import { useFileUpload } from "@/Hooks/use-file-upload"
-import { Button } from "@/components/ui/button"
+// Utility function to convert HEIC to JPEG using canvas
+const convertHeicToJpeg = async (file) => {
+  return new Promise((resolve, reject) => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      canvas.toBlob(
+        (blob) => {
+          const convertedFile = new File(
+            [blob],
+            file.name.replace(/\.(heic|heif)$/i, ".jpg"),
+            {
+              type: "image/jpeg",
+              lastModified: Date.now(),
+            }
+          );
+          resolve(convertedFile);
+        },
+        "image/jpeg",
+        0.9
+      );
+    };
+
+    img.onerror = () => {
+      reject(new Error("Failed to load HEIC image"));
+    };
+
+    img.src = URL.createObjectURL(file);
+  });
+};
+
+// Function to check if file is HEIC/HEIF
+const isHeicFile = (file) => {
+  const fileName = file.name.toLowerCase();
+  return (
+    fileName.endsWith(".heic") ||
+    fileName.endsWith(".heif") ||
+    file.type === "image/heic" ||
+    file.type === "image/heif"
+  );
+};
 
 export default function ImageUpload({ onFileChange }) {
-  const maxSizeMB = 20
-  const maxSize = maxSizeMB * 1024 * 1024 // 20MB default
+  const maxSizeMB = 20;
+  const maxSize = maxSizeMB * 1024 * 1024; // 20MB default
 
   const [
     { files, isDragging, errors },
@@ -21,20 +68,42 @@ export default function ImageUpload({ onFileChange }) {
       getInputProps,
     },
   ] = useFileUpload({
-    accept: "image/svg+xml,image/png,image/jpeg,image/jpg,image/gif",
+    accept:
+      "image/svg+xml,image/png,image/jpeg,image/jpg,image/gif,image/heic,image/heif,.heic,.heif",
     maxSize,
-    onFilesChange: (files) => {
-      // Call the callback when files change
+    onFilesChange: async (files) => {
+      // Process HEIC files if present
+      const processedFiles = await Promise.all(
+        files.map(async (fileData) => {
+          if (isHeicFile(fileData.file)) {
+            try {
+              const convertedFile = await convertHeicToJpeg(fileData.file);
+              return {
+                ...fileData,
+                file: convertedFile,
+                originalFile: fileData.file, // Keep reference to original
+              };
+            } catch (error) {
+              console.error("Failed to convert HEIC file:", error);
+              return fileData; // Return original if conversion fails
+            }
+          }
+          return fileData;
+        })
+      );
+
+      // Call the callback with processed files
       if (onFileChange) {
-        onFileChange(files);
+        onFileChange(processedFiles);
       }
     },
-  })
-  const previewUrl = files[0]?.preview || null
-  const fileName = files[0]?.file.name || null
+  });
+
+  const previewUrl = files[0]?.preview || null;
+  const fileName = files[0]?.file.name || null;
 
   return (
-    (<div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
       <div className="relative">
         {/* Drop area */}
         <div
@@ -43,29 +112,43 @@ export default function ImageUpload({ onFileChange }) {
           onDragOver={handleDragOver}
           onDrop={handleDrop}
           data-dragging={isDragging || undefined}
-          className="border-input w-[600px] data-[dragging=true]:bg-accent/50 has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 relative flex min-h-62 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-4 transition-colors has-[input:focus]:ring-[3px]">
-          <input {...getInputProps()} className="sr-only" aria-label="Upload image file" />
+          className="border-input w-[600px] data-[dragging=true]:bg-accent/50 has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 relative flex min-h-62 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-4 transition-colors has-[input:focus]:ring-[3px]"
+        >
+          <input
+            {...getInputProps()}
+            className="sr-only"
+            aria-label="Upload image file"
+          />
           {previewUrl ? (
             <div className="absolute inset-0 flex items-center justify-center p-4">
               <img
                 src={previewUrl}
                 alt={files[0]?.file?.name || "Uploaded image"}
-                className="mx-auto max-h-full rounded object-contain" />
+                className="mx-auto max-h-full rounded object-contain"
+              />
             </div>
           ) : (
-            <div
-              className="flex flex-col items-center justify-center px-4 py-3 text-center">
+            <div className="flex flex-col items-center justify-center px-4 py-3 text-center">
               <div
                 className=" mb-2 flex size-11 shrink-0 items-center justify-center rounded-full border"
-                aria-hidden="true">
+                aria-hidden="true"
+              >
                 <ImageIcon className="size-4 opacity-60" />
               </div>
               <p className="mb-1.5 text-sm font-medium">Drop your image here</p>
               <p className="text-muted-foreground text-xs">
-                SVG, PNG, JPG or GIF (max. {maxSizeMB}MB)
+                SVG, PNG, JPG, GIF (max. {maxSizeMB}MB)
               </p>
-              <Button variant="primary " className="mt-4 border-1" onClick={openFileDialog}>
-                <UploadIcon className="-ms-1 size-4 opacity-60" aria-hidden="true" />
+
+              <Button
+                variant="primary "
+                className="mt-4 border-1"
+                onClick={openFileDialog}
+              >
+                <UploadIcon
+                  className="-ms-1 size-4 opacity-60"
+                  aria-hidden="true"
+                />
                 Select image
               </Button>
             </div>
@@ -78,14 +161,18 @@ export default function ImageUpload({ onFileChange }) {
               type="button"
               className="focus-visible:border-ring focus-visible:ring-ring/50 z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white transition-[color,box-shadow] outline-none hover:bg-black/80 focus-visible:ring-[3px]"
               onClick={() => removeFile(files[0]?.id)}
-              aria-label="Remove image">
+              aria-label="Remove image"
+            >
               <XIcon className="size-4" aria-hidden="true" />
             </button>
           </div>
         )}
       </div>
       {errors.length > 0 && (
-        <div className="text-destructive flex items-center gap-1 text-xs" role="alert">
+        <div
+          className="text-destructive flex items-center gap-1 text-xs"
+          role="alert"
+        >
           <AlertCircleIcon className="size-3 shrink-0" />
           <span>{errors[0]}</span>
         </div>
@@ -101,6 +188,6 @@ export default function ImageUpload({ onFileChange }) {
           API
         </a>
       </p> */}
-    </div>)
+    </div>
   );
 }

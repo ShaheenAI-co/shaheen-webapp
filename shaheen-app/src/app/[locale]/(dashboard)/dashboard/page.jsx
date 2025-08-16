@@ -7,10 +7,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+} from "../../../../components/ui/card";
+import { cn } from "../../../../lib/utils";
 import { FolderClosed, Brush, Calendar } from "lucide-react";
-import TableComponent from "./components/Table";
 import Image from "next/image";
 import Topbar from "./components/Topbar";
 import InstagramConnectionStatus from "@/components/InstagramConnectionStatus";
@@ -41,8 +40,7 @@ const Dashboardpage = () => {
     <div className="px-12 pt-6  min-h-screen ">
       <Topbar icon="/icons/Home.svg" title="dashboard" />
 
-      <div className="mt-6"
-      >
+      <div className="mt-6">
         {/* GREETINGS */}
         <div className="flex flex-col gap-2">
           <h2 className="text-3xl font-bold capitalize satoshi-bold ">
@@ -116,10 +114,7 @@ const Dashboardpage = () => {
             </CardContent>
           </Card>
         </div>
-
-
       </div>
-
     </div>
   );
 };
