@@ -1,5 +1,8 @@
 import { supabaseClient } from "../../utils/supabaseClient"
 
+// S3 bucket base URL - can be configured via environment variable
+const S3_BASE_URL = process.env.NEXT_PUBLIC_S3_BASE_URL;
+
 export const fetchImagesByPostId = async (postId) => {
   try {
     console.log("Attempting to fetch images for post_id:", postId);
@@ -24,6 +27,8 @@ export const fetchImagesByPostId = async (postId) => {
       throw error;
     }
     
+    console.log("data", data);
+
     if (!data || data.length === 0) {
       console.log("No images found for post_id:", postId);
       return [];
@@ -41,9 +46,25 @@ export const fetchImagesByPostId = async (postId) => {
 export const fetchImageUrlsByPostId = async (postId) => {
   try {
     const data = await fetchImagesByPostId(postId);
-    return data.map(item => item.image_url);
+    // Construct full S3 URLs by prepending the S3 bucket base URL
+    return data.map(item => `${S3_BASE_URL}${item.image_url}`);
   } catch (error) {
     console.error("Failed to fetch image URLs:", error);
+    throw error;
+  }
+};
+
+// Function that returns full data with complete S3 URLs
+export const fetchImagesWithFullUrlsByPostId = async (postId) => {
+  try {
+    const data = await fetchImagesByPostId(postId);
+    // Construct full S3 URLs by prepending the S3 bucket base URL
+    return data.map(item => ({
+      ...item,
+      full_image_url: `${S3_BASE_URL}${item.image_url}`
+    }));
+  } catch (error) {
+    console.error("Failed to fetch images with full URLs:", error);
     throw error;
   }
 };
