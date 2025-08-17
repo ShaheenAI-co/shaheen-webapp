@@ -295,10 +295,47 @@ export class InstagramPostingService {
     }
   }
 
+  // Get Instagram Professional Account ID
+  async getInstagramProfessionalAccountId(accessToken) {
+    try {
+      console.log('Getting Instagram Professional Account ID...');
+      
+      const response = await fetch('/api/instagram/me', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ accessToken }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to get Instagram account info: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('Instagram account info:', data);
+      
+      if (data.error) {
+        throw new Error(`Instagram API error: ${data.error.message || data.error.type}`);
+      }
+
+      // The ID from /me endpoint is the correct Instagram Professional Account ID
+      return data.id;
+    } catch (error) {
+      console.error('Error getting Instagram Professional Account ID:', error);
+      throw error;
+    }
+  }
+
   // Main method to post content immediately
   async postNow(instagramId, accessToken, postData) {
     try {
       console.log('Starting Instagram post process...', { instagramId, postData });
+      
+      // First get the correct Instagram Professional Account ID
+      const instagramProfessionalAccountId = await this.getInstagramProfessionalAccountId(accessToken);
+      console.log('Using Instagram Professional Account ID:', instagramProfessionalAccountId);
       
       const { files, caption, mediaType = 'IMAGE' } = postData;
 
@@ -336,7 +373,7 @@ export class InstagramPostingService {
         console.log('Container data being sent:', containerData);
         console.log('mediaUrls[0]:', mediaUrls[0]);
         
-        containerId = await this.createMediaContainer(instagramId, accessToken, containerData);
+        containerId = await this.createMediaContainer(instagramProfessionalAccountId, accessToken, containerData);
         console.log('Single media container created:', containerId);
       } else {
         // Carousel post
@@ -347,7 +384,7 @@ export class InstagramPostingService {
           mediaType: item.type
         }));
 
-        containerId = await this.createCarouselContainer(instagramId, accessToken, mediaItems, caption);
+        containerId = await this.createCarouselContainer(instagramProfessionalAccountId, accessToken, mediaItems, caption);
         console.log('Carousel container created:', containerId);
       }
 
@@ -363,7 +400,7 @@ export class InstagramPostingService {
       if (status === 'FINISHED') {
         // Publish the media
         console.log('Container ready, publishing media...');
-        const mediaId = await this.publishMedia(instagramId, accessToken, containerId);
+        const mediaId = await this.publishMedia(instagramProfessionalAccountId, accessToken, containerId);
         console.log('Media published successfully:', mediaId);
         return { success: true, mediaId, containerId };
       } else if (status === 'IN_PROGRESS') {
@@ -374,7 +411,7 @@ export class InstagramPostingService {
         console.log('Final container status:', finalStatus);
         
         if (finalStatus === 'FINISHED') {
-          const mediaId = await this.publishMedia(instagramId, accessToken, containerId);
+          const mediaId = await this.publishMedia(instagramProfessionalAccountId, accessToken, containerId);
           console.log('Media published successfully:', mediaId);
           return { success: true, mediaId, containerId };
         } else {
