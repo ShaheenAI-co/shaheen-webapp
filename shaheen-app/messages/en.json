@@ -5,7 +5,7 @@
   "Heading": {
     "title": "Supercharge your brand with AI powered content creation ",
     "subhead": "Everything you need to grow online designed , scheduled and delivered by AI",
-    "CTA" : "Get Started"
+    "CTA": "Get Started"
   },
   "NavLinks": {
     "l-1": "Pricing",
@@ -13,61 +13,61 @@
     "l-3": "About"
   },
   "NavCTA": {
-    "login" : "login",
-    "try" : "Try for free",
-    "dashboard" : "Dashboard"
+    "login": "login",
+    "try": "Try for free",
+    "dashboard": "Dashboard"
   },
   "SlideText": {
     "phrase-1": "Elevate your brand",
     "phrase-2": "Increase your sales"
   },
-  "Login":{
-    "Heading" : "Welcome Back 🎊",
-    "Subheading" : "Stand out let our AI do the magic",
-    "seperatorText" : "Or" ,
-    "Email" : "Email" , 
+  "Login": {
+    "Heading": "Welcome Back 🎊",
+    "Subheading": "Stand out let our AI do the magic",
+    "seperatorText": "Or",
+    "Email": "Email",
     "EmailPlaceholder": "eg. unknow@gmail.com",
-    "Password" : "Password" ,
-    "PasswordPlaceholder" : "must be 8 characters" ,
-    "LoginBtn" : "Login" , 
-    "ExtraText" : "Don't have an account ? ",
-    "ExternalLink" : "Signup"
+    "Password": "Password",
+    "PasswordPlaceholder": "must be 8 characters",
+    "LoginBtn": "Login",
+    "ExtraText": "Don't have an account ? ",
+    "ExternalLink": "Signup"
   },
-  "Signup":{
-    "Heading" : "Create An Account",
-    "Subheading" : "enter your personal details to create an account",
-    "seperatorText" : "Or" ,
-    "FName": "First Name" , 
-    "FNamePlaceholder": "eg. Ahmad" ,
-    "LName": "Last Name" , 
-    "LNamePlaceholder": "eg. Mohamed" ,
-    "Email" : "Email" , 
+  "Signup": {
+    "Heading": "Create An Account",
+    "Subheading": "enter your personal details to create an account",
+    "seperatorText": "Or",
+    "FName": "First Name",
+    "FNamePlaceholder": "eg. Ahmad",
+    "LName": "Last Name",
+    "LNamePlaceholder": "eg. Mohamed",
+    "Email": "Email",
     "EmailPlaceholder": "eg. unknow@gmail.com",
-    "Password" : "Password" ,
-    "PasswordPlaceholder" : "must be 8 characters" ,
-    "SignupBtn" : "Signup" , 
-    "ExtraText" : "Already have an account ? ",
-    "ExternalLink" : "Login"
+    "Password": "Password",
+    "PasswordPlaceholder": "must be 8 characters",
+    "SignupBtn": "Signup",
+    "ExtraText": "Already have an account ? ",
+    "ExternalLink": "Login"
   },
-  "LoginBanner" :{
-    "Text" : ""
+  "LoginBanner": {
+    "Text": ""
   },
-  "SignupBanner" :{
-    "Text" : " "
+  "SignupBanner": {
+    "Text": " "
   },
-  "Introduction":{
+  "Introduction": {
     "Heading": "",
-    "Text" : ""
+    "Text": ""
   },
-  
+
   "Cards": {
-    "Heading" : "how it works" , 
-    "Title-1" : "Snap a Quick Photo",
-    "body-1" : "Use your phone to take a clear, well lit photo of your product. Natural light near a window works best no fancy camera needed" ,
-    "Title-2" : "Upload It",
-    "body-2" : "Upload the photo straight to our site. No editing, no setup  just a simple upload, and you're good to go. our AI will handle the rest from here." ,
-    "Title-3" : "Ready to post",
-    "body-3" : "Shaheen generates a polished background with engaging captions , You can edit it before publishing, so you have full control over the final look" 
+    "Heading": "how it works",
+    "Title-1": "Snap a Quick Photo",
+    "body-1": "Use your phone to take a clear, well lit photo of your product. Natural light near a window works best no fancy camera needed",
+    "Title-2": "Upload It",
+    "body-2": "Upload the photo straight to our site. No editing, no setup  just a simple upload, and you're good to go. our AI will handle the rest from here.",
+    "Title-3": "Ready to post",
+    "body-3": "Shaheen generates a polished background with engaging captions , You can edit it before publishing, so you have full control over the final look"
   },
 
   "FinalCta": {
@@ -88,6 +88,97 @@
     "A-4": "Yes, our platform is mobile-friendly. You can upload photos and edit content from anywhere.",
     "Q-5": "Is there technical support ?",
     "A-5": "Yes, we have a support team ready to help you anytime. You can contact us through the website or by email."
+  },
+
+  "Settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account settings and preferences",
+    "saveChanges": "Save Changes",
+    "tabs": {
+      "profile": "Profile",
+      "notifications": "Notifications",
+      "security": "Security",
+      "language": "Language",
+      "instagram": "Instagram",
+      "appearance": "Appearance",
+      "billing": "Billing"
+    },
+    "profile": {
+      "profilePicture": "Profile Picture",
+      "profilePictureDesc": "Update your profile picture",
+      "uploadPhoto": "Upload New Photo",
+      "remove": "Remove",
+      "personalInfo": "Personal Information",
+      "personalInfoDesc": "Update your personal details",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "location": "Location",
+      "website": "Website",
+      "bio": "Bio"
+    },
+    "notifications": {
+      "title": "Notification Preferences",
+      "subtitle": "Choose how you want to be notified",
+      "emailNotifications": "Email Notifications",
+      "emailNotificationsDesc": "Receive notifications via email",
+      "pushNotifications": "Push Notifications",
+      "pushNotificationsDesc": "Receive notifications in your browser",
+      "marketingEmails": "Marketing Emails",
+      "marketingEmailsDesc": "Receive promotional content and updates",
+      "postReminders": "Post Reminders",
+      "postRemindersDesc": "Get reminded about scheduled posts",
+      "weeklyReports": "Weekly Reports",
+      "weeklyReportsDesc": "Receive weekly performance reports"
+    },
+    "security": {
+      "changePassword": "Change Password",
+      "changePasswordDesc": "Update your password to keep your account secure",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "securitySettings": "Security Settings",
+      "securitySettingsDesc": "Additional security options for your account",
+      "twoFactorAuth": "Two-Factor Authentication",
+      "twoFactorAuthDesc": "Add an extra layer of security to your account",
+      "sessionTimeout": "Session Timeout"
+    },
+    "language": {
+      "title": "Language & Region",
+      "subtitle": "Customize your language and regional settings",
+      "language": "Language",
+      "timezone": "Timezone",
+      "dateFormat": "Date Format",
+      "timeFormat": "Time Format"
+    },
+    "instagram": {
+      "title": "Instagram Integration",
+      "subtitle": "Manage your Instagram account settings",
+      "autoPost": "Auto Post",
+      "autoPostDesc": "Automatically post generated content",
+      "postFrequency": "Post Frequency",
+      "contentReview": "Content Review",
+      "contentReviewDesc": "Review content before posting",
+      "hashtagSuggestions": "Hashtag Suggestions",
+      "hashtagSuggestionsDesc": "Include AI-generated hashtag suggestions"
+    },
+    "appearance": {
+      "title": "Appearance Settings",
+      "subtitle": "Customize the look and feel of your dashboard",
+      "theme": "Theme",
+      "fontSize": "Font Size",
+      "compactMode": "Compact Mode",
+      "compactModeDesc": "Reduce spacing for a more compact layout"
+    },
+    "billing": {
+      "currentPlan": "Current Plan",
+      "subtitle": "Manage your subscription and billing",
+      "nextBillingDate": "Next Billing Date",
+      "autoRenew": "Auto Renew",
+      "autoRenewDesc": "Automatically renew your subscription",
+      "downloadInvoice": "Download Invoice",
+      "manageBilling": "Manage Billing"
+    }
   }
-  
 }

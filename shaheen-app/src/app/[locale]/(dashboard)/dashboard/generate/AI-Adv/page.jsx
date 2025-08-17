@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import ImageUpload from "@/components/ImageUpload";
 import { insertPostToSupabase } from "../../../../../../../lib/supabase/post";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Topbar from "../../components/Topbar";
 
 const postSize = [
@@ -35,6 +35,8 @@ const postSize = [
 const page = () => {
   const { user, isLoaded } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
 
   const [post, setPost] = useState("");
   const [postTitle, setPostTitle] = useState("");
@@ -184,10 +186,7 @@ const page = () => {
         `Generation completed successfully! Generated ${generateResult.total_generated} images.`
       );
 
-      // TEMPORARILY DISABLED: Redirect to generated_images page after a short delay
-      // setTimeout(() => {
-      //   router.push("/dashboard/generated_images");
-      // }, 2000);
+      router.push(`/${locale}/dashboard/generate/AI-Adv/generated_images`);
     } catch (error) {
       console.error("Generation error:", error);
       setGenerationStatus(`Generation failed: ${error.message}`);
@@ -276,6 +275,7 @@ const page = () => {
               </div>
             </div>
 
+            {/* PRODUCT DESCRIPTION */}
             <div className="flex flex-col gap-4">
               <h4 className="capitalize">product description</h4>
               <textarea
