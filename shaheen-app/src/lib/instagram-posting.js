@@ -8,9 +8,14 @@ export class InstagramPostingService {
   // Create a media container for single image/video
   async createMediaContainer(instagramId, accessToken, mediaData) {
     try {
+      console.log('createMediaContainer called with:', { instagramId, accessToken, mediaData });
+      
       const { imageUrl, videoUrl, caption, mediaType = 'IMAGE' } = mediaData;
       
+      console.log('Extracted values:', { imageUrl, videoUrl, caption, mediaType });
+      
       if (!imageUrl && !videoUrl) {
+        console.error('Both imageUrl and videoUrl are missing:', { imageUrl, videoUrl });
         throw new Error('Either imageUrl or videoUrl is required');
       }
 
@@ -212,25 +217,50 @@ export class InstagramPostingService {
   // Upload file to S3 and get public URL
   async uploadToS3(file) {
     try {
+      console.log('Starting S3 upload for file:', file.name, file.type, file.size);
+      
       const formData = new FormData();
       formData.append('file', file);
+
+      console.log('FormData created, sending request to /api/s3-upload...');
 
       const response = await fetch('/api/s3-upload', {
         method: 'POST',
         body: formData,
       });
 
+      console.log('S3 upload response status:', response.status);
+      console.log('S3 upload response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
         const errorText = await response.text();
+        console.error('S3 upload failed with status:', response.status, 'Error text:', errorText);
         throw new Error(`S3 upload failed: ${response.status} - ${errorText}`);
       }
 
-      const data = await response.json();
+      const responseText = await response.text();
+      console.log('S3 upload response text:', responseText);
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+        console.log('S3 upload parsed response:', data);
+      } catch (parseError) {
+        console.error('Failed to parse S3 upload response as JSON:', parseError);
+        throw new Error(`S3 upload response is not valid JSON: ${responseText}`);
+      }
       
       if (!data.success) {
+        console.error('S3 upload returned success: false, error:', data.error);
         throw new Error(`S3 upload failed: ${data.error || 'Unknown error'}`);
       }
 
+      if (!data.url) {
+        console.error('S3 upload succeeded but no URL returned:', data);
+        throw new Error('S3 upload succeeded but no URL returned');
+      }
+
+      console.log('S3 upload successful, URL:', data.url);
       return data.url; // Return the public S3 URL
     } catch (error) {
       console.error('Error uploading to S3:', error);
@@ -270,12 +300,16 @@ export class InstagramPostingService {
       if (mediaUrls.length === 1) {
         // Single media post
         console.log('Creating single media container...');
-        containerId = await this.createMediaContainer(instagramId, accessToken, {
+        const containerData = {
           imageUrl: mediaUrls[0].type === 'IMAGE' ? mediaUrls[0].url : undefined,
           videoUrl: mediaUrls[0].type === 'VIDEO' ? mediaUrls[0].url : undefined,
           caption,
           mediaType: mediaUrls[0].type
-        });
+        };
+        console.log('Container data being sent:', containerData);
+        console.log('mediaUrls[0]:', mediaUrls[0]);
+        
+        containerId = await this.createMediaContainer(instagramId, accessToken, containerData);
         console.log('Single media container created:', containerId);
       } else {
         // Carousel post
