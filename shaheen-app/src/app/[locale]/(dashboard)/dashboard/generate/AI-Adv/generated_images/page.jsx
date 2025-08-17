@@ -110,7 +110,7 @@ const GeneratedImages = () => {
                   key={index}
                 >
                   <img
-                    src={image.image_url}
+                    src={image}
                     alt="generated image"
                     className="w-full  h-full object-cover "
                   />
