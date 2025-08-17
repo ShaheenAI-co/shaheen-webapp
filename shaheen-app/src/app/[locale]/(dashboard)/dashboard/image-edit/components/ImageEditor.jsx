@@ -8,14 +8,19 @@ import { Button } from "@/components/ui/button";
 import { Download, Plus, Type, Settings, Menu } from "lucide-react";
 import html2canvas from "html2canvas";
 import { useMediaQuery } from "react-responsive";
+import { useRouter, usePathname } from "next/navigation";
 
 export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
   const [uploadedImage, setUploadedImage] = useState(imageUrl);
   const [textElements, setTextElements] = useState([]); // to store all the text layers
   const [selectedTextId, setSelectedTextId] = useState(null); // points to the current selected text layer
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const workspaceRef = useRef(null);
   const isMobile = useMediaQuery({ maxWidth: 768 });
+  const router = useRouter();
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
 
   // Update uploadedImage when imageUrl prop changes
   useEffect(() => {
@@ -87,7 +92,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
   const selectedElement = textElements.find((el) => el.id === selectedTextId);
 
   const SidebarContent = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 ">
       {!uploadedImage ? (
         <ImageUpload onImageUpload={handleImageUpload} />
       ) : (
@@ -154,33 +159,117 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
     </div>
   );
 
-  const exportImage = useCallback(async () => {
+  const saveAndNavigate = useCallback(async () => {
     if (!workspaceRef.current || !uploadedImage) {
-      toast.error("No image to export");
+      console.error("No image to save");
       return;
     }
 
+    setIsSaving(true);
+
     try {
+      console.log("Saving edited image...");
+
+      // Temporarily override CSS variables to avoid oklch colors
+      const originalRoot = document.documentElement.style;
+      const originalVars = {};
+
+      // Store original CSS variables
+      const cssVars = [
+        "--background",
+        "--foreground",
+        "--card",
+        "--card-foreground",
+        "--popover",
+        "--popover-foreground",
+        "--primary",
+        "--primary-foreground",
+        "--secondary",
+        "--secondary-foreground",
+        "--muted",
+        "--muted-foreground",
+        "--accent",
+        "--accent-foreground",
+        "--destructive",
+        "--border",
+        "--input",
+        "--ring",
+        "--sidebar",
+        "--sidebar-foreground",
+      ];
+
+      cssVars.forEach((varName) => {
+        const value = getComputedStyle(
+          document.documentElement
+        ).getPropertyValue(varName);
+        if (value && value.includes("oklch")) {
+          originalVars[varName] = value;
+          // Replace with standard colors
+          if (varName.includes("foreground") || varName.includes("text")) {
+            document.documentElement.style.setProperty(varName, "#ffffff");
+          } else if (varName.includes("background")) {
+            document.documentElement.style.setProperty(varName, "transparent");
+          } else if (varName.includes("border")) {
+            document.documentElement.style.setProperty(varName, "#ffffff");
+          } else {
+            document.documentElement.style.setProperty(varName, "#ffffff");
+          }
+        }
+      });
+
       const canvas = await html2canvas(workspaceRef.current, {
         backgroundColor: null,
         scale: 2,
         useCORS: true,
-        allowTaint: true, // Added for S3 images
+        allowTaint: true,
       });
 
-      const link = document.createElement("a");
-      link.download = "edited-image.png";
-      link.href = canvas.toDataURL();
-      link.click();
-      toast.success("Image exported successfully");
+      // Restore original CSS variables
+      Object.keys(originalVars).forEach((varName) => {
+        document.documentElement.style.setProperty(
+          varName,
+          originalVars[varName]
+        );
+      });
+
+      // Convert canvas to blob
+      const blob = await new Promise((resolve) => {
+        canvas.toBlob(resolve, "image/png", 0.95);
+      });
+
+      // Create FormData to upload the edited image
+      const formData = new FormData();
+      formData.append("file", blob, "edited-image.png");
+
+      // Upload the edited image to S3
+      const uploadResponse = await fetch("/api/s3-upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const uploadResult = await uploadResponse.json();
+
+      if (!uploadResult.success) {
+        throw new Error(`Upload failed: ${uploadResult.error}`);
+      }
+
+      const editedImageUrl = uploadResult.s3Url;
+      console.log("Edited image uploaded:", editedImageUrl);
+
+      // Navigate to Final-image page with the edited image URL
+      router.push(
+        `/${locale}/dashboard/generate/Final-Image?imageUrl=${encodeURIComponent(editedImageUrl)}&originalImageUrl=${encodeURIComponent(uploadedImage)}`
+      );
     } catch (error) {
-      toast.error("Failed to export image");
-      console.error("Export error:", error);
+      console.error("Save error:", error);
+      alert("Failed to save image. Please try again.");
+    } finally {
+      setIsSaving(false);
     }
-  }, [uploadedImage]);
+  }, [uploadedImage, router, locale]);
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
+    <div className="min-h-screen bg-[#0f0f0f] flex flex-col">
       <header className="  px-4 lg:px-6 py-3 lg:py-4 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 lg:gap-3">
@@ -215,14 +304,23 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
               {!isMobile && "Add Text"}
             </Button>
             <Button
-              onClick={exportImage}
-              disabled={!uploadedImage}
+              onClick={saveAndNavigate}
+              disabled={!uploadedImage || isSaving}
               variant="primary"
               size={isMobile ? "sm" : "default"}
               className="gap-1 lg:gap-2 "
             >
-              <Download className="h-4 w-4" />
-              {!isMobile && "Export"}
+              {isSaving ? (
+                <>
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  {!isMobile && "Saving..."}
+                </>
+              ) : (
+                <>
+                  <Download className="h-4 w-4" />
+                  {!isMobile && "Save"}
+                </>
+              )}
             </Button>
             {isMobile &&
               selectedElement && ( // Mobile Sidebar
@@ -250,7 +348,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
       <div className="flex flex-1 min-h-0">
         {/* Desktop Sidebar */}
         {!isMobile && (
-          <div className="w-80 border-r border-border bg-black p-6 overflow-y-auto flex-shrink-0">
+          <div className="w-80 border-r border-border bg-[#0f0f0f] p-6 overflow-y-auto flex-shrink-0">
             <SidebarContent />
           </div>
         )}
@@ -258,7 +356,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
         {/* Workspace */}
         <div className="flex-1 bg-workspace p-2 lg:p-8 overflow-auto">
           <div className="flex items-center justify-center min-h-full">
-            {uploadedImage ? (
+            {uploadedImage || imageUrl ? (
               <div
                 ref={workspaceRef}
                 className="relative bg-white rounded-lg shadow-editor overflow-hidden max-w-full"
@@ -268,11 +366,24 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
                 }}
               >
                 <img
-                  src={uploadedImage}
+                  src={uploadedImage || imageUrl}
                   alt="Editing"
                   className="max-w-full max-h-full block"
                   draggable={false}
                   crossOrigin="anonymous" // Added for S3 CORS support
+                  onLoad={() => console.log("Image loaded successfully")}
+                  onError={(e) => {
+                    console.error("Image failed to load:", e);
+                    console.error(
+                      "Failed image URL:",
+                      uploadedImage || imageUrl
+                    );
+                  }}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain",
+                  }}
                 />
                 {textElements.map((element) => (
                   <TextOverlay

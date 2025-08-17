@@ -26,7 +26,7 @@ const dashPages = [
   },
   {
     name: "posts",
-    href: "/dashboard",
+    href: "/dashboard/posts",
     icon: "/icons/Paper_File.svg",
   },
   {

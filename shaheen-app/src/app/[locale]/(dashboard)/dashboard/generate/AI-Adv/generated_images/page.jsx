@@ -3,38 +3,46 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { fetchImageUrlsByPostId } from "../../../../../../../../lib/supabase/generated_asset";
 import Topbar from "../../../components/Topbar";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 const GeneratedImages = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         // Get post_id from URL search parameters
-        const postId = searchParams.get('post_id');
-        
+        const postId = searchParams.get("post_id");
+
         if (!postId) {
           setError("No post ID provided. Please go back and try again.");
           setLoading(false);
           return;
         }
-        
+
         console.log("Fetching images for post_id:", postId);
-        
+
         const fetchedImages = await fetchImageUrlsByPostId(postId);
         setImages(fetchedImages);
-        console.log(`${fetchedImages.length} images fetched successfully for post_id: ${postId}`);
-        
+        console.log(
+          `${fetchedImages.length} images fetched successfully for post_id: ${postId}`
+        );
+
         // Debug: Log the current URL and search params
         console.log("Current URL:", window.location.href);
-        console.log("Search params:", Object.fromEntries(searchParams.entries()));
+        console.log(
+          "Search params:",
+          Object.fromEntries(searchParams.entries())
+        );
       } catch (error) {
         console.error("Error fetching images:", error);
         setError("Failed to fetch images. Please try again.");
@@ -42,9 +50,15 @@ const GeneratedImages = () => {
         setLoading(false);
       }
     };
-    
+
     fetchImages();
   }, [searchParams]);
+
+  const handleImageSelect = (selectedImageUrl) => {
+    // Navigate to image-edit page with the selected image URL as a parameter
+    const imageEditUrl = `/${locale}/dashboard/image-edit?imageUrl=${encodeURIComponent(selectedImageUrl)}`;
+    router.push(imageEditUrl);
+  };
 
   return (
     <div className="py-6 bg-[#0f0f0f] min-h-screen">
@@ -63,7 +77,7 @@ const GeneratedImages = () => {
           </div>
 
           {/* IMAGES CONTAINER */}
-          
+
           {loading && (
             <div className="w-full flex items-center justify-center py-12">
               <div className="text-center">
@@ -77,8 +91,8 @@ const GeneratedImages = () => {
             <div className="w-full flex items-center justify-center py-12">
               <div className="text-center">
                 <p className="text-red-400 mb-4">{error}</p>
-                <button 
-                  onClick={() => window.history.back()} 
+                <button
+                  onClick={() => window.history.back()}
                   className="bg-[#6123B8] text-white px-6 py-2 rounded-lg hover:bg-[#6123B8]/80 transition-all duration-300"
                 >
                   Go Back
@@ -90,9 +104,11 @@ const GeneratedImages = () => {
           {!loading && !error && images.length === 0 && (
             <div className="w-full flex items-center justify-center py-12">
               <div className="text-center">
-                <p className="text-white/70 mb-4">No images found for this post.</p>
-                <button 
-                  onClick={() => window.history.back()} 
+                <p className="text-white/70 mb-4">
+                  No images found for this post.
+                </p>
+                <button
+                  onClick={() => window.history.back()}
                   className="bg-[#6123B8] text-white px-6 py-2 rounded-lg hover:bg-[#6123B8]/80 transition-all duration-300"
                 >
                   Go Back
@@ -114,7 +130,11 @@ const GeneratedImages = () => {
                     alt="generated image"
                     className="w-full  h-full object-cover "
                   />
-                  <button className="bg-[#6123B8] cursor-pointer hover:bg-[#6123B8]/80 transition-all duration-300 text-white px-4 py-3  rounded-b-2xl  w-full">
+
+                  <button
+                    onClick={() => handleImageSelect(image)}
+                    className="bg-[#6123B8] cursor-pointer hover:bg-[#6123B8]/80 transition-all duration-300 text-white px-4 py-3  rounded-b-2xl  w-full"
+                  >
                     select
                   </button>
                 </div>
