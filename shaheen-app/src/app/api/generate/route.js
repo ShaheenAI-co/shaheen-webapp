@@ -234,7 +234,7 @@ export async function POST(request) {
           const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
           
           try {
-            const vmResponse = await fetch('https://goj0ya7zpmw516-5151.proxy.runpod.net/generate', {
+            const vmResponse = await fetch('https://i2bnptqjmftvh3-5151.proxy.runpod.net/generate', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
