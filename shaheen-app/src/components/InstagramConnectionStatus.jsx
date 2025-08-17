@@ -105,11 +105,11 @@ const InstagramConnectionStatus = () => {
               
               {supabaseAccounts.map((account) => {
                 const isCurrentAccount = userData && userData.instagram_id === account.instagram_id;
-                const expiresAt = new Date(account.expires_at);
-                const now = new Date();
-                const daysRemaining = Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-                const isExpired = expiresAt <= now;
-                const needsRefresh = daysRemaining <= 7;
+                // const expiresAt = new Date(account.expires_at);
+                // const now = new Date();
+                // const daysRemaining = Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                // const isExpired = expiresAt <= now;
+                // const needsRefresh = daysRemaining <= 7;
 
                 return (
                   <div key={account.instagram_id} className="p-3 bg-white/5 border border-white/10 rounded-md">
@@ -122,7 +122,7 @@ const InstagramConnectionStatus = () => {
                               Active
                             </Badge>
                           )}
-                          <Badge 
+                          {/* <Badge 
                             variant="secondary" 
                             className={`${
                               daysRemaining > 30 
@@ -133,16 +133,16 @@ const InstagramConnectionStatus = () => {
                             }`}
                           >
                             {isExpired ? 'Expired' : `${daysRemaining} days left`}
-                          </Badge>
+                          </Badge> */}
                         </div>
                         
                         <div className="text-xs text-gray-400 space-y-1">
-                          <div>Instagram ID: {account.instagram_id}</div>
+                          {/* <div>Instagram ID: {account.instagram_id}</div> */}
                           <div>Connected: {new Date(account.connected_at).toLocaleDateString()}</div>
-                          {account.last_posted_at && (
+                          {/* {account.last_posted_at && (
                             <div>Last Posted: {new Date(account.last_posted_at).toLocaleDateString()}</div>
-                          )}
-                          <div>Expires: {expiresAt.toLocaleDateString()} at {expiresAt.toLocaleTimeString()}</div>
+                          )} */}
+                          {/* <div>Expires: {expiresAt.toLocaleDateString()} at {expiresAt.toLocaleTimeString()}</div> */}
                         </div>
                       </div>
                       
@@ -160,7 +160,7 @@ const InstagramConnectionStatus = () => {
               })}
             </div>
             
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
               <Button
                 onClick={refreshTokens}
                 variant="outline"
@@ -178,7 +178,16 @@ const InstagramConnectionStatus = () => {
                 <XCircle className="w-4 h-4 mr-2" />
                 Disconnect All
               </Button>
-            </div>
+            </div> */}
+            
+            <Button
+              onClick={logout}
+              variant="outline"
+              className="w-full border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500/50"
+            >
+              <XCircle className="w-4 h-4 mr-2" />
+              Disconnect All
+            </Button>
           </div>
         ) : (
           <div className="space-y-3">
@@ -192,10 +201,10 @@ const InstagramConnectionStatus = () => {
             
             <p className="text-sm text-gray-300">
               Connect your Instagram accounts to start scheduling posts and managing your content.
-              <br />
+              {/* <br />
               <span className="text-xs text-gray-400 mt-1 block">
                 🔒 Uses long-lived tokens (60 days) stored securely in Supabase
-              </span>
+              </span> */}
             </p>
             
             <Button

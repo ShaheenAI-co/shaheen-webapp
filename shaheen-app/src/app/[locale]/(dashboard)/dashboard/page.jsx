@@ -13,7 +13,7 @@ import { FolderClosed, Brush, Calendar } from "lucide-react";
 import Image from "next/image";
 import Topbar from "./components/Topbar";
 import InstagramConnectionStatus from "@/components/InstagramConnectionStatus";
-import InstagramPostScheduler from "@/components/InstagramPostScheduler";
+// import InstagramPostScheduler from "@/components/InstagramPostScheduler";
 
 const DashboardCards = [
   {
@@ -86,9 +86,9 @@ const Dashboardpage = () => {
         </div>
 
         {/* INSTAGRAM POST SCHEDULER */}
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <InstagramPostScheduler />
-        </div>
+        </div> */}
 
         {/* TABLE */}
         <div className="mt-8">
