@@ -54,7 +54,7 @@ const features = [
   },
   {
     name: "retouch",
-    href: "/dashboard",
+    href: "/dashboard/retouch",
     icon: "/icons/Brush.svg",
   },
 ];
@@ -145,10 +145,10 @@ export default function Sidebar() {
           <SidebarBtn
             activePage={activePage}
             handleActivePage={handleActivePage}
-            href="/dashboard"
+            href="/dashboard/schedule"
             icon="/icons/Calendar.svg"
             name="Schedule_Post"
-            onClick={() => handleActivePage(page.name)}
+            onClick={() => handleActivePage("Schedule_Post")}
           />
         </div>
       </div>

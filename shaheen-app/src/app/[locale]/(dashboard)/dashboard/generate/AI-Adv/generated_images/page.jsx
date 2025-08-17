@@ -25,7 +25,6 @@ const GeneratedImages = () => {
 
   return (
     <div className="py-6 bg-[#0f0f0f] min-h-screen">
-
       {/* TOPBAR */}
       <div className="px-12">
         <Topbar icon="/icons/Image_.svg" title="AI Advertisement" />
@@ -42,24 +41,24 @@ const GeneratedImages = () => {
 
           {/* IMAGES CONTAINER */}
 
-          <div className="w-full flex items-center gap-6 relative  flex-wrap">
-
+          <div className="w-full flex items-center gap-6 relative justify-center flex-wrap">
             {/* IMAGES */}
             {images.map((image, index) => (
-              <div className="w-[250px] h-[350px] hover:scale-105 transition-all duration-300 cursor-pointer flex flex-col justify-between overflow-hidden  bg-white/10 rounded-lg relative" key={index}>
+              <div
+                className="w-[250px] h-[350px] hover:scale-105 transition-all duration-300 cursor-pointer flex flex-col justify-between overflow-hidden  bg-white/10 rounded-lg relative"
+                key={index}
+              >
                 <img
                   src={image}
-                alt="generated image"
-                className="w-full  h-full object-cover "
-              />
-              <button className="bg-[#6123B8] cursor-pointer hover:bg-[#6123B8]/80 transition-all duration-300 text-white px-4 py-3  rounded-b-2xl  w-full">
-                select
-              </button>
-            </div>
+                  alt="generated image"
+                  className="w-full  h-full object-cover "
+                />
+                <button className="bg-[#6123B8] cursor-pointer hover:bg-[#6123B8]/80 transition-all duration-300 text-white px-4 py-3  rounded-b-2xl  w-full">
+                  select
+                </button>
+              </div>
             ))}
           </div>
-
-
         </div>
       </div>
     </div>
