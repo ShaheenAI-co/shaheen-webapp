@@ -1,13 +1,14 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, Clock, Image as ImageIcon, Send, Instagram } from 'lucide-react';
+import { Calendar, Clock, Image as ImageIcon, Send, Instagram, Upload, X, Play } from 'lucide-react';
 import { useInstagramAuth } from '@/Hooks/useInstagramAuth';
+import { instagramPosting } from '@/lib/instagram-posting';
 
 const InstagramPostScheduler = () => {
   const { isConnected, userData, supabaseAccounts, user } = useInstagramAuth();
@@ -16,7 +17,11 @@ const InstagramPostScheduler = () => {
   const [scheduledDate, setScheduledDate] = useState('');
   const [scheduledTime, setScheduledTime] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
   const [message, setMessage] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [mediaPreview, setMediaPreview] = useState([]);
+  const fileInputRef = useRef(null);
 
   // Set default selected account when accounts are loaded
   React.useEffect(() => {
@@ -25,10 +30,134 @@ const InstagramPostScheduler = () => {
     }
   }, [supabaseAccounts, selectedAccount]);
 
+  // Cleanup preview URLs on unmount
+  React.useEffect(() => {
+    return () => {
+      mediaPreview.forEach(preview => {
+        URL.revokeObjectURL(preview.url);
+      });
+    };
+  }, [mediaPreview]);
+
+  // Handle file selection
+  const handleFileSelect = (files) => {
+    const fileArray = Array.from(files);
+    const validFiles = fileArray.filter(file => {
+      const isValidType = file.type.startsWith('image/') || file.type.startsWith('video/');
+      const isValidSize = file.size <= 100 * 1024 * 1024; // 100MB limit
+      return isValidType && isValidSize;
+    });
+
+    if (validFiles.length === 0) {
+      setMessage('Please select valid image or video files (max 100MB each)');
+      return;
+    }
+
+    if (validFiles.length > 10) {
+      setMessage('Maximum 10 files allowed for carousel posts');
+      return;
+    }
+
+    setSelectedFiles(validFiles);
+    setMessage('');
+
+    // Create previews
+    const previews = validFiles.map(file => ({
+      url: URL.createObjectURL(file),
+      type: file.type.startsWith('image/') ? 'image' : 'video',
+      name: file.name
+    }));
+    setMediaPreview(previews);
+  };
+
+  // Handle file input change
+  const handleFileInputChange = (e) => {
+    handleFileSelect(e.target.files);
+  };
+
+  // Handle drag and drop
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.currentTarget.classList.add('border-blue-400', 'bg-blue-500/10');
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('border-blue-400', 'bg-blue-500/10');
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('border-blue-400', 'bg-blue-500/10');
+    handleFileSelect(e.dataTransfer.files);
+  };
+
+  // Remove file from selection
+  const removeFile = (index) => {
+    const newFiles = selectedFiles.filter((_, i) => i !== index);
+    const newPreviews = mediaPreview.filter((_, i) => i !== index);
+    
+    setSelectedFiles(newFiles);
+    setMediaPreview(newPreviews);
+    
+    // Clean up preview URLs
+    URL.revokeObjectURL(mediaPreview[index].url);
+  };
+
+  // Clear all files
+  const clearFiles = () => {
+    selectedFiles.forEach((_, index) => {
+      URL.revokeObjectURL(mediaPreview[index].url);
+    });
+    setSelectedFiles([]);
+    setMediaPreview([]);
+  };
+
+  // Handle immediate posting
+  const handlePostNow = async () => {
+    if (!selectedAccount || selectedFiles.length === 0) {
+      setMessage('Please select an account and at least one media file');
+      return;
+    }
+
+    setIsPosting(true);
+    setMessage('');
+
+    try {
+      const selectedAccountData = supabaseAccounts.find(
+        acc => acc.instagram_id.toString() === selectedAccount
+      );
+
+      if (!selectedAccountData) {
+        throw new Error('Selected account not found');
+      }
+
+      const result = await instagramPosting.postNow(
+        selectedAccountData.instagram_id,
+        selectedAccountData.page_access_token,
+        {
+          files: selectedFiles,
+          caption: caption.trim() || undefined
+        }
+      );
+
+      setMessage(`Post published successfully! 🎉 Media ID: ${result.mediaId}`);
+      
+      // Clear form
+      setCaption('');
+      clearFiles();
+      
+    } catch (error) {
+      setMessage(`Error posting to Instagram: ${error.message}`);
+    } finally {
+      setIsPosting(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!selectedAccount || !caption.trim() || !scheduledDate || !scheduledTime) {
+    if (!selectedAccount || !scheduledDate || !scheduledTime) {
       setMessage('Please fill in all required fields');
       return;
     }
@@ -209,18 +338,115 @@ const InstagramPostScheduler = () => {
             </div>
           </div>
 
-          {/* Media Upload Placeholder */}
+          {/* Media Upload */}
           <div className="space-y-2">
             <Label className="text-white flex items-center gap-2">
               <ImageIcon className="w-4 h-4" />
-              Media (Coming Soon)
+              Media Files
             </Label>
-            <div className="border-2 border-dashed border-white/20 rounded-lg p-8 text-center">
-              <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-300 mb-2">Media upload feature coming soon</p>
-              <p className="text-sm text-gray-400">
-                You'll be able to upload images and videos here
-              </p>
+            
+            {/* File Input */}
+            <div 
+              className="border-2 border-dashed border-white/20 rounded-lg p-6 text-center transition-colors duration-200"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="image/*,video/*"
+                onChange={handleFileInputChange}
+                className="hidden"
+              />
+              
+              {mediaPreview.length === 0 ? (
+                <div>
+                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-300 mb-2">Upload images or videos</p>
+                  <p className="text-sm text-gray-400 mb-4">
+                    Drag & drop files here or click to browse
+                  </p>
+                  <Button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    variant="outline"
+                    className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Select Files
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-white font-medium">
+                      {mediaPreview.length} file{mediaPreview.length > 1 ? 's' : ''} selected
+                    </span>
+                    <Button
+                      type="button"
+                      onClick={clearFiles}
+                      variant="outline"
+                      size="sm"
+                      className="bg-red-500/10 border-red-500/20 text-red-400 hover:bg-red-500/20"
+                    >
+                      <X className="w-4 h-4 mr-2" />
+                      Clear All
+                    </Button>
+                  </div>
+                  
+                  {/* Media Previews */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {mediaPreview.map((preview, index) => (
+                      <div key={index} className="relative group">
+                        <div className="aspect-square rounded-lg overflow-hidden bg-gray-800 border border-white/20">
+                          {preview.type === 'image' ? (
+                            <img
+                              src={preview.url}
+                              alt={preview.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gray-700">
+                              <Play className="w-8 h-8 text-white" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* Remove button */}
+                        <button
+                          type="button"
+                          onClick={() => removeFile(index)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                        
+                        {/* File name */}
+                        <p className="text-xs text-gray-400 mt-1 truncate">
+                          {preview.name}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Add more files button */}
+                  <Button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    variant="outline"
+                    className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Add More Files
+                  </Button>
+                </div>
+              )}
+            </div>
+            
+            <div className="text-xs text-gray-400">
+              Supported: Images (JPEG) and Videos (MP4, MOV). Max 10 files, 100MB each.
             </div>
           </div>
 
@@ -235,24 +461,47 @@ const InstagramPostScheduler = () => {
             </div>
           )}
 
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            disabled={isSubmitting || !selectedAccount || !caption.trim() || !scheduledDate || !scheduledTime}
-            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                Scheduling Post...
-              </>
-            ) : (
-              <>
-                <Send className="w-4 h-4 mr-2" />
-                Schedule Post
-              </>
-            )}
-          </Button>
+          {/* Action Buttons */}
+          <div className="grid grid-cols-2 gap-3">
+            {/* Post Now Button */}
+            <Button
+              type="button"
+              onClick={handlePostNow}
+              disabled={isPosting || !selectedAccount || selectedFiles.length === 0}
+              className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isPosting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  Posting...
+                </>
+              ) : (
+                <>
+                  <Instagram className="w-4 h-4 mr-2" />
+                  Post Now
+                </>
+              )}
+            </Button>
+
+            {/* Schedule Post Button */}
+            <Button
+              type="submit"
+              disabled={isSubmitting || !selectedAccount || !caption.trim() || !scheduledDate || !scheduledTime}
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  Scheduling...
+                </>
+              ) : (
+                <>
+                  <Send className="w-4 h-4 mr-2" />
+                  Schedule Post
+                </>
+              )}
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>
