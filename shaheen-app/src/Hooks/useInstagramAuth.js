@@ -98,9 +98,56 @@ export const useInstagramAuth = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const error = urlParams.get('error');
+    const instagramSuccess = urlParams.get('instagram_success');
     
     if (error) {
       setError(`Instagram login failed: ${error}`);
+      return;
+    }
+    
+    // Check if we have Instagram data in localStorage (from redirect)
+    if (instagramSuccess) {
+      try {
+        const instagramData = localStorage.getItem('instagram_auth_data');
+        if (instagramData) {
+          const parsedData = JSON.parse(instagramData);
+          
+          // Save Instagram accounts to Supabase
+          if (parsedData.instagram_accounts) {
+            const savedAccounts = await instagramAuth.saveAccountsToSupabase(
+              parsedData.instagram_accounts, 
+              user.id
+            );
+            
+            // Handle null response safely
+            if (savedAccounts && Array.isArray(savedAccounts)) {
+              setSupabaseAccounts(savedAccounts);
+
+              // Set user data from the first account
+              if (savedAccounts.length > 0) {
+                const firstAccount = savedAccounts[0];
+                setUserData({
+                  access_token: firstAccount.access_token,
+                  token_type: 'bearer',
+                  expires_in: Math.floor((new Date(firstAccount.expires_at) - new Date()) / 1000),
+                  isLongLived: true,
+                  timestamp: firstAccount.connected_at,
+                  instagram_id: firstAccount.instagram_id,
+                  username: firstAccount.username
+                });
+                setIsConnected(true);
+              }
+            }
+            
+            // Clear localStorage and URL parameters
+            localStorage.removeItem('instagram_auth_data');
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
+        }
+      } catch (err) {
+        console.error('Error processing Instagram data from localStorage:', err);
+        setError('Failed to process Instagram authentication data');
+      }
       return;
     }
     
@@ -129,21 +176,25 @@ export const useInstagramAuth = () => {
               data.data.instagram_accounts, 
               user.id
             );
-            setSupabaseAccounts(savedAccounts);
+            
+            // Handle null response safely
+            if (savedAccounts && Array.isArray(savedAccounts)) {
+              setSupabaseAccounts(savedAccounts);
 
-            // Set user data from the first account
-            if (savedAccounts.length > 0) {
-              const firstAccount = savedAccounts[0];
-              setUserData({
-                access_token: firstAccount.access_token,
-                token_type: 'bearer',
-                expires_in: Math.floor((new Date(firstAccount.expires_at) - new Date()) / 1000),
-                isLongLived: true,
-                timestamp: firstAccount.connected_at,
-                instagram_id: firstAccount.instagram_id,
-                username: firstAccount.username
-              });
-              setIsConnected(true);
+              // Set user data from the first account
+              if (savedAccounts.length > 0) {
+                const firstAccount = savedAccounts[0];
+                setUserData({
+                  access_token: firstAccount.access_token,
+                  token_type: 'bearer',
+                  expires_in: Math.floor((new Date(firstAccount.expires_at) - new Date()) / 1000),
+                  isLongLived: true,
+                  timestamp: firstAccount.connected_at,
+                  instagram_id: firstAccount.instagram_id,
+                  username: firstAccount.username
+                });
+                setIsConnected(true);
+              }
             }
           }
           
