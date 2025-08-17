@@ -52,6 +52,7 @@ export default function page() {
     const isArabic = locale === "ar";
   return (
     <div className="px-12 mt-6 h-screen">
+      
         {/* Heading */}
       <div className="flex flex-col gap-2 border-b border-[#272729] pb-4 ">
         <h2 className="text-2xl font-bold capitalize satoshi-bold ">

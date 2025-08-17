@@ -62,6 +62,48 @@ const page = () => {
     setSelectedFile(files[0]?.file || null);
   };
 
+  const handleEditImage = async () => {
+    if (!selectedFile) {
+      setGenerationStatus("Please select an image first.");
+      return;
+    }
+
+    setIsGenerating(true);
+    setGenerationStatus("Uploading image for editing...");
+
+    try {
+      // Upload image to S3
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const s3Response = await fetch("/api/s3-upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const s3Result = await s3Response.json();
+
+      if (!s3Result.success) {
+        throw new Error(`S3 upload failed: ${s3Result.error}`);
+      }
+
+      const imageUrl = s3Result.s3Url;
+      setGenerationStatus(
+        "Image uploaded successfully. Redirecting to editor..."
+      );
+
+      // Navigate to image-edit page with the image URL
+      router.push(
+        `/${locale}/dashboard/generate/AI-Adv/generated_images?post_id=f88f242f-022d-4195-9ebb-f73da5db34e4`
+      );
+    } catch (error) {
+      console.error("Image upload error:", error);
+      setGenerationStatus(`Image upload failed: ${error.message}`);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   const handleGenerate = async () => {
     if (
       !post ||
@@ -187,7 +229,9 @@ const page = () => {
         `Generation completed successfully! Generated ${generateResult.total_generated} images.`
       );
 
-      router.push(`/${locale}/dashboard/generate/AI-Adv/generated_images?post_id=${postId}`);
+      router.push(
+        `/${locale}/dashboard/generate/AI-Adv/generated_images?post_id=${postId}`
+      );
     } catch (error) {
       console.error("Generation error:", error);
       setGenerationStatus(`Generation failed: ${error.message}`);
@@ -307,7 +351,7 @@ const page = () => {
           </div>
 
           {/* Generation Status */}
-          {/* {generationStatus && (
+          {generationStatus && (
             <div className="mt-4 p-3 rounded-lg bg-white/5 border border-white/10">
               <div className="flex items-center gap-2">
                 {isGenerating && (
@@ -316,9 +360,23 @@ const page = () => {
                 <p className="text-sm text-white/80">{generationStatus}</p>
               </div>
             </div>
-          )} */}
+          )}
 
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center gap-4 mt-6">
+            <Button
+              className="bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleEditImage}
+              disabled={isGenerating || !selectedFile}
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                "Edit Image"
+              )}
+            </Button>
             <Button
               className="bg-purple-500 text-white px-4 py-3 rounded-lg hover:bg-purple-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleGenerate}

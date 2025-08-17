@@ -1,8 +1,36 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Topbar from "../../components/Topbar";
 import Image from "next/image";
 
 const page = () => {
+  const searchParams = useSearchParams();
+  const [imageUrl, setImageUrl] = useState("/images/bagV2.png");
+  const [originalImageUrl, setOriginalImageUrl] = useState(null);
+
+  useEffect(() => {
+    // Get image URL from query parameters
+    const urlFromParams = searchParams.get("imageUrl");
+    const originalUrlFromParams = searchParams.get("originalImageUrl");
+
+    if (urlFromParams) {
+      setImageUrl(decodeURIComponent(urlFromParams));
+      console.log(
+        "Final Image: Received edited image URL:",
+        decodeURIComponent(urlFromParams)
+      );
+    }
+
+    if (originalUrlFromParams) {
+      setOriginalImageUrl(decodeURIComponent(originalUrlFromParams));
+      console.log(
+        "Final Image: Received original image URL:",
+        decodeURIComponent(originalUrlFromParams)
+      );
+    }
+  }, [searchParams]);
+
   return (
     <div className="py-6 bg-[#0f0f0f] min-h-screen">
       {/* TOPBAR */}
@@ -21,12 +49,17 @@ const page = () => {
         <div className="w-full flex gap-6 items-center flex-col lg:flex-row border border-white/10 bg-white/5 rounded-lg p-4 h-[800px]    mt-6">
           {/* IMAGE */}
           <div className=" w-[50%] h-full flex items-center justify-center rounded-lg p-2">
-            <Image
-              width={450}
-              height={450}
-              src="/images/bagV2.png"
-              alt="generated image"
+            <img
+              src={imageUrl || "/images/bagV2.png"}
+              alt="edited image"
               className="object-cover rounded-lg w-[450px] h-[490px]"
+              onLoad={() =>
+                console.log("Final Image: Image loaded successfully")
+              }
+              onError={(e) => {
+                console.error("Final Image: Image failed to load:", e);
+                console.error("Failed image URL:", imageUrl);
+              }}
             />
           </div>
 
