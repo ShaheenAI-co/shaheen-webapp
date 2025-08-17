@@ -11,7 +11,7 @@ export class InstagramAuthService {
   // Get Instagram OAuth URL using the Instagram Business API endpoint as provided by Meta
   // Using the new scope values as documented by Meta (replacing deprecated business_* scopes)
   getAuthUrl(state = 'instagram_login') {
-    const scope = 'instagram_business_basic,instagram_business_content_publish,instagram_business_manage_messages,instagram_business_manage_comments';
+    const scope = 'instagram_business_basic,instagram_business_content_publish';
     
     return `https://www.instagram.com/oauth/authorize?` +
       new URLSearchParams({
