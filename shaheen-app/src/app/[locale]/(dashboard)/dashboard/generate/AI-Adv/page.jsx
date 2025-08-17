@@ -187,7 +187,7 @@ const page = () => {
         `Generation completed successfully! Generated ${generateResult.total_generated} images.`
       );
 
-      router.push(`/${locale}/dashboard/generate/AI-Adv/generated_images`);
+      router.push(`/${locale}/dashboard/generate/AI-Adv/generated_images?post_id=${postId}`);
     } catch (error) {
       console.error("Generation error:", error);
       setGenerationStatus(`Generation failed: ${error.message}`);
