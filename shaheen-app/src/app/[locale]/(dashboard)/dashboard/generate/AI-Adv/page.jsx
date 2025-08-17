@@ -8,6 +8,7 @@ import { insertPostToSupabase } from "../../../../../../../lib/supabase/post";
 import { useUser } from "@clerk/nextjs";
 import { useRouter, usePathname } from "next/navigation";
 import Topbar from "../../components/Topbar";
+import { Loader2 } from "lucide-react";
 
 const postSize = [
   {
@@ -305,12 +306,32 @@ const page = () => {
             <ImageUpload onFileChange={handleFileChange} />
           </div>
 
+          {/* Generation Status */}
+          {/* {generationStatus && (
+            <div className="mt-4 p-3 rounded-lg bg-white/5 border border-white/10">
+              <div className="flex items-center gap-2">
+                {isGenerating && (
+                  <Loader2 className="h-4 w-4 animate-spin text-purple-400" />
+                )}
+                <p className="text-sm text-white/80">{generationStatus}</p>
+              </div>
+            </div>
+          )} */}
+
           <div className="flex justify-center mt-6">
             <Button
-              className="bg-purple-500 text-white px-4 py-3 rounded-lg"
+              className="bg-purple-500 text-white px-4 py-3 rounded-lg hover:bg-purple-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleGenerate}
+              disabled={isGenerating}
             >
-              Generate
+              {isGenerating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                "Generate"
+              )}
             </Button>
           </div>
         </div>
