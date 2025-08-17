@@ -180,5 +180,112 @@
       "downloadInvoice": "Download Invoice",
       "manageBilling": "Manage Billing"
     }
+  },
+  "PrivacyPolicy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated",
+    "introduction": {
+      "title": "1. Introduction",
+      "content": "Welcome to Shaheen AI (\"we,\" \"our,\" or \"us\"). We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered social media management platform."
+    },
+    "informationCollection": {
+      "title": "2. Information We Collect",
+      "personalInfo": {
+        "title": "2.1 Personal Information",
+        "items": [
+          "Name and email address when you create an account",
+          "Profile information and preferences",
+          "Social media account credentials (when connecting platforms)",
+          "Payment information for premium services"
+        ]
+      },
+      "usageInfo": {
+        "title": "2.2 Usage Information",
+        "items": [
+          "Content you upload, generate, or edit using our AI tools",
+          "Posts you schedule or publish through our platform",
+          "Analytics and performance data",
+          "Device information and usage patterns"
+        ]
+      }
+    },
+    "howWeUse": {
+      "title": "3. How We Use Your Information",
+      "intro": "We use the information we collect to:",
+      "items": [
+        "Provide and maintain our AI-powered services",
+        "Generate and enhance content using artificial intelligence",
+        "Schedule and publish posts to your connected social media accounts",
+        "Process payments and manage subscriptions",
+        "Improve our services and develop new features",
+        "Send important updates and notifications",
+        "Provide customer support and respond to inquiries"
+      ]
+    },
+    "aiProcessing": {
+      "title": "4. AI and Content Processing",
+      "intro": "Our platform uses artificial intelligence to:",
+      "items": [
+        "Generate and enhance images and content",
+        "Analyze your social media performance",
+        "Provide personalized recommendations",
+        "Optimize posting schedules"
+      ],
+      "additional": "Content you upload or generate may be processed by our AI systems to improve our services. We ensure that all AI processing is conducted securely and in accordance with this privacy policy."
+    },
+    "informationSharing": {
+      "title": "5. Information Sharing",
+      "intro": "We do not sell, trade, or rent your personal information to third parties. We may share your information only in the following circumstances:",
+      "items": [
+        "With your explicit consent",
+        "To comply with legal obligations",
+        "To protect our rights and prevent fraud",
+        "With trusted service providers who assist in operating our platform",
+        "With social media platforms when you authorize connections"
+      ]
+    },
+    "dataSecurity": {
+      "title": "6. Data Security",
+      "content": "We implement industry-standard security measures to protect your information, including encryption, secure servers, and regular security audits. However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security."
+    },
+    "yourRights": {
+      "title": "7. Your Rights",
+      "intro": "You have the right to:",
+      "items": [
+        "Access and review your personal information",
+        "Update or correct your information",
+        "Delete your account and associated data",
+        "Opt-out of marketing communications",
+        "Request data portability",
+        "Withdraw consent for data processing"
+      ]
+    },
+    "cookies": {
+      "title": "8. Cookies and Tracking",
+      "content": "We use cookies and similar technologies to enhance your experience, analyze usage patterns, and provide personalized content. You can control cookie settings through your browser preferences."
+    },
+    "thirdParty": {
+      "title": "9. Third-Party Services",
+      "content": "Our platform integrates with third-party services such as social media platforms and payment processors. These services have their own privacy policies, and we encourage you to review them."
+    },
+    "childrenPrivacy": {
+      "title": "10. Children's Privacy",
+      "content": "Our services are not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you believe we have collected such information, please contact us immediately."
+    },
+    "internationalTransfers": {
+      "title": "11. International Data Transfers",
+      "content": "Your information may be transferred to and processed in countries other than your own. We ensure that such transfers comply with applicable data protection laws and implement appropriate safeguards."
+    },
+    "changes": {
+      "title": "12. Changes to This Policy",
+      "content": "We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy on our website and updating the \"Last updated\" date. Your continued use of our services after such changes constitutes acceptance of the updated policy."
+    },
+    "contact": {
+      "title": "13. Contact Us",
+      "intro": "If you have any questions about this Privacy Policy or our data practices, please contact us at:",
+      "email": "Email",
+      "address": "Address",
+      "phone": "Phone"
+    }
   }
 }
