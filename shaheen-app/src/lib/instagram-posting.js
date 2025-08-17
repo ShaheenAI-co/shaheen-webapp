@@ -255,13 +255,16 @@ export class InstagramPostingService {
         throw new Error(`S3 upload failed: ${data.error || 'Unknown error'}`);
       }
 
-      if (!data.url) {
+      // Check for both 'url' and 's3Url' fields (S3 API returns 's3Url')
+      const fileUrl = data.url || data.s3Url;
+      
+      if (!fileUrl) {
         console.error('S3 upload succeeded but no URL returned:', data);
         throw new Error('S3 upload succeeded but no URL returned');
       }
 
-      console.log('S3 upload successful, URL:', data.url);
-      return data.url; // Return the public S3 URL
+      console.log('S3 upload successful, URL:', fileUrl);
+      return fileUrl; // Return the public S3 URL
     } catch (error) {
       console.error('Error uploading to S3:', error);
       throw error;
