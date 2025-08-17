@@ -132,9 +132,12 @@ const InstagramPostScheduler = () => {
         throw new Error('Selected account not found');
       }
 
+      console.log('Selected account data:', selectedAccountData);
+      console.log('Access token field:', selectedAccountData.access_token || selectedAccountData.page_access_token);
+
       const result = await instagramPosting.postNow(
         selectedAccountData.instagram_id,
-        selectedAccountData.page_access_token,
+        selectedAccountData.access_token || selectedAccountData.page_access_token,
         {
           files: selectedFiles,
           caption: caption.trim() || undefined

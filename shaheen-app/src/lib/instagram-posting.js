@@ -10,6 +10,10 @@ export class InstagramPostingService {
     try {
       console.log('createMediaContainer called with:', { instagramId, accessToken, mediaData });
       
+      if (!accessToken) {
+        throw new Error('Access token is required');
+      }
+      
       const { imageUrl, videoUrl, caption, mediaType = 'IMAGE' } = mediaData;
       
       console.log('Extracted values:', { imageUrl, videoUrl, caption, mediaType });
@@ -37,16 +41,20 @@ export class InstagramPostingService {
         payload.caption = caption;
       }
 
-      const response = await fetch(
-        `${this.baseUrl}/${this.apiVersion}/${instagramId}/media`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      console.log('Sending request to Instagram API with payload:', payload);
+
+      // Instagram API doesn't support CORS from browsers, so we need to proxy through our backend
+      const response = await fetch('/api/instagram/media', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          instagramId,
+          accessToken,
+          payload
+        }),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -98,16 +106,17 @@ export class InstagramPostingService {
         payload.caption = caption;
       }
 
-      const response = await fetch(
-        `${this.baseUrl}/${this.apiVersion}/${instagramId}/media`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch('/api/instagram/media', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          instagramId,
+          accessToken,
+          payload
+        }),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -135,16 +144,17 @@ export class InstagramPostingService {
         creation_id: containerId
       };
 
-      const response = await fetch(
-        `${this.baseUrl}/${this.apiVersion}/${instagramId}/media_publish`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch('/api/instagram/media-publish', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          instagramId,
+          accessToken,
+          payload
+        }),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -167,9 +177,16 @@ export class InstagramPostingService {
   // Check media container status
   async checkContainerStatus(containerId, accessToken) {
     try {
-      const response = await fetch(
-        `${this.baseUrl}/${this.apiVersion}/${containerId}?fields=status_code&access_token=${accessToken}`
-      );
+      const response = await fetch('/api/instagram/container-status', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          containerId,
+          accessToken
+        }),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -192,9 +209,16 @@ export class InstagramPostingService {
   // Check publishing rate limit
   async checkPublishingLimit(instagramId, accessToken) {
     try {
-      const response = await fetch(
-        `${this.baseUrl}/${this.apiVersion}/${instagramId}/content_publishing_limit?access_token=${accessToken}`
-      );
+      const response = await fetch('/api/instagram/publishing-limit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          instagramId,
+          accessToken
+        }),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
