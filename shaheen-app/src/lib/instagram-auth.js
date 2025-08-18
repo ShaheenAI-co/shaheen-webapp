@@ -5,7 +5,7 @@ export class InstagramAuthService {
   constructor() {
     this.clientId = process.env.NEXT_PUBLIC_FB_APP_ID || '1274014204192589';
     this.clientSecret = process.env.FB_APP_SECRET;
-    this.redirectUri = `${typeof window !== 'undefined' ? window.location.origin : ''}/api/auth/ig-callback`;
+    this.redirectUri = 'https://shaheen-ai.com/api/auth/ig-callback';
   }
 
   // Get Instagram OAuth URL using the Instagram Business API endpoint as provided by Meta
