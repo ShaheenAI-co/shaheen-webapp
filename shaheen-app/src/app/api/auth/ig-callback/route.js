@@ -28,7 +28,7 @@ export async function GET(req) {
           client_id: process.env.FB_APP_ID || '1274014204192589',
           client_secret: process.env.FB_APP_SECRET,
           grant_type: 'authorization_code',
-          redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL || 'https://shaheen-ai.com'}/api/auth/ig-callback`,
+          redirect_uri: 'https://shaheen-ai.com/api/auth/ig-callback',
           code: code,
         })
       }
