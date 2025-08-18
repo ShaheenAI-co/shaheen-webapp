@@ -5,17 +5,18 @@ import { TextOverlay } from "./TextOverlay";
 import { TextControls } from "./TextControls";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Download, Plus, Type, Settings, Menu } from "lucide-react";
+import { Download, Plus, Type, Settings, Menu, Sparkle } from "lucide-react";
 import html2canvas from "html2canvas";
 import { useMediaQuery } from "react-responsive";
 import { useRouter, usePathname } from "next/navigation";
 
-export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
+export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo = null }) => {
   const [uploadedImage, setUploadedImage] = useState(imageUrl);
   const [textElements, setTextElements] = useState([]); // to store all the text layers
   const [selectedTextId, setSelectedTextId] = useState(null); // points to the current selected text layer
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isGeneratingText, setIsGeneratingText] = useState(false);
   const [imageDimensions, setImageDimensions] = useState({
     width: 0,
     height: 0,
@@ -36,6 +37,69 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
       }
     }
   }, [imageUrl, onImageChange]);
+
+  const generateAIText = async () => {
+    if (!uploadedImage || !productInfo) {
+      console.error("No image or product info available for AI text generation");
+      return;
+    }
+
+    setIsGeneratingText(true);
+
+    try {
+      console.log("Generating AI text for:", { uploadedImage, productInfo });
+
+      const response = await fetch("/api/generate-text-overlay", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageUrl: uploadedImage,
+          productInfo: productInfo
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`API error: ${response.status} - ${errorText}`);
+      }
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to generate text overlay");
+      }
+
+      console.log("AI generated text overlay:", result.textOverlay);
+
+      // Create a new text element with the AI-generated properties
+      const newTextElement = {
+        id: `ai-text-${Date.now()}`,
+        text: result.textOverlay.text,
+        x: result.textOverlay.x,
+        y: result.textOverlay.y,
+        fontSize: result.textOverlay.fontSize,
+        fontFamily: result.textOverlay.fontFamily,
+        color: result.textOverlay.color,
+        fontWeight: result.textOverlay.fontWeight,
+        fontStyle: "normal",
+        textAlign: result.textOverlay.textAlign,
+      };
+
+      // Add the new AI-generated text element
+      setTextElements((prev) => [...prev, newTextElement]);
+      setSelectedTextId(newTextElement.id);
+
+      console.log("AI text element added successfully:", newTextElement);
+
+    } catch (error) {
+      console.error("AI text generation error:", error);
+      alert(`Failed to generate AI text: ${error.message}`);
+    } finally {
+      setIsGeneratingText(false);
+    }
+  };
 
   const addTextElement = useCallback(() => {
     // function create a text element
@@ -159,6 +223,37 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
               </Button>
             </div>
           </div>
+
+          {/* AI Text Generation Section - Only show when product info is available */}
+          {productInfo && (
+            <div>
+              <h3 className="text-sm font-medium text-white mb-2 sm:mb-3">
+                AI Text Generation
+              </h3>
+              <Button
+                onClick={generateAIText}
+                disabled={isGeneratingText}
+                variant="primary"
+                size="sm"
+                className="w-full gap-2 bg-[#FF6B35] hover:bg-[#ff8a5c] text-white"
+              >
+                {isGeneratingText ? (
+                  <>
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Sparkle className="h-4 w-4" />
+                    Generate AI Text
+                  </>
+                )}
+              </Button>
+              <p className="text-xs text-white/60 mt-2">
+                Generate Arabic marketing text with AI
+              </p>
+            </div>
+          )}
 
           {selectedElement && (
             <TextControls
@@ -353,6 +448,30 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
               <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
               {!isMobile && "Add Text"}
             </Button>
+            
+            {/* AI Text Generation Button - Only show when product info is available */}
+            {productInfo && (
+              <Button
+                onClick={generateAIText}
+                disabled={!uploadedImage || isGeneratingText}
+                variant="primary"
+                size="sm"
+                className="gap-1 bg-[#FF6B35] hover:bg-[#ff8a5c] text-white lg:gap-2 text-xs sm:text-sm"
+              >
+                {isGeneratingText ? (
+                  <>
+                    <div className="h-3 w-3 sm:h-4 sm:w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    {!isMobile && "Generating..."}
+                  </>
+                ) : (
+                  <>
+                    <Sparkle className="h-3 w-3 sm:h-4 sm:w-4" />
+                    {!isMobile && "AI Text"}
+                  </>
+                )}
+              </Button>
+            )}
+            
             <Button
               onClick={saveAndNavigate}
               disabled={!uploadedImage || isSaving}

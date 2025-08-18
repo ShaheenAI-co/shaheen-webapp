@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { fetchImageUrlsByPostId } from "../../../../../../../../lib/supabase/generated_asset";
+import { getPostById } from "../../../../../../../../lib/supabase/post";
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
@@ -9,13 +10,14 @@ const GeneratedImages = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [postDetails, setPostDetails] = useState(null);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
 
   useEffect(() => {
-    const fetchImages = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
@@ -29,13 +31,21 @@ const GeneratedImages = () => {
           return;
         }
 
-        console.log("Fetching images for post_id:", postId);
+        console.log("Fetching data for post_id:", postId);
 
-        const fetchedImages = await fetchImageUrlsByPostId(postId);
+        // Fetch both images and post details in parallel
+        const [fetchedImages, fetchedPostDetails] = await Promise.all([
+          fetchImageUrlsByPostId(postId),
+          getPostById(postId)
+        ]);
+
         setImages(fetchedImages);
+        setPostDetails(fetchedPostDetails);
+
         console.log(
           `${fetchedImages.length} images fetched successfully for post_id: ${postId}`
         );
+        console.log("Post details fetched:", fetchedPostDetails);
 
         // Debug: Log the current URL and search params
         console.log("Current URL:", window.location.href);
@@ -44,19 +54,32 @@ const GeneratedImages = () => {
           Object.fromEntries(searchParams.entries())
         );
       } catch (error) {
-        console.error("Error fetching images:", error);
-        setError("Failed to fetch images. Please try again.");
+        console.error("Error fetching data:", error);
+        setError("Failed to fetch data. Please try again.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchImages();
+    fetchData();
   }, [searchParams]);
 
   const handleImageSelect = (selectedImageUrl) => {
-    // Navigate to image-edit page with the selected image URL as a parameter
-    const imageEditUrl = `/${locale}/dashboard/image-edit?imageUrl=${encodeURIComponent(selectedImageUrl)}`;
+    if (!postDetails) {
+      console.error("No post details available");
+      return;
+    }
+
+    // Extract product info from post details
+    const productInfo = {
+      title: postDetails.product_description?.product_title || "",
+      description: postDetails.product_description?.product_desc || "",
+      category: postDetails.product_description?.product_category || "",
+      postTitle: postDetails.post_title || ""
+    };
+
+    // Navigate to image-edit page with both image URL and product info
+    const imageEditUrl = `/${locale}/dashboard/image-edit?imageUrl=${encodeURIComponent(selectedImageUrl)}&productInfo=${encodeURIComponent(JSON.stringify(productInfo))}`;
     router.push(imageEditUrl);
   };
 
