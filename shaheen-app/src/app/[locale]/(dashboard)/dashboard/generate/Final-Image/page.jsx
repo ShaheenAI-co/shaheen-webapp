@@ -20,8 +20,6 @@ const page = () => {
 
   useEffect(() => {
     setIsImageLoading(true);
-    setImageError(false);
-    
     // Get image URL from query parameters
     const urlFromParams = searchParams.get("imageUrl");
     const originalUrlFromParams = searchParams.get("originalImageUrl");
@@ -29,14 +27,21 @@ const page = () => {
     if (urlFromParams) {
       const decodedUrl = decodeURIComponent(urlFromParams);
       setImageUrl(decodedUrl);
+      console.log(
+        "Final Image: Received edited image URL:",
+        decodedUrl
+      );
       
       // Preload the image to check if it's accessible
       const preloadImage = new window.Image();
       preloadImage.onload = () => {
+        console.log("Final Image: Image preloaded successfully");
         setIsImageLoading(false);
         setImageError(false);
       };
-      preloadImage.onerror = () => {
+      preloadImage.onerror = (e) => {
+        console.error("Final Image: Image preload failed:", e);
+        console.error("Failed image URL:", decodedUrl);
         setIsImageLoading(false);
         setImageError(true);
       };
@@ -45,8 +50,8 @@ const page = () => {
       // Add a timeout fallback in case the image takes too long to load
       const timeoutId = setTimeout(() => {
         if (isImageLoading) {
+          console.log("Final Image: Image loading timeout, setting loading to false");
           setIsImageLoading(false);
-          setImageError(true);
         }
       }, 10000); // 10 second timeout
 
@@ -59,6 +64,10 @@ const page = () => {
 
     if (originalUrlFromParams) {
       setOriginalImageUrl(decodeURIComponent(originalUrlFromParams));
+      console.log(
+        "Final Image: Received original image URL:",
+        decodeURIComponent(originalUrlFromParams)
+      );
     }
   }, [searchParams]);
 
@@ -150,6 +159,8 @@ const page = () => {
       // Cleanup
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
+
+      console.log("Image exported successfully");
     } catch (error) {
       console.error("Error exporting image:", error);
       alert("Failed to export image. Please try again.");
@@ -164,10 +175,12 @@ const page = () => {
       
       const retryImage = new window.Image();
       retryImage.onload = () => {
+        console.log("Final Image: Image retry successful");
         setIsImageLoading(false);
         setImageError(false);
       };
-      retryImage.onerror = () => {
+      retryImage.onerror = (e) => {
+        console.error("Final Image: Image retry failed:", e);
         setIsImageLoading(false);
         setImageError(true);
       };
@@ -224,8 +237,13 @@ const page = () => {
                   height: "auto",
                   maxWidth: "100%",
                 }}
-                onLoad={() => setIsImageLoading(false)}
-                onError={() => {
+                onLoad={() => {
+                  console.log("Final Image: Image loaded successfully");
+                  setIsImageLoading(false);
+                }}
+                onError={(e) => {
+                  console.error("Final Image: Image failed to load:", e);
+                  console.error("Failed image URL:", imageUrl);
                   setIsImageLoading(false);
                   setImageError(true);
                 }}
