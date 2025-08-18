@@ -51,7 +51,7 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
 async function testGeminiConnection() {
   try {
     console.log('Testing Gemini API connection...');
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
     const result = await model.generateContent('Hello, test message');
     console.log('Gemini API connection successful');
     return true;
@@ -153,7 +153,7 @@ export async function POST(request) {
       throw new Error('Failed to connect to Google Gemini API');
     }
     
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
     
     const promptGenerationText = `
 
