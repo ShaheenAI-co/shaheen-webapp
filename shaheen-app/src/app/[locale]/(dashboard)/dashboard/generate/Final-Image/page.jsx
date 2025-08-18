@@ -1,12 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useMediaQuery } from "react-responsive";
+import { Sparkle } from "lucide-react";
 
 import { useInstagramAuth } from "@/Hooks/useInstagramAuth";
 import { instagramPosting } from "@/lib/instagram-posting";
 
 const page = () => {
   const searchParams = useSearchParams();
+  const isMobile = useMediaQuery({ maxWidth: 768 });
   const [imageUrl, setImageUrl] = useState("");
   const [originalImageUrl, setOriginalImageUrl] = useState(null);
   const [isImageLoading, setIsImageLoading] = useState(true);
@@ -17,6 +20,11 @@ const page = () => {
   const [selectedAccount, setSelectedAccount] = useState("");
   const [isPosting, setIsPosting] = useState(false);
   const [postMessage, setPostMessage] = useState("");
+
+  // Caption generation state
+  const [isGeneratingCaption, setIsGeneratingCaption] = useState(false);
+  const [caption, setCaption] = useState("This is a test caption");
+  const [hashtags, setHashtags] = useState([]);
 
   useEffect(() => {
     setIsImageLoading(true);
@@ -78,6 +86,49 @@ const page = () => {
     }
   }, [supabaseAccounts, selectedAccount]);
 
+  // Handle caption generation
+  const handleGenerateCaption = async () => {
+    if (!imageUrl || imageUrl === "/images/bagV2.png") {
+      setPostMessage("No image to generate caption for");
+      return;
+    }
+
+    setIsGeneratingCaption(true);
+    setPostMessage("");
+
+    try {
+      const response = await fetch('/api/generate-caption', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imageUrl: imageUrl,
+          productInfo: {
+            title: "Product Image",
+            description: "Generated product image",
+            category: "General"
+          }
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setCaption(data.caption);
+        setHashtags(data.hashtags || []);
+        setPostMessage("Caption generated successfully! ✨");
+      } else {
+        throw new Error(data.error || 'Failed to generate caption');
+      }
+    } catch (error) {
+      console.error('Error generating caption:', error);
+      setPostMessage(`Error generating caption: ${error.message}`);
+    } finally {
+      setIsGeneratingCaption(false);
+    }
+  };
+
   // Handle Instagram posting
   const handleInstagramPost = async () => {
     if (!isConnected || !selectedAccount) {
@@ -102,9 +153,8 @@ const page = () => {
         throw new Error("Selected account not found");
       }
 
-      // Get caption from textarea
-      const captionElement = document.querySelector("textarea");
-      const caption = captionElement ? captionElement.value : "";
+      // Use the caption state instead of getting from textarea
+      const captionToUse = caption || "This is a test caption";
 
       // Convert image URL to File object for posting
       const response = await fetch(imageUrl);
@@ -119,7 +169,7 @@ const page = () => {
           selectedAccountData.page_access_token,
         {
           files: [file],
-          caption: caption.trim() || undefined,
+          caption: captionToUse.trim() || undefined,
         }
       );
 
@@ -285,13 +335,46 @@ const page = () => {
                     post caption
                   </p>
                   <textarea
-                    name=""
-                    id=""
+                    value={caption}
+                    onChange={(e) => setCaption(e.target.value)}
                     cols="30"
                     rows="3"
-                    className="bg-[#2E2042] rounded-lg p-3 sm:p-4 w-full max-w-[400px] text-sm sm:text-base"
-                    defaultValue={"This is a test caption"}
-                  ></textarea>
+                    className="bg-[#2E2042] rounded-lg p-3 sm:p-4 w-full max-w-[400px] text-sm sm:text-base text-white"
+                    placeholder="Enter your caption here..."
+                  />
+                  <button
+                    onClick={handleGenerateCaption}
+                    disabled={isGeneratingCaption || !imageUrl}
+                    className="gap-1 bg-[#FF6B35] hover:bg-[#ff8a5c] text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-sm sm:text-base transition-colors"
+                  >
+                    {isGeneratingCaption ? (
+                      <>
+                        <div className="h-3 w-3 sm:h-4 sm:w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                        {!isMobile && "Generating..."}
+                      </>
+                    ) : (
+                                              <>
+                          <Sparkle className="h-3 w-3 sm:h-4 sm:w-4" />
+                          {!isMobile && "AI Text"}
+                        </>
+                    )}
+                  </button>
+                  
+                  {/* Display generated hashtags */}
+                  {hashtags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      <p className="text-white/70 text-sm">Suggested hashtags:</p>
+                      {hashtags.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="bg-purple-600/20 text-purple-300 px-2 py-1 rounded-md text-xs border border-purple-500/30 cursor-pointer hover:bg-purple-600/30 transition-colors"
+                          onClick={() => setCaption(prev => prev + ' ' + tag)}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* INSTAGRAM ACCOUNT SELECTOR - Responsive styling */}
@@ -335,7 +418,10 @@ const page = () => {
                   <button className="bg-[#6123B8] font-semibold capitalize text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg text-sm sm:text-base w-full sm:w-auto">
                     publish now
                   </button>
-                  <button className="border border-[#6123B8] font-semibold capitalize text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg text-sm sm:text-base w-full sm:w-auto">
+                  <button 
+                    onClick={() => window.history.back()}
+                    className="border border-[#6123B8] font-semibold capitalize text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg text-sm sm:text-base w-full sm:w-auto hover:bg-[#6123B8] hover:text-white transition-colors"
+                  >
                     regenerate
                   </button>
                 </div>
