@@ -111,7 +111,7 @@ export async function GET(req) {
     };
 
     // Redirect user back to dashboard with success message
-    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://shaheen-ai.com'}/dashboard?instagram_success=true&message=${encodeURIComponent('Instagram Business login successful with long-lived tokens!')}`;
+    const dashboardUrl = `https://shaheen-ai.com/dashboard?instagram_success=true&message=${encodeURIComponent('Instagram Business login successful with long-lived tokens!')}`;
     
     return new Response(
       `<!DOCTYPE html>
@@ -190,7 +190,7 @@ export async function POST(req) {
           client_id: process.env.FB_APP_ID || '1274014204192589',
           client_secret: process.env.FB_APP_SECRET,
           grant_type: 'authorization_code',
-          redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL || 'https://shaheen-ai.com'}/api/auth/ig-callback`,
+          redirect_uri: 'https://shaheen-ai.com/api/auth/ig-callback',
           code: code,
         })
       }
