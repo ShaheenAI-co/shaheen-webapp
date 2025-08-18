@@ -144,7 +144,7 @@ export async function POST(request) {
       );
     }
 
-    // Generate 2 different prompts using Google Gemini
+    // Generate 4 different prompts using Google Gemini
     console.log('Initializing Google Gemini...');
     
     // Test Gemini connection first
@@ -157,7 +157,7 @@ export async function POST(request) {
     
     const promptGenerationText = `
 
-**Your Role:** You are an expert Visual Prompt Engineer. Your task is to analyze an input image and its associated context, then generate two **distinctly different** and highly detailed prompts for an image generation model. The goal is to provide the user with two unique creative directions for customizing their original image.
+**Your Role:** You are an expert Visual Prompt Engineer. Your task is to analyze an input image and its associated context, then generate four **distinctly different** and highly detailed prompts for an image generation model. The goal is to provide the user with four unique creative directions for customizing their original image.
 
 **Your Process:**
 
@@ -166,13 +166,20 @@ export async function POST(request) {
       * **Image (${input_image_url}):** Carefully examine the source image. Identify the primary subject, composition (framing, layout), color palette, lighting, and overall artistic style (e.g., photorealistic, illustration, minimalist).
       * **Context (${post_title}, ${product_name}, etc.):** Analyze the text context to understand the product's theme, intended mood, and key selling points. Extract keywords and concepts (e.g., "luxury," "natural," "tech," "comfort").
 
-2.  **Strategize Two Different Creative Directions:**
-    This is the most critical step. You must create two prompts that are conceptually different. Do not just change a few words.
+2.  **Strategize Four Different Creative Directions:**
+    This is the most critical step. You must create four prompts that are conceptually different from each other. Do not just change a few words.
 
       * **Prompt 1: The "Refined Reality" Prompt.** This prompt should aim to create a polished, idealized version of the original image. The goal is a subtle but significant enhancement.
           * **Focus on:** Photorealism, perfect lighting (e.g., "soft golden hour light," "clean studio lighting"), enhanced textures, rich colors, and adding subtle, context-appropriate background elements that improve the scene without changing it dramatically. The mood should be a more professional and high-quality version of the original.
+      
       * **Prompt 2: The "Thematic & Artistic" Prompt.** This prompt should re-imagine the image with a strong artistic or narrative twist based on the product context. The goal is a creative, eye-catching interpretation.
           * **Focus on:** A specific artistic style (e.g., "cinematic," "vintage film," "ethereal fantasy," "dramatic chiaroscuro"), a completely different setting or mood (e.g., changing the time of day, location), and incorporating conceptual elements from the product description (e.g., if a perfume has "ocean notes," add "ethereal splashes of water suspended in the air").
+      
+      * **Prompt 3: The "Luxury & Premium" Prompt.** This prompt should transform the image into a high-end, luxury aesthetic that emphasizes premium quality and sophistication.
+          * **Focus on:** Elegant backgrounds (e.g., "marble surfaces," "golden accents," "silk textures"), sophisticated lighting (e.g., "dramatic spotlighting," "warm ambient glow"), premium materials, and a sense of exclusivity and refinement that matches luxury brand positioning.
+      
+      * **Prompt 4: The "Modern & Minimalist" Prompt.** This prompt should create a clean, contemporary aesthetic with emphasis on simplicity and modern design principles.
+          * **Focus on:** Clean lines, minimal backgrounds, neutral color palettes, geometric shapes, modern typography elements, and a sense of sophistication through simplicity. Think of modern tech companies and contemporary design trends.
 
 3.  **Construct the Prompts:**
     For each prompt, follow this structure:
@@ -194,18 +201,20 @@ export async function POST(request) {
   * **Strategy:**
       * **Prompt 1 (Refined Reality):** I'll make it a perfect product shot. Clean, bright, maybe add a hint of a cozy morning routine.
       * **Prompt 2 (Thematic & Artistic):** I'll lean into the "Oceanic Serenity" theme. I'll place the mug in a fantastical, ocean-inspired setting.
-  * **Resulting Prompts:**
-      * **Prompt 1 (Generated):** "A flawless, high-end product photograph of the 'Oceanic Serenity Mug' on a clean, white marble tabletop. Bathed in soft, natural morning light from a nearby window, highlighting the mug's deep blue glaze and subtle textures. In the soft-focus background, add a neatly folded linen napkin and a single, fresh green leaf. The image should feel calm, clean, and aspirational. Photorealistic, hyper-detailed, 4K, suitable for ${size}."
-      * **Prompt 2 (Generated):** "A creative, cinematic shot of the 'Oceanic Serenity Mug' resting on a wet, dark rock by the ocean at sunrise. Gentle waves are blurred in motion in the background, and the rising sun casts a warm glow on the scene. Ethereal, magical wisps of steam rise from the mug, subtly forming the shape of a gentle wave. The mood is tranquil, magical, and deeply connected to nature. Dramatic lighting, anamorphic lens style, suitable for ${size}."
+      * **Prompt 3 (Luxury & Premium):** I'll create a high-end luxury aesthetic with premium materials and sophisticated lighting.
+      * **Prompt 4 (Modern & Minimalist):** I'll focus on clean lines, minimal design, and contemporary aesthetics.
 
 -----
+
 
 ***Final Output Command:*** Now, using the instructions above, analyze the provided variables and generate the JSON output.
 
 
 {
   "prompt1": "First detailed prompt description",
-  "prompt2": "Second detailed prompt description"
+  "prompt2": "Second detailed prompt description",
+  "prompt3": "Third detailed prompt description",
+  "prompt4": "Fourth detailed prompt description"
 }
 `;
 
@@ -259,17 +268,15 @@ export async function POST(request) {
 
     const generatedAssets = [];
 
-    // Process each prompt to generate 2 images
+    // Process each prompt to generate 1 image
     console.log('Starting image generation process...');
     console.log('Number of prompts to process:', Object.keys(prompts).length);
     
     for (const [promptKey, prompt] of Object.entries(prompts)) {
       console.log(`Processing ${promptKey}: ${prompt}`);
       
-      // Generate 2 images for each prompt
-      for (let i = 1; i <= 2; i++) {
-        try {
-          console.log(`=== Generating image ${i} for ${promptKey} ===`);
+      try {
+        console.log(`=== Generating image for ${promptKey} ===`);
           
           // Send to VM for image generation
           const vmRequestPayload = {
@@ -354,10 +361,10 @@ export async function POST(request) {
               asset_id: asset.asset_id,
               image_url: assetUrl,
               prompt: promptKey,
-              iteration: i
+              iteration: 1
             });
 
-            console.log(`=== Successfully generated image ${i} for ${promptKey}: ${assetUrl} ===`);
+            console.log(`=== Successfully generated image for ${promptKey}: ${assetUrl} ===`);
             
           } catch (fetchError) {
             clearTimeout(timeoutId); // Clear timeout on error
@@ -371,13 +378,12 @@ export async function POST(request) {
             throw fetchError;
           }
           
-        } catch (error) {
-          console.error(`=== Error generating image ${i} for ${promptKey} ===`);
-          console.error('Error details:', error);
-          console.error('Error message:', error.message);
-          console.error('Error stack:', error.stack);
-          // Continue with other images even if one fails
-        }
+      } catch (error) {
+        console.error(`=== Error generating image for ${promptKey} ===`);
+        console.error('Error details:', error);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+        // Continue with other images even if one fails
       }
     }
 
@@ -386,16 +392,17 @@ export async function POST(request) {
     console.log('Assets:', generatedAssets);
     console.log('Final result summary:', {
       promptsProcessed: Object.keys(prompts).length,
-      expectedImages: Object.keys(prompts).length * 2,
+      expectedImages: Object.keys(prompts).length,
       actualImagesGenerated: generatedAssets.length,
       success: generatedAssets.length > 0
     });
 
     return Response.json({
       success: true,
-      message: `Successfully generated ${generatedAssets.length} images`,
+      message: `Successfully generated ${generatedAssets.length} distinct images from ${Object.keys(prompts).length} unique prompts`,
       assets: generatedAssets,
-      total_generated: generatedAssets.length
+      total_generated: generatedAssets.length,
+      prompts_used: Object.keys(prompts).length
     });
 
   } catch (error) {
