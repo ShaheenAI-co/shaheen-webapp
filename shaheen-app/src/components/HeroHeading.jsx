@@ -23,7 +23,7 @@ const HeroHeading = () => {
         </p>
       </div>
 
-      <Link  href={`/${locale}/Signup`} >
+      <Link href={`/${locale}/sign-up`}>
         <Button variant="secondary" className="cursor-pointer">
           {t("CTA")}
         </Button>

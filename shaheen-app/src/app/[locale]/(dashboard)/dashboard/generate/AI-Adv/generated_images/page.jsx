@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { fetchImageUrlsByPostId } from "../../../../../../../../lib/supabase/generated_asset";
-import Topbar from "../../../components/Topbar";
+
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 const GeneratedImages = () => {
@@ -62,11 +62,6 @@ const GeneratedImages = () => {
 
   return (
     <div className="py-6 bg-[#0f0f0f] min-h-screen">
-      {/* TOPBAR */}
-      <div className="px-12">
-        <Topbar icon="/icons/Image_.svg" title="AI Advertisement" />
-      </div>
-
       <div className="mt-6 px-8">
         <div className="flex flex-col gap-6   bg-white/5 border border-white/10 rounded-2xl px-4 py-6  ">
           <div className="w-full flex flex-col gap-2   ">

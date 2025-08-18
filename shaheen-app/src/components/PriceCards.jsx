@@ -1,33 +1,39 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Check } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Check } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Component() {
-  const [isYearly, setIsYearly] = useState(false)
-  const pathname = usePathname()
-  const locale = pathname.split("/")[1] || "en"
+  const [isYearly, setIsYearly] = useState(false);
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
 
   // Pricing data
   const pricing = {
     pro: {
       monthly: 9,
-      yearly: 7 // ~22% discount
+      yearly: 7, // ~22% discount
     },
     business: {
       monthly: 19,
-      yearly: 15 // ~21% discount
+      yearly: 15, // ~21% discount
     },
     enterprise: {
       monthly: 39,
-      yearly: 31 // ~21% discount
-    }
-  }
+      yearly: 31, // ~21% discount
+    },
+  };
 
   return (
     <div className="min-h-screen bg-black text-white py-16 px-4">
@@ -38,31 +44,37 @@ export default function Component() {
             Pricing
           </Badge>
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Plans Made for<br />
+            Plans Made for
+            <br />
             Teams of All Sizes
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-12">
-            From startups to enterprises, choose the right plan to keep projects on track.
+            From startups to enterprises, choose the right plan to keep projects
+            on track.
           </p>
 
           {/* Billing Toggle */}
           <div className="flex items-center justify-center gap-4 mb-8">
-            <span className={`text-lg ${!isYearly ? 'text-white' : 'text-gray-400'}`}>
+            <span
+              className={`text-lg ${!isYearly ? "text-white" : "text-gray-400"}`}
+            >
               Monthly
             </span>
             <button
               onClick={() => setIsYearly(!isYearly)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-black ${
-                isYearly ? 'bg-blue-600' : 'bg-gray-600'
+                isYearly ? "bg-blue-600" : "bg-gray-600"
               }`}
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  isYearly ? 'translate-x-6' : 'translate-x-1'
+                  isYearly ? "translate-x-6" : "translate-x-1"
                 }`}
               />
             </button>
-            <span className={`text-lg ${isYearly ? 'text-white' : 'text-gray-400'}`}>
+            <span
+              className={`text-lg ${isYearly ? "text-white" : "text-gray-400"}`}
+            >
               Yearly
             </span>
             {isYearly && (
@@ -75,7 +87,6 @@ export default function Component() {
 
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            
           {/* Free Plan */}
           <Card className="bg-gray-900 border-gray-800 text-white relative">
             <CardHeader className="pb-8">
@@ -89,13 +100,16 @@ export default function Component() {
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
-              <Link href={`/${locale}/Signup`}>
-                <Button variant="outline" className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800">
+              <Link href={`/${locale}/sign-up`}>
+                <Button
+                  variant="outline"
+                  className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800"
+                >
                   Sign Up Now
                 </Button>
               </Link>
               <p className="text-center text-gray-400 text-sm">Always free</p>
-              
+
               <div className="space-y-4">
                 <p className="font-semibold">What's included:</p>
                 <ul className="space-y-3">
@@ -129,7 +143,9 @@ export default function Component() {
             <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800"></div>
             <div className="relative z-10">
               <CardHeader className="pb-8">
-                <CardTitle className="text-2xl font-semibold text-white">Pro</CardTitle>
+                <CardTitle className="text-2xl font-semibold text-white">
+                  Pro
+                </CardTitle>
                 <div className="flex items-baseline gap-1">
                   <span className="text-5xl font-bold text-white">
                     ${isYearly ? pricing.pro.yearly : pricing.pro.monthly}
@@ -138,7 +154,8 @@ export default function Component() {
                 </div>
                 {isYearly && (
                   <div className="text-blue-100 text-sm">
-                    <span className="line-through">${pricing.pro.monthly}</span> per month billed annually
+                    <span className="line-through">${pricing.pro.monthly}</span>{" "}
+                    per month billed annually
                   </div>
                 )}
                 <CardDescription className="text-blue-100 text-base">
@@ -146,21 +163,25 @@ export default function Component() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6 space-y-6">
-                <Link href={`/${locale}/Signup`}>
+                <Link href={`/${locale}/sign-up`}>
                   <Button className="w-full h-12 bg-white text-blue-600 hover:bg-gray-100 font-semibold">
                     Start Free Trial
                   </Button>
                 </Link>
                 <p className="text-center text-blue-100 text-sm">
-                  Billed {isYearly ? 'annually' : 'monthly'}
+                  Billed {isYearly ? "annually" : "monthly"}
                 </p>
-                
+
                 <div className="space-y-4">
-                  <p className="font-semibold text-white">All free plan features, plus:</p>
+                  <p className="font-semibold text-white">
+                    All free plan features, plus:
+                  </p>
                   <ul className="space-y-3">
                     <li className="flex items-center gap-3">
                       <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-blue-100">Unlimited team members</span>
+                      <span className="text-blue-100">
+                        Unlimited team members
+                      </span>
                     </li>
                     <li className="flex items-center gap-3">
                       <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
@@ -168,15 +189,21 @@ export default function Component() {
                     </li>
                     <li className="flex items-center gap-3">
                       <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-blue-100">Priority-based workflows</span>
+                      <span className="text-blue-100">
+                        Priority-based workflows
+                      </span>
                     </li>
                     <li className="flex items-center gap-3">
                       <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-blue-100">Advanced search filters</span>
+                      <span className="text-blue-100">
+                        Advanced search filters
+                      </span>
                     </li>
                     <li className="flex items-center gap-3">
                       <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-blue-100">30-day version history</span>
+                      <span className="text-blue-100">
+                        30-day version history
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -190,13 +217,19 @@ export default function Component() {
               <CardTitle className="text-2xl font-semibold">Business</CardTitle>
               <div className="flex items-baseline gap-1">
                 <span className="text-5xl font-bold">
-                  ${isYearly ? pricing.business.yearly : pricing.business.monthly}
+                  $
+                  {isYearly
+                    ? pricing.business.yearly
+                    : pricing.business.monthly}
                 </span>
                 <span className="text-gray-400">/ user / month</span>
               </div>
               {isYearly && (
                 <div className="text-gray-400 text-sm">
-                  <span className="line-through">${pricing.business.monthly}</span> per month billed annually
+                  <span className="line-through">
+                    ${pricing.business.monthly}
+                  </span>{" "}
+                  per month billed annually
                 </div>
               )}
               <CardDescription className="text-gray-400 text-base">
@@ -204,15 +237,18 @@ export default function Component() {
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
-              <Link href={`/${locale}/Signup`}>
-                <Button variant="outline" className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800">
+              <Link href={`/${locale}/sign-up`}>
+                <Button
+                  variant="outline"
+                  className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800"
+                >
                   Start Free Trial
                 </Button>
               </Link>
               <p className="text-center text-gray-400 text-sm">
-                Billed {isYearly ? 'annually' : 'monthly'}
+                Billed {isYearly ? "annually" : "monthly"}
               </p>
-              
+
               <div className="space-y-4">
                 <p className="font-semibold">All pro plan features, plus:</p>
                 <ul className="space-y-3">
@@ -230,11 +266,15 @@ export default function Component() {
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-300">Advanced analytics & reporting</span>
+                    <span className="text-gray-300">
+                      Advanced analytics & reporting
+                    </span>
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-300">180-day version history</span>
+                    <span className="text-gray-300">
+                      180-day version history
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -244,16 +284,24 @@ export default function Component() {
           {/* Enterprise Plan */}
           <Card className="bg-gray-900 border-gray-800 text-white relative">
             <CardHeader className="pb-8">
-              <CardTitle className="text-2xl font-semibold">Enterprise</CardTitle>
+              <CardTitle className="text-2xl font-semibold">
+                Enterprise
+              </CardTitle>
               <div className="flex items-baseline gap-1">
                 <span className="text-5xl font-bold">
-                  ${isYearly ? pricing.enterprise.yearly : pricing.enterprise.monthly}
+                  $
+                  {isYearly
+                    ? pricing.enterprise.yearly
+                    : pricing.enterprise.monthly}
                 </span>
                 <span className="text-gray-400">/ user / month</span>
               </div>
               {isYearly && (
                 <div className="text-gray-400 text-sm">
-                  <span className="line-through">${pricing.enterprise.monthly}</span> per month billed annually
+                  <span className="line-through">
+                    ${pricing.enterprise.monthly}
+                  </span>{" "}
+                  per month billed annually
                 </div>
               )}
               <CardDescription className="text-gray-400 text-base">
@@ -261,21 +309,26 @@ export default function Component() {
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
-              <Link href={`/${locale}/Signup`}>
-                <Button variant="outline" className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800">
+              <Link href={`/${locale}/sign-up`}>
+                <Button
+                  variant="outline"
+                  className="w-full h-12 bg-transparent border-gray-600 text-white hover:bg-gray-800"
+                >
                   Contact Sales
                 </Button>
               </Link>
               <p className="text-center text-gray-400 text-sm">
-                Billed {isYearly ? 'annually' : 'monthly'}
+                Billed {isYearly ? "annually" : "monthly"}
               </p>
-              
+
               <div className="space-y-4">
                 <p className="font-semibold">All business features, plus:</p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3">
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-300">Advanced security controls</span>
+                    <span className="text-gray-300">
+                      Advanced security controls
+                    </span>
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
@@ -291,7 +344,9 @@ export default function Component() {
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-300">Unlimited version history</span>
+                    <span className="text-gray-300">
+                      Unlimited version history
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -300,5 +355,5 @@ export default function Component() {
         </div>
       </div>
     </div>
-  )
+  );
 }

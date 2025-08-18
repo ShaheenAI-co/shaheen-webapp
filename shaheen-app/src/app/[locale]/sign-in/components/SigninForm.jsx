@@ -39,7 +39,7 @@ const SigninForm = () => {
       if (result.status === "complete") {
         // Set the session as active
         await setActive({ session: result.createdSessionId });
-        
+
         // Redirect to dashboard or wherever you want
         router.push(`/${locale}/dashboard`);
       } else if (result.status === "needs_verification") {
@@ -48,7 +48,7 @@ const SigninForm = () => {
       }
     } catch (err) {
       console.error("Sign in error:", err);
-      
+
       if (err.errors && err.errors.length > 0) {
         setError(err.errors[0].message);
       } else if (err.message) {
@@ -89,8 +89,6 @@ const SigninForm = () => {
         </div>
 
         <form className="space-y-3 md:space-y-4" onSubmit={handleEmailSignIn}>
-       
-
           {/* Google Sign In Button */}
           <Button
             type="button"
@@ -126,12 +124,17 @@ const SigninForm = () => {
               <span className="w-full border-t border-white" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-black px-2 text-gray-400">{t("seperatorText")}</span>
+              <span className="bg-black px-2 text-gray-400">
+                {t("seperatorText")}
+              </span>
             </div>
           </div>
 
           {/* Email Field */}
-          <div className="space-y-2 mt-4 md:mt-8 mb-6" dir={isArabic ? "rtl" : "ltr"}>
+          <div
+            className="space-y-2 mt-4 md:mt-8 mb-6"
+            dir={isArabic ? "rtl" : "ltr"}
+          >
             <Label htmlFor="email" className="text-white text-sm md:text-base">
               {t("Email")}
             </Label>
@@ -147,8 +150,14 @@ const SigninForm = () => {
           </div>
 
           {/* Password Field */}
-          <div className="space-y-2 mb-8 md:mb-8" dir={isArabic ? "rtl" : "ltr"}>
-            <Label htmlFor="password" className="text-white text-sm md:text-base">
+          <div
+            className="space-y-2 mb-8 md:mb-8"
+            dir={isArabic ? "rtl" : "ltr"}
+          >
+            <Label
+              htmlFor="password"
+              className="text-white text-sm md:text-base"
+            >
               {t("Password")}
             </Label>
             <Input
@@ -162,7 +171,7 @@ const SigninForm = () => {
             />
           </div>
 
-             {/* Error Display */}
+          {/* Error Display */}
           {error && (
             <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md">
               <p className="text-red-500 text-sm">{error}</p>
@@ -170,7 +179,7 @@ const SigninForm = () => {
           )}
 
           {/* Sign In Button */}
-          <Button 
+          <Button
             type="submit"
             disabled={!isLoaded || isLoading}
             className="w-full bg-white text-black cursor-pointer hover:bg-white h-10 md:h-12 font-semibold text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
@@ -178,12 +187,13 @@ const SigninForm = () => {
             {isLoading ? "Signing in..." : t("LoginBtn")}
           </Button>
 
-       
-
           {/* Signup Link */}
           <p className="text-center text-gray-400 text-sm md:text-base">
             {t("ExtraText")}{" "}
-            <Link href={`/${locale}/Signup`} className="text-blue-500 hover:underline">
+            <Link
+              href={`/${locale}/sign-up`}
+              className="text-blue-500 hover:underline"
+            >
               {t("ExternalLink")}
             </Link>
           </p>

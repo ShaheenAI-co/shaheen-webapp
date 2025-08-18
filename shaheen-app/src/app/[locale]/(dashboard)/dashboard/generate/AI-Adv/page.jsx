@@ -7,7 +7,7 @@ import ImageUpload from "@/components/ImageUpload";
 import { insertPostToSupabase } from "../../../../../../../lib/supabase/post";
 import { useUser } from "@clerk/nextjs";
 import { useRouter, usePathname } from "next/navigation";
-import Topbar from "../../components/Topbar";
+
 import { Loader2 } from "lucide-react";
 
 const postSize = [
@@ -242,11 +242,6 @@ const page = () => {
 
   return (
     <div className=" py-6 bg-[#0f0f0f] min-h-screen">
-      {/* TOPBAR */}
-      <div className="px-12">
-        <Topbar icon="/icons/Image_.svg" title="AI Advertisement" />
-      </div>
-
       {/* CONTENT */}
       <div className="mt-6 px-8">
         {/* POST SIZE */}
@@ -256,11 +251,11 @@ const page = () => {
             <p className="text-white/35">select from one of the post sizes</p>
           </div>
 
-          <div className="w-full flex items-center gap-6 justify-center  flex-wrap">
+          <div className="w-full flex flex-col md:flex-row items-center gap-6 justify-center  flex-wrap">
             {postSize.map((item, index) => (
               <div
                 key={index}
-                className={`w-[200px] h-[200px]  border-2 border-white/30 gradient-purple-dark opacity-60 flex flex-col gap-3 items-center justify-center rounded-2xl cursor-pointer hover:scale-105 hover:opacity-100 transition-all duration-300 ${post === item.size ? "opacity-100 scale-105" : ""}`}
+                className={`w-[200px] h-[200px]   border-2 border-white/30 gradient-purple-dark opacity-60 flex flex-col gap-3 items-center justify-center rounded-2xl cursor-pointer hover:scale-105 hover:opacity-100 transition-all duration-300 ${post === item.size ? "opacity-100 scale-105" : ""}`}
                 onClick={() => handlePostSize(item.size)}
               >
                 <h4 className="font-medium capitalize">{item.title}</h4>

@@ -23,7 +23,7 @@ import { Separator } from "../../../../../components/ui/separator";
 import { Badge } from "../../../../../components/ui/badge";
 import { Textarea } from "../../../../../components/ui/textarea";
 import { cn } from "../../../../../lib/utils";
-import Topbar from "../components/Topbar";
+
 import {
   User,
   Bell,
@@ -844,8 +844,6 @@ const SettingsPage = () => {
 
   return (
     <div className="px-12 pt-6 min-h-screen">
-      <Topbar icon="/icons/Settings_icon.svg" title="settings" />
-
       <div className="mt-6">
         <div className="flex flex-col gap-2">
           <h2 className="text-3xl font-bold capitalize satoshi-bold">

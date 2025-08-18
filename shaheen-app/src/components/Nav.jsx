@@ -19,9 +19,7 @@ export const Nav = () => {
   const { isSignedIn, isLoaded } = useUser();
 
   return (
-    <nav
-      className={`flex items-center w-full justify-between py-2    `}
-    >
+    <nav className={`flex items-center w-full justify-between py-2    `}>
       <Logo />
       <NavLinks />
       <NavCTA />
@@ -30,21 +28,26 @@ export const Nav = () => {
       <div className="flex lg:hidden gap-4">
         <LanguageSwitch />
 
-        {isLoaded && (
-          isSignedIn ? (
+        {isLoaded &&
+          (isSignedIn ? (
             <Link href={`/${locale}/dashboard`} className="pr-2">
-              <Button variant="secondary" className=" cursor-pointer  capitalize">
+              <Button
+                variant="secondary"
+                className=" cursor-pointer  capitalize"
+              >
                 {t("dashboard")}
               </Button>
             </Link>
           ) : (
             <Link href={`/${locale}/sign-in`} className="pr-2">
-              <Button variant="secondary" className=" cursor-pointer  capitalize">
+              <Button
+                variant="secondary"
+                className=" cursor-pointer  capitalize"
+              >
                 {t("login")}
               </Button>
             </Link>
-          )
-        )}
+          ))}
       </div>
     </nav>
   );

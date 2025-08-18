@@ -16,6 +16,10 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
   const [selectedTextId, setSelectedTextId] = useState(null); // points to the current selected text layer
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [imageDimensions, setImageDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
   const workspaceRef = useRef(null);
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const router = useRouter();
@@ -82,6 +86,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
     setUploadedImage(null);
     setTextElements([]);
     setSelectedTextId(null);
+    setImageDimensions({ width: 0, height: 0 });
     if (isMobile) setSidebarOpen(false);
     // Notify parent component if callback is provided
     if (onImageChange) {
@@ -89,27 +94,66 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
     }
   }, [isMobile, onImageChange]);
 
+  const handleImageLoad = useCallback(
+    (event) => {
+      const img = event.target;
+      const { naturalWidth, naturalHeight } = img;
+
+      // Calculate responsive dimensions while maintaining aspect ratio
+      // Mobile: Account for smaller screen size and padding
+      const maxContainerWidth = isMobile ? window.innerWidth - 32 : 800; // Account for padding
+      const maxContainerHeight = isMobile ? window.innerHeight - 200 : 600;
+
+      let displayWidth = naturalWidth;
+      let displayHeight = naturalHeight;
+
+      // Scale down if image is larger than container
+      if (displayWidth > maxContainerWidth) {
+        const scale = maxContainerWidth / displayWidth;
+        displayWidth = maxContainerWidth;
+        displayHeight = naturalHeight * scale;
+      }
+
+      if (displayHeight > maxContainerHeight) {
+        const scale = maxContainerHeight / displayHeight;
+        displayHeight = maxContainerHeight;
+        displayWidth = displayWidth * scale;
+      }
+
+      setImageDimensions({ width: displayWidth, height: displayHeight });
+      console.log("Image loaded successfully", {
+        naturalWidth,
+        naturalHeight,
+        displayWidth,
+        displayHeight,
+      });
+    },
+    [isMobile]
+  );
+
   const selectedElement = textElements.find((el) => el.id === selectedTextId);
 
   const SidebarContent = () => (
-    <div className="space-y-6 ">
+    <div className="space-y-4 sm:space-y-6">
       {!uploadedImage ? (
         <ImageUpload onImageUpload={handleImageUpload} />
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div>
-            <h3 className="text-sm font-medium text-white mb-3">Image</h3>
+            <h3 className="text-sm font-medium text-white mb-2 sm:mb-3">
+              Image
+            </h3>
             <div className="relative group">
               <img
                 src={uploadedImage}
                 alt="Uploaded"
-                className="w-full h-32 object-cover rounded-lg border border-border"
+                className="w-full h-24 sm:h-32 object-cover rounded-lg border border-border"
               />
               <Button
                 onClick={handleImageRemove}
                 variant="destructive"
                 size="sm"
-                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 sm:top-2 sm:right-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs sm:text-sm"
               >
                 Remove
               </Button>
@@ -131,7 +175,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
 
           {textElements.length > 0 && (
             <div>
-              <h3 className="text-sm font-medium text-white mb-3">
+              <h3 className="text-sm font-medium text-white mb-2 sm:mb-3">
                 Text Layers
               </h3>
               <div className="space-y-2">
@@ -142,13 +186,15 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
                       setSelectedTextId(element.id);
                       if (isMobile) setSidebarOpen(false);
                     }}
-                    className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                    className={`p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
                       selectedTextId === element.id
                         ? "border-primary bg-primary/5"
                         : "border-border hover:border-muted-foreground"
                     }`}
                   >
-                    <p className="text-sm truncate">{element.text}</p>
+                    <p className="text-xs sm:text-sm truncate">
+                      {element.text}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -270,8 +316,10 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] flex flex-col">
-      <header className="  px-4 lg:px-6 py-3 lg:py-4 flex-shrink-0">
-        <div className="flex items-center justify-between">
+      {/* Responsive Header - Stacks vertically on mobile, horizontal on desktop */}
+      <header className="px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 flex-shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+          {/* Left side - Logo and title */}
           <div className="flex items-center gap-2 lg:gap-3">
             {isMobile && (
               <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
@@ -288,49 +336,51 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary">
               <Type className="h-4 w-4 text-white" />
             </div>
-            <h1 className="text-lg lg:text-xl font-semibold text-white">
+            <h1 className="text-base sm:text-lg lg:text-xl font-semibold text-white">
               {isMobile ? "Text Editor" : "Image Text Editor"}
             </h1>
           </div>
-          <div className="flex items-center gap-1 lg:gap-2">
+
+          {/* MOBILE RIGHT SIDE - Action buttons */}
+          <div className="flex items-center gap-1 lg:gap-2 justify-center sm:justify-end">
             <Button
               onClick={addTextElement}
               disabled={!uploadedImage}
-              variant="secondary"
-              size={isMobile ? "sm" : "default"}
-              className="gap-1 bg-[#7F4BF3] hover:bg-[#ad8cf5] text-white lg:gap-2"
+              variant="primary"
+              size="sm"
+              className="gap-1 bg-[#7F4BF3] hover:bg-[#ad8cf5] text-white lg:gap-2 text-xs sm:text-sm"
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
               {!isMobile && "Add Text"}
             </Button>
             <Button
               onClick={saveAndNavigate}
               disabled={!uploadedImage || isSaving}
               variant="primary"
-              size={isMobile ? "sm" : "default"}
-              className="gap-1 lg:gap-2 "
+              size="sm"
+              className="gap-1 lg:gap-2 text-xs sm:text-sm"
             >
               {isSaving ? (
                 <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  <div className="h-3 w-3 sm:h-4 sm:w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                   {!isMobile && "Saving..."}
                 </>
               ) : (
                 <>
-                  <Download className="h-4 w-4" />
+                  <Download className="h-3 w-3 sm:h-4 sm:w-4" />
                   {!isMobile && "Save"}
                 </>
               )}
             </Button>
             {isMobile &&
               selectedElement && ( // Mobile Sidebar
-                <Sheet>
+                <Sheet >
                   <SheetTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <Settings className="h-4 w-4" />
+                    <Button variant="outline" size="sm" className="border-white text-white ">
+                      <Settings className="h-3 w-3  sm:h-4 sm:w-4" />
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-80 overflow-y-auto">
+                  <SheetContent side="right" className="w-80 px-4 py-8 overflow-y-auto bg-[#0f0f0f]">
                     <TextControls
                       textElement={selectedElement}
                       onUpdate={(updates) =>
@@ -342,36 +392,41 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
                 </Sheet>
               )}
           </div>
+          
         </div>
       </header>
 
+      {/* Main Content Area - Flex layout that adapts to screen size */}
       <div className="flex flex-1 min-h-0">
-        {/* Desktop Sidebar */}
+        {/* Desktop Sidebar - Hidden on mobile, shown on desktop */}
         {!isMobile && (
-          <div className="w-80 border-r border-border bg-[#0f0f0f] p-6 overflow-y-auto flex-shrink-0">
+          <div className="w-80 border-r border-border bg-[#0f0f0f] p-4 sm:p-6 overflow-y-auto flex-shrink-0">
             <SidebarContent />
           </div>
         )}
 
-        {/* Workspace */}
-        <div className="flex-1 bg-workspace p-2 lg:p-8 overflow-auto">
+        {/* Workspace - Takes full width on mobile, remaining space on desktop */}
+        <div className="flex-1 bg-workspace p-2 sm:p-4 lg:p-8 overflow-auto">
           <div className="flex items-center justify-center min-h-full">
             {uploadedImage || imageUrl ? (
               <div
                 ref={workspaceRef}
-                className="relative bg-white rounded-lg shadow-editor overflow-hidden max-w-full"
+                className="relative bg-white rounded-lg shadow-editor overflow-hidden"
                 style={{
-                  maxWidth: isMobile ? "100%" : "800px",
-                  maxHeight: isMobile ? "calc(100vh - 200px)" : "600px",
+                  width: imageDimensions.width || "auto",
+                  height: imageDimensions.height || "auto",
+                  // Responsive max dimensions - smaller on mobile
+                  maxWidth: isMobile ? "calc(100vw - 32px)" : "800px",
+                  maxHeight: isMobile ? "calc(100vh - 180px)" : "600px",
                 }}
               >
                 <img
                   src={uploadedImage || imageUrl}
                   alt="Editing"
-                  className="max-w-full max-h-full block"
+                  className="block w-full h-full"
                   draggable={false}
                   crossOrigin="anonymous" // Added for S3 CORS support
-                  onLoad={() => console.log("Image loaded successfully")}
+                  onLoad={handleImageLoad}
                   onError={(e) => {
                     console.error("Image failed to load:", e);
                     console.error(
@@ -380,8 +435,8 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
                     );
                   }}
                   style={{
-                    maxWidth: "100%",
-                    maxHeight: "100%",
+                    width: "100%",
+                    height: "100%",
                     objectFit: "contain",
                   }}
                 />
@@ -398,9 +453,9 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
                 ))}
               </div>
             ) : (
-              <div className="text-center px-4">
-                <Type className="h-12 lg:h-16 w-12 lg:w-16 text-workspace-foreground/30 mx-auto mb-4" />
-                <p className="text-base lg:text-lg text-workspace-foreground/70">
+              <div className="text-center px-4 sm:px-6">
+                <Type className="h-10 w-10 sm:h-12 sm:w-12 lg:h-16 lg:w-16 text-workspace-foreground/30 mx-auto mb-3 sm:mb-4" />
+                <p className="text-sm sm:text-base lg:text-lg text-workspace-foreground/70 mb-4 sm:mb-6">
                   {isMobile
                     ? "Upload an image to start"
                     : "Upload an image to start editing"}
@@ -408,10 +463,11 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
                 {isMobile && (
                   <Button
                     onClick={() => setSidebarOpen(true)}
-                    className="mt-4"
+                    className="mt-2 sm:mt-4 bg-[#7F4BF3] hover:bg-[#ad8cf5] text-white"
                     variant="outline"
+                    size="sm"
                   >
-                    <Plus className="h-4 w-4 mr-2" />
+                    <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                     Upload Image
                   </Button>
                 )}

@@ -29,7 +29,7 @@ import {
   Contrast,
   Layers,
 } from "lucide-react";
-import Topbar from "../components/Topbar";
+
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 
@@ -213,8 +213,6 @@ const RetouchPage = () => {
 
   return (
     <div className="px-12 pt-6 bg-[#0f0f0f] min-h-screen">
-      <Topbar icon="/icons/Brush.svg" title="Retouch" />
-
       <div className="mt-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">

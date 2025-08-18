@@ -61,7 +61,7 @@ const NavCTA = () => {
         </Button>
       )}
 
-      {/* <Link href="/signup" className="pr-2">
+      {/* <Link href={`/${locale}/sign-up`} className="pr-2">
         <Button variant="secondary">{t("try")}</Button>
       </Link> */}
     </div>

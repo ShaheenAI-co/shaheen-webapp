@@ -63,8 +63,8 @@ export const ImageUpload = ({ onImageUpload }) => {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-sm font-medium text-foreground mb-3">
-          Upload Image
+        <h3 className="text-sm font-medium text-white capitalize mb-3">
+          your image
         </h3>
         <div
           onDrop={handleDrop}
@@ -76,7 +76,7 @@ export const ImageUpload = ({ onImageUpload }) => {
             ${
               isDragOver
                 ? "border-primary bg-primary/5 scale-105"
-                : "border-border hover:border-muted-foreground hover:bg-muted/30"
+                : "border-border hover:border-white/50 hover:bg-white/10"
             }
           `}
         >
@@ -102,7 +102,7 @@ export const ImageUpload = ({ onImageUpload }) => {
 
             <div>
               <p
-                className={`${isMobile ? "text-xs" : "text-sm"} font-medium text-foreground mb-1`}
+                className={`${isMobile ? "text-xs" : "text-sm"} font-medium text-white mb-1`}
               >
                 {isDragOver
                   ? "Drop your image here"
@@ -111,7 +111,7 @@ export const ImageUpload = ({ onImageUpload }) => {
                     : "Drag & drop an image here"}
               </p>
               {!isMobile && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-white">
                   or click to browse files
                 </p>
               )}
@@ -120,7 +120,7 @@ export const ImageUpload = ({ onImageUpload }) => {
             <Button
               variant="outline"
               size={isMobile ? "sm" : "default"}
-              className="pointer-events-none"
+              className="pointer-events-none text-black"
             >
               Choose File
             </Button>
@@ -128,9 +128,6 @@ export const ImageUpload = ({ onImageUpload }) => {
         </div>
       </div>
 
-      <div className="text-xs text-muted-foreground">
-        Supported formats: JPG, PNG, GIF, WebP
-      </div>
     </div>
   );
 };

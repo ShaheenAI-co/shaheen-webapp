@@ -25,7 +25,7 @@ const InstagramConnectionStatus = () => {
   // Don't render if Clerk is still loading
   if (!isClerkLoaded) {
     return (
-      <Card className="w-full bg-white/10 border border-white/20 backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)]">
+      <Card className="w-[800px] bg-white/10 border border-white/20 backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)]">
         <CardContent className="flex items-center justify-center py-8">
           <Loader2 className="w-6 h-6 animate-spin text-white" />
           <span className="ml-2 text-white">Loading...</span>
@@ -37,7 +37,7 @@ const InstagramConnectionStatus = () => {
   // Don't render if user is not authenticated
   if (!user) {
     return (
-      <Card className="w-full bg-white/10 border border-white/20 backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)]">
+      <Card className="w-[800px] bg-white/10 border border-white/20 backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)]">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-white">
             <Instagram className="w-5 h-5" />
@@ -69,7 +69,7 @@ const InstagramConnectionStatus = () => {
   }
 
   return (
-    <Card className="w-full bg-white/10 border border-white/20 backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)]">
+    <Card className="w-[800px] bg-white/10 border border-white/20 backdrop-blur-md shadow-[inset_0px_-66px_64px_-48px_#432C81,inset_0px_-68px_64px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-white">
           <Instagram className="w-5 h-5" />

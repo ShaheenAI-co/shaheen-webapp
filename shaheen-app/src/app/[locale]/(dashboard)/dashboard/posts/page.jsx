@@ -29,7 +29,6 @@ import {
   MessageCircle,
   Share,
 } from "lucide-react";
-import Topbar from "../components/Topbar";
 import { cn } from "@/lib/utils";
 
 const PostsPage = () => {
@@ -267,8 +266,6 @@ const PostsPage = () => {
 
   return (
     <div className="px-12 pt-6 bg-[#0f0f0f] min-h-screen">
-      <Topbar icon="/icons/Paper_File.svg" title="Posts" />
-
       <div className="mt-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">

@@ -24,6 +24,16 @@ const NavMobile = () => {
   const isArabic = locale === "ar";
   const { isSignedIn, isLoaded } = useUser();
 
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   return (
     <div className="md:hidden max-sm:block">
       <Sheet>
@@ -40,8 +50,8 @@ const NavMobile = () => {
               >
                 <LanguageSwitch />
 
-                {isLoaded && (
-                  isSignedIn ? (
+                {isLoaded &&
+                  (isSignedIn ? (
                     <Link href={`/${locale}/dashboard`} className="pr-2">
                       <Button
                         variant="secondary"
@@ -59,20 +69,15 @@ const NavMobile = () => {
                         {l("login")}
                       </Button>
                     </Link>
-                  )
-                )}
-
-          
+                  ))}
               </div>
               <div className="flex flex-col justify-center text-xl items-center gap-4">
-                <Link href="#">
-                  <button
-                    variant="link"
-                    className="text-white font-light cursor-pointer"
-                  >
-                    {t("l-2")}
-                  </button>
-                </Link>
+                <button
+                  onClick={() => scrollToSection("features-section")}
+                  className="text-white font-light cursor-pointer bg-transparent border-none"
+                >
+                  {t("l-2")}
+                </button>
 
                 <Link href="#">
                   <button
@@ -83,14 +88,12 @@ const NavMobile = () => {
                   </button>
                 </Link>
 
-                <Link href="#">
-                  <button
-                    variant="link"
-                    className="text-white font-light cursor-pointer"
-                  >
-                    {t("l-1")}
-                  </button>
-                </Link>
+                <button
+                  onClick={() => scrollToSection("pricing-section")}
+                  className="text-white font-light cursor-pointer bg-transparent border-none"
+                >
+                  {t("l-1")}
+                </button>
               </div>
             </SheetDescription>
           </SheetHeader>

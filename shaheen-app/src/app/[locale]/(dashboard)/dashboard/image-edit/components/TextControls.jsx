@@ -40,7 +40,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-foreground">Text Properties</h3>
+        <h3 className="text-sm font-medium text-white">Text Properties</h3>
         <button
           onClick={onDelete}
           variant="destructive"
@@ -54,10 +54,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
       <div className="space-y-4">
         {/* Text Content */}
         <div>
-          <Label
-            htmlFor="text-content"
-            className="text-xs text-muted-foreground"
-          >
+          <Label htmlFor="text-content" className="text-xs text-white">
             Text
           </Label>
           <Input
@@ -71,9 +68,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
 
         {/* Font Family */}
         <div>
-          <Label className="text-xs text-muted-foreground mb-2 block">
-            Font Family
-          </Label>
+          <Label className="text-xs text-white mb-2 block">Font Family</Label>
           <Select
             value={textElement.fontFamily}
             onValueChange={(value) => onUpdate({ fontFamily: value })}
@@ -100,7 +95,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
 
         {/* Font Size */}
         <div>
-          <Label className="text-xs text-muted-foreground mb-2 block">
+          <Label className="text-xs text-white mb-2 block">
             Font Size: {textElement.fontSize}px
           </Label>
           <Slider
@@ -109,13 +104,13 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
             min={12}
             max={120}
             step={1}
-            className="mt-1"
+            className="mt-1 "
           />
         </div>
 
         {/* Color */}
         <div>
-          <Label htmlFor="text-color" className="text-xs text-muted-foreground">
+          <Label htmlFor="text-color" className="text-xs text-white">
             Color
           </Label>
           <div className="flex items-center gap-2 mt-1">
@@ -137,9 +132,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
 
         {/* Style Controls */}
         <div>
-          <Label className="text-xs text-muted-foreground mb-2 block">
-            Style
-          </Label>
+          <Label className="text-xs text-white mb-2 block">Style</Label>
           <div className="flex items-center gap-1">
             <Toggle
               pressed={textElement.fontWeight === "bold"}
@@ -164,9 +157,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
 
         {/* Text Alignment */}
         <div>
-          <Label className="text-xs text-muted-foreground mb-2 block">
-            Alignment
-          </Label>
+          <Label className="text-xs text-white mb-2 block">Alignment</Label>
           <div className="flex items-center gap-1">
             <Toggle
               pressed={textElement.textAlign === "left"}
@@ -195,7 +186,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
         {/* Position */}
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <Label htmlFor="pos-x" className="text-xs text-muted-foreground">
+            <Label htmlFor="pos-x" className="text-xs text-white">
               X Position
             </Label>
             <Input
@@ -208,7 +199,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
             />
           </div>
           <div>
-            <Label htmlFor="pos-y" className="text-xs text-muted-foreground">
+            <Label htmlFor="pos-y" className="text-xs text-white">
               Y Position
             </Label>
             <Input

@@ -24,7 +24,7 @@ import {
   CalendarDays,
   Filter,
 } from "lucide-react";
-import Topbar from "../components/Topbar";
+
 import { cn } from "@/lib/utils";
 
 const SchedulePage = () => {
@@ -195,8 +195,6 @@ const SchedulePage = () => {
 
   return (
     <div className="px-12 pt-6 bg-[#0f0f0f] min-h-screen">
-      <Topbar icon="/icons/Calendar.svg" title="Schedule Posts" />
-
       <div className="mt-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">

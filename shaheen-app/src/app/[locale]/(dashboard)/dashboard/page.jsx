@@ -11,7 +11,6 @@ import {
 import { cn } from "../../../../lib/utils";
 import { FolderClosed, Brush, Calendar } from "lucide-react";
 import Image from "next/image";
-import Topbar from "./components/Topbar";
 import InstagramConnectionStatus from "@/components/InstagramConnectionStatus";
 // import InstagramPostScheduler from "@/components/InstagramPostScheduler";
 
@@ -38,8 +37,6 @@ const SchedulePost = [" post"];
 const Dashboardpage = () => {
   return (
     <div className="px-12 pt-6  min-h-screen ">
-      <Topbar icon="/icons/Home.svg" title="dashboard" />
-
       <div className="mt-6">
         {/* GREETINGS */}
         <div className="flex flex-col gap-2">
