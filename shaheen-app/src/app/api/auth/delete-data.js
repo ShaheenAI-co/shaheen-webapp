@@ -7,7 +7,7 @@ export default function handler(req, res) {
       // You might schedule deletion of user data in your DB here
   
       res.status(200).json({
-        url: "https://shaheen-webapp.vercel.app/data-deletion-status",
+        url: "https://shaheen-ai.com/data-deletion-status",
         confirmation_code: "user_data_deleted"
       });
     } else {
