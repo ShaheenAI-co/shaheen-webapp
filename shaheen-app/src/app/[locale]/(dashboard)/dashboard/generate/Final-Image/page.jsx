@@ -8,8 +8,9 @@ import { instagramPosting } from "@/lib/instagram-posting";
 
 const page = () => {
   const searchParams = useSearchParams();
-  const [imageUrl, setImageUrl] = useState("/images/bagV2.png");
+  const [imageUrl, setImageUrl] = useState("");
   const [originalImageUrl, setOriginalImageUrl] = useState(null);
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   // Instagram posting state
   const { isConnected, supabaseAccounts, user } = useInstagramAuth();
@@ -18,6 +19,7 @@ const page = () => {
   const [postMessage, setPostMessage] = useState("");
 
   useEffect(() => {
+    setIsImageLoading(true);
     // Get image URL from query parameters
     const urlFromParams = searchParams.get("imageUrl");
     const originalUrlFromParams = searchParams.get("originalImageUrl");
@@ -28,6 +30,9 @@ const page = () => {
         "Final Image: Received edited image URL:",
         decodeURIComponent(urlFromParams)
       );
+    } else {
+      // If no image URL from params, set loading to false
+      setIsImageLoading(false);
     }
 
     if (originalUrlFromParams) {
@@ -101,12 +106,49 @@ const page = () => {
     }
   };
 
+  // Handle image export
+  const handleExportImage = async () => {
+    try {
+      // Get the current image URL (use the actual imageUrl state, not the hardcoded one)
+      const currentImageUrl = imageUrl;
+
+      // Fetch the image
+      const response = await fetch(currentImageUrl);
+      const blob = await response.blob();
+
+      // Create a download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+
+      // Set filename with timestamp
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+      link.download = `exported-image-${timestamp}.png`;
+
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      console.log("Image exported successfully");
+    } catch (error) {
+      console.error("Error exporting image:", error);
+      alert("Failed to export image. Please try again.");
+    }
+  };
+
   return (
     <div className="py-6 bg-[#0f0f0f] min-h-screen">
       <div className="w-full flex flex-col mt-6 px-4 sm:px-8 md:px-12">
         {/* EXPORT BUTTON - Responsive positioning and sizing */}
         <div className="w-full flex justify-end">
-          <button className="bg-[#6123B8] font-bold capitalize text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg text-sm sm:text-base">
+          <button
+            onClick={handleExportImage}
+            className="bg-[#6123B8] font-bold capitalize text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg text-sm sm:text-base hover:bg-[#4a1a8a] transition-colors"
+          >
             export
           </button>
         </div>
@@ -115,23 +157,45 @@ const page = () => {
         <div className="w-full flex gap-4 sm:gap-6 items-center flex-col lg:flex-row border border-white/10 bg-white/5 rounded-lg p-3 sm:p-4 h-auto lg:h-[800px] mt-6">
           {/* IMAGE SECTION - Responsive sizing: adapts to image dimensions while maintaining aspect ratio */}
           <div className="w-full lg:w-[50%] h-auto lg:h-full flex items-center justify-center rounded-lg p-2">
-            <img
-              src={"/images/perfume.png"}
-              alt="edited image"
-              className="object-contain rounded-lg w-auto h-auto max-w-full max-h-[350px] sm:max-h-[490px] lg:max-h-[600px]"
-              style={{
-                width: "auto",
-                height: "auto",
-                maxWidth: "100%",
-              }}
-              onLoad={() =>
-                console.log("Final Image: Image loaded successfully")
-              }
-              onError={(e) => {
-                console.error("Final Image: Image failed to load:", e);
-                console.error("Failed image URL:", imageUrl);
-              }}
-            />
+            {isImageLoading ? (
+              <div className="w-full h-[350px] sm:h-[490px] lg:h-[600px] max-w-full bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg animate-pulse flex items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                  <p className="text-white/70 text-sm">Loading image...</p>
+                </div>
+              </div>
+            ) : imageUrl ? (
+              <img
+                src={imageUrl}
+                alt="edited image"
+                className="object-contain rounded-lg w-auto h-auto max-w-full max-h-[350px] sm:max-h-[490px] lg:max-h-[600px]"
+                style={{
+                  width: "auto",
+                  height: "auto",
+                  maxWidth: "100%",
+                }}
+                onLoad={() => {
+                  console.log("Final Image: Image loaded successfully");
+                  setIsImageLoading(false);
+                }}
+                onError={(e) => {
+                  console.error("Final Image: Image failed to load:", e);
+                  console.error("Failed image URL:", imageUrl);
+                  setIsImageLoading(false);
+                }}
+              />
+            ) : (
+              <div className="w-full h-[350px] sm:h-[490px] lg:h-[600px] max-w-full bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-16 h-16 text-white/50">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+                    </svg>
+                  </div>
+                  <p className="text-white/50 text-sm">No image available</p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* INFO SECTION - Responsive sizing: full width on mobile, 50% on desktop */}
