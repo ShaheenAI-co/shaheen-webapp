@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-import Image from "next/image";
 import { useInstagramAuth } from "@/Hooks/useInstagramAuth";
 import { instagramPosting } from "@/lib/instagram-posting";
 
@@ -11,6 +10,7 @@ const page = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [originalImageUrl, setOriginalImageUrl] = useState(null);
   const [isImageLoading, setIsImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
 
   // Instagram posting state
   const { isConnected, supabaseAccounts, user } = useInstagramAuth();
@@ -20,16 +20,38 @@ const page = () => {
 
   useEffect(() => {
     setIsImageLoading(true);
+    setImageError(false);
+    
     // Get image URL from query parameters
     const urlFromParams = searchParams.get("imageUrl");
     const originalUrlFromParams = searchParams.get("originalImageUrl");
 
     if (urlFromParams) {
-      setImageUrl(decodeURIComponent(urlFromParams));
-      console.log(
-        "Final Image: Received edited image URL:",
-        decodeURIComponent(urlFromParams)
-      );
+      const decodedUrl = decodeURIComponent(urlFromParams);
+      setImageUrl(decodedUrl);
+      
+      // Preload the image to check if it's accessible
+      const preloadImage = new window.Image();
+      preloadImage.onload = () => {
+        setIsImageLoading(false);
+        setImageError(false);
+      };
+      preloadImage.onerror = () => {
+        setIsImageLoading(false);
+        setImageError(true);
+      };
+      preloadImage.src = decodedUrl;
+      
+      // Add a timeout fallback in case the image takes too long to load
+      const timeoutId = setTimeout(() => {
+        if (isImageLoading) {
+          setIsImageLoading(false);
+          setImageError(true);
+        }
+      }, 10000); // 10 second timeout
+
+      // Cleanup timeout on unmount
+      return () => clearTimeout(timeoutId);
     } else {
       // If no image URL from params, set loading to false
       setIsImageLoading(false);
@@ -37,10 +59,6 @@ const page = () => {
 
     if (originalUrlFromParams) {
       setOriginalImageUrl(decodeURIComponent(originalUrlFromParams));
-      console.log(
-        "Final Image: Received original image URL:",
-        decodeURIComponent(originalUrlFromParams)
-      );
     }
   }, [searchParams]);
 
@@ -132,11 +150,28 @@ const page = () => {
       // Cleanup
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-
-      console.log("Image exported successfully");
     } catch (error) {
       console.error("Error exporting image:", error);
       alert("Failed to export image. Please try again.");
+    }
+  };
+
+  // Retry loading the image
+  const retryImageLoad = () => {
+    if (imageUrl) {
+      setIsImageLoading(true);
+      setImageError(false);
+      
+      const retryImage = new window.Image();
+      retryImage.onload = () => {
+        setIsImageLoading(false);
+        setImageError(false);
+      };
+      retryImage.onerror = () => {
+        setIsImageLoading(false);
+        setImageError(true);
+      };
+      retryImage.src = imageUrl;
     }
   };
 
@@ -164,6 +199,21 @@ const page = () => {
                   <p className="text-white/70 text-sm">Loading image...</p>
                 </div>
               </div>
+            ) : imageError ? (
+              <div className="w-full h-[350px] sm:h-[490px] lg:h-[600px] max-w-full bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex flex-col items-center justify-center gap-4">
+                <div className="w-16 h-16 text-red-500">
+                  <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
+                  </svg>
+                </div>
+                <p className="text-white/50 text-sm">Failed to load image.</p>
+                <button
+                  onClick={retryImageLoad}
+                  className="bg-[#6123B8] font-semibold capitalize text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg text-sm sm:text-base"
+                >
+                  Retry
+                </button>
+              </div>
             ) : imageUrl ? (
               <img
                 src={imageUrl}
@@ -174,14 +224,10 @@ const page = () => {
                   height: "auto",
                   maxWidth: "100%",
                 }}
-                onLoad={() => {
-                  console.log("Final Image: Image loaded successfully");
+                onLoad={() => setIsImageLoading(false)}
+                onError={() => {
                   setIsImageLoading(false);
-                }}
-                onError={(e) => {
-                  console.error("Final Image: Image failed to load:", e);
-                  console.error("Failed image URL:", imageUrl);
-                  setIsImageLoading(false);
+                  setImageError(true);
                 }}
               />
             ) : (
