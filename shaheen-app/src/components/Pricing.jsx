@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { User, Cloud, Check } from "lucide-react";
+import { User, Cloud, Check ,ImagePlus,Calendar } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -36,7 +37,7 @@ export default function Pricing() {
     >
       {/* Header Section */}
       <div className="flex flex-col items-center text-center  gap-4">
-        <h2 className="text-2xl lg:text-5xl font-bold satoshi-bold leading-tight max-sm:w-[300px]  max-w-[500px]  capitalize ">
+        <h2 className={`text-2xl lg:text-5xl font-bold  leading-tight ${isArabic ? "alexandria-font " : "satoshi-bold"} max-sm:w-[300px]  max-w-[500px]  capitalize `}>
           {t("title")}
         </h2>
         <p className=" max-w-[500px] max-sm:w-[300px] text-base md:text-lg font-normal text-muted-foreground ">
@@ -80,7 +81,7 @@ export default function Pricing() {
         {/*  Card 1 */}
         <div className="relative overflow-hidden rounded-sm border-1  border-white/25 bg-black backdrop-blur-lg  w-[300px] h-[550px] md:w-[350px] md:h-[600px] pt-4 pb-12 shadow-[inset_-48px_44px_84px_-48px_#B52CFF,inset_-32px_68px_84px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten">
           <div className="relative z-10 p-6 sm:p-8 flex flex-col gap-4 ">
-            <h2 className="text-2xl satoshi-bold  mb-2">{t("startup.name")}</h2>
+            <h2 className={`text-2xl ${isArabic ? "alexandria-font " : "satoshi-bold"}  mb-2`}>{t("startup.name")}</h2>
 
             <div className="flex flex-col gap-2 ">
               <div className="flex items-baseline ">
@@ -117,23 +118,23 @@ export default function Pricing() {
 
               <ul className="space-y-3 text-white">
                 <li className="flex items-center gap-3">
-                  <User className="w-5 h-5 text-purple-400" />
+                  <ImagePlus className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
-                    {t("startup.features.seats")}
+                    {t("startup.features.post")}
                   </span>
                 </li>
 
                 <li className="flex items-center gap-3">
-                  <Cloud className="w-5 h-5 text-purple-400" />
+                  <Calendar className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
-                    {t("startup.features.storage")}
+                    {t("startup.features.schedule")}
                   </span>
                 </li>
 
                 <li className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
-                    {t("startup.features.tools")}
+                    {t("startup.features.retouch")}
                   </span>
                 </li>
               </ul>
@@ -144,7 +145,7 @@ export default function Pricing() {
         {/*  Card 2 */}
         <div className="relative overflow-hidden rounded-sm border-1 border-white/25 bg-black backdrop-blur-lg  w-[300px] h-[550px] md:w-[350px] md:h-[600px] pt-4 pb-12  shadow-[inset_102px_-46px_84px_-48px_#B52CFF,inset_108px_-32px_84px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten">
           <div className="relative z-10 p-6 sm:p-8 flex flex-col gap-4 ">
-            <h2 className="text-2xl satoshi-bold  mb-2">
+            <h2 className={`text-2xl ${isArabic ? "alexandria-font " : "satoshi-bold"}  mb-2`}>
               {t("business.name")}
             </h2>
 
@@ -183,23 +184,23 @@ export default function Pricing() {
 
               <ul className="space-y-3 text-white">
                 <li className="flex items-center gap-3">
-                  <User className="w-5 h-5 text-purple-400" />
+                  <ImagePlus className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
-                    {t("business.features.seats")}
+                    {t("business.features.post")}
                   </span>
                 </li>
 
                 <li className="flex items-center gap-3">
-                  <Cloud className="w-5 h-5 text-purple-400" />
+                  <Calendar className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
-                    {t("business.features.storage")}
+                    {t("business.features.schedule")}
                   </span>
                 </li>
 
                 <li className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
-                    {t("business.features.tools")}
+                    {t("business.features.retouch")}
                   </span>
                 </li>
               </ul>
@@ -210,7 +211,7 @@ export default function Pricing() {
         {/*  Card 3 */}
         <div className="relative overflow-hidden rounded-sm border-1 border-white/25 bg-black backdrop-blur-lg  w-[300px] h-[550px] md:w-[350px] md:h-[600px] pt-4 pb-12  shadow-[inset_-88px_-60px_84px_-48px_#B52CFF,inset_-88px_-60px_84px_-32px_#826CFF,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten">
           <div className="relative z-10 p-6 sm:p-8 flex flex-col gap-4 ">
-            <h2 className="text-2xl satoshi-bold  mb-2">
+            <h2 className={`text-2xl ${isArabic ? "alexandria-font " : "satoshi-bold"}  mb-2`}>
               {t("enterprise.name")}
             </h2>
 
@@ -249,23 +250,23 @@ export default function Pricing() {
 
               <ul className="space-y-3 text-white">
                 <li className="flex items-center gap-3">
-                  <User className="w-5 h-5 text-purple-400" />
+                  <ImagePlus className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
-                    {t("enterprise.features.seats")}
+                    {t("enterprise.features.post")}
                   </span>
                 </li>
 
                 <li className="flex items-center gap-3">
-                  <Cloud className="w-5 h-5 text-purple-400" />
+                  <Calendar className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
-                    {t("enterprise.features.storage")}
+                    {t("enterprise.features.schedule")}
                   </span>
                 </li>
 
                 <li className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
-                    {t("enterprise.features.tools")}
+                    {t("enterprise.features.retouch")}
                   </span>
                 </li>
               </ul>

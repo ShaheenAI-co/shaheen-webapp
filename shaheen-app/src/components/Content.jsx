@@ -6,6 +6,7 @@ import AccordionComponent from "./Accordion";
 import PriceCards from "@/components/PriceCards";
 import Pricing from "./Pricing";
 import FinalCta from "./FinalCta";
+import CompareTable from "./compareTable";
 
 const Content = () => {
   return (
@@ -13,6 +14,7 @@ const Content = () => {
       {/*<AnimatedText />*/}
       <HowItWork />
       <FeaturesBento />
+      <CompareTable />
       <Pricing />
 
       <AccordionComponent />
