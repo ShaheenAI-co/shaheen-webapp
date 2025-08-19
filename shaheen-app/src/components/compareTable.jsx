@@ -109,7 +109,7 @@ export default function CompareTable() {
 
       {/* Comparison Table */}
       <div className="w-full max-w-6xl mx-auto">
-        <div className="bg-black border border-white/25 rounded-sm overflow-hidden shadow-[inset_0px_-126px_64px_-48px_#432C81,inset_0px_-126px_64px_-32px_#7c67f3,inset_20px_-20px_50px_-10px_rgba(0,0,0,0.5)] mix-blend-lighten">
+        <div className="bg-black border border-white/25 rounded-sm overflow-hidden ">
           {/* Mobile View - Stacked Cards */}
           <div className="block md:hidden">
             {features.map((feature, index) => (
@@ -118,39 +118,48 @@ export default function CompareTable() {
                 className="px-4 py-6 border-b border-white/25 last:border-b-0"
               >
                 {/* LABEL */}
-                <div className="mb-3 border-b border-white pb-3">
-                  <h2 className="font-bold text-lg mb-1 text-[#6123B8] ">
+                <div className="mb-3 border-b text-center border-white pb-3">
+                  <h2
+                    className={`font-bold text-xl mb-1 text-[#6123B8] ${isArabic ? "alexandria-font" : "satoshi-bold"}`}
+                  >
                     {feature.name}
                   </h2>
-                  <h3 className="text-xs text-white/50">
+                  {/* <h3 className="text-xs text-white/50">
                     {feature.description}
-                  </h3>
+                  </h3> */}
                 </div>
 
                 <div className="space-y-3">
                   {/* SHAHEEN */}
-                  <div className="flex flex-col gap-2 border-b border-white/25 pb-3">
-                    <p className="font-bold text-white mb-1 text-base">
+                  <div className="flex flex-col gap-2 text-center border-b border-white/25 pb-3">
+                    <p
+                      className={` text-white mb-1 text-lg ${isArabic ? "alexandria-font font-bold" : "satoshi-bold"}`}
+                    >
                       {t("shaheen")}
                     </p>
                     <ComparisonText text={feature.shaheen} isShaheen={true} />
                   </div>
 
                   {/* AGENCIES */}
-                  <div className="flex flex-col gap-2 border-b border-white/25 pb-3">
-                    <p className="font-bold text-white mb-1 text-base">
+                  <div className="flex flex-col gap-2 text-center border-b border-white/25 pb-3">
+                    <p
+                      className={` text-white mb-1 text-base ${isArabic ? "alexandria-font font-bold" : "satoshi-bold"}`}
+                    >
                       {t("agencies")}
                     </p>
                     <ComparisonText text={feature.agencies} />
                   </div>
 
                   {/* PLATFORMS */}
-                  <div>
-                    <p className="font-bold text-white mb-1 text-base">
+                  <div className="text-center">
+                    <p
+                      className={` text-white mb-1 text-base ${isArabic ? "alexandria-font font-bold" : "satoshi-bold"}`}
+                    >
                       {t("platforms")}
                     </p>
                     <ComparisonText text={feature.platforms} />
                   </div>
+
                 </div>
               </div>
             ))}
@@ -158,6 +167,8 @@ export default function CompareTable() {
 
           {/* Desktop View - Table */}
           <div className="hidden md:block bg-white/5">
+
+
             {/* Table Header */}
             <div className="grid grid-cols-4 gap-4 p-6 border-b border-white/25 ">
               <div className="font-semibold text-white">{t("criterion")}</div>
@@ -199,6 +210,8 @@ export default function CompareTable() {
                 </div>
               </div>
             ))}
+
+
           </div>
         </div>
       </div>

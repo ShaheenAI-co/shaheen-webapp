@@ -30,7 +30,7 @@ const NavLinks = () => {
         {t("l-2")}
       </button>
 
-      <Link href="#">
+      <Link href="/contact-us">
         <button variant="link" className="text-white font-light cursor-pointer">
           {t("l-3")}
         </button>

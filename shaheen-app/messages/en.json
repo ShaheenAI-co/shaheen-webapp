@@ -10,7 +10,7 @@
   "NavLinks": {
     "l-1": "Pricing",
     "l-2": "Features",
-    "l-3": "About"
+    "l-3": "Contact Us"
   },
   "NavCTA": {
     "login": "login",
@@ -89,9 +89,11 @@
       "button": "get startup plan",
       "featuresTitle": "Plan includes :",
       "features": {
-        "post": "10 free posts available",
-        "schedule": "10 free posts scheduled",
-        "retouch": "free retouch"
+        "post": "15 post generation ",
+        "schedule": "posts scheduling",
+        "retouch": "free retouch",
+        "branding": "1 brand creation",
+        "social": "1 platform connection"
       }
     },
     "business": {
@@ -100,9 +102,11 @@
       "button": "get business plan",
       "featuresTitle": "Plan includes :",
       "features": {
-        "post": "10 free posts available",
-        "schedule": "10 free posts scheduled",
-        "retouch": "free retouch"
+        "post": "30 post generation ",
+        "schedule": "posts scheduling",
+        "retouch": "free retouch",
+        "branding": "4 brand creation",
+        "social": "3 platform connection"
       }
     },
     "enterprise": {
@@ -111,9 +115,11 @@
       "button": "get enterprise plan",
       "featuresTitle": "Plan includes :",
       "features": {
-        "post": "10 free posts available",
-        "schedule": "10 free posts scheduled",
-        "retouch": "free retouch"
+        "post": "45 post generation ",
+        "schedule": "posts scheduling",
+        "retouch": "free retouch",
+        "branding": "6 brand creation",
+        "social": "6 platform connection"
       }
     }
   },
@@ -390,6 +396,61 @@
       "phone": "Phone"
     }
   },
+  "ContactUs": {
+    "title": "Let's Talk About Your Project",
+    "subtitle": "Have questions about Shaheen AI? We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+    "getInTouch": "Get in Touch",
+    "sendMessage": "Send us a Message",
+    "formDescription": "Fill out the form below and we'll get back to you within 24 hours.",
+    "fullName": "Full Name",
+    "emailAddress": "Email Address",
+    "subject": "Subject",
+    "message": "Message",
+    "sendButton": "Send Message",
+    "sending": "Sending...",
+    "messageSent": "Message Sent!",
+    "thankYou": "Thank you for contacting us. We'll get back to you soon.",
+    "contactInfo": {
+      "title": "Get in Touch",
+      "description": "Ready to supercharge your brand with AI-powered content creation? We're here to help you get started and answer any questions you might have.",
+      "email": {
+        "title": "Email",
+        "value": "hello@shaheen.ai",
+        "description": "Send us an email anytime"
+      },
+      "phone": {
+        "title": "Phone",
+        "value": "+966 50 123 4567",
+        "description": "Mon-Fri from 8am to 6pm"
+      },
+      "office": {
+        "title": "Office",
+        "value": "Riyadh, Saudi Arabia",
+        "description": "Visit us at our office"
+      },
+      "support": {
+        "title": "Support Hours",
+        "value": "24/7 Available",
+        "description": "We're here to help anytime"
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Quick answers to common questions",
+      "startup": {
+        "question": "How quickly can I get started?",
+        "answer": "You can start using Shaheen AI immediately after signing up. Our platform is designed to be intuitive and user-friendly."
+      },
+      "custom": {
+        "question": "Do you offer custom solutions?",
+        "answer": "Yes! We offer custom AI solutions for enterprise clients. Contact us to discuss your specific needs."
+      },
+      "platforms": {
+        "question": "What social media platforms do you support?",
+        "answer": "Currently, we support Instagram with plans to expand to other platforms soon."
+      }
+    }
+  },
   "CompareTable": {
     "title": "How does Shaheen compare?",
     "subtitle": "See how Shaheen stacks up against traditional digital marketing agencies and global platforms",
@@ -462,5 +523,8 @@
         "platforms": "Stable cloud infrastructure with technical support"
       }
     }
+  },
+  "productCarousel": {
+    "title": "Generate on brand content for all your business needs"
   }
 }

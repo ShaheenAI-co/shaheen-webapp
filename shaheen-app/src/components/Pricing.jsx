@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { User, Cloud, Check ,ImagePlus,Calendar } from "lucide-react";
+import { User, Cloud, Check ,ImagePlus,Calendar,Instagram,Pencil } from "lucide-react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -105,7 +105,7 @@ export default function Pricing() {
             </div>
 
             <Link href={`/${locale}/sign-up`}>
-              <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
+              <Button className={`w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-base lg:text-lg  py-6 rounded-sm transition-all duration-200 ${isArabic ? "alexandria-font" : "satoshi-bold"}`}>
                 {t("startup.button")}
               </Button>
             </Link>
@@ -132,11 +132,19 @@ export default function Pricing() {
                 </li>
 
                 <li className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-purple-400" />
+                  <Pencil className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
                     {t("startup.features.retouch")}
                   </span>
                 </li>
+
+                <li className="flex items-center gap-3">
+                  <Instagram className="w-5 h-5 text-purple-400" />
+                  <span className="text-base font-normal">
+                    {t("startup.features.social")}
+                  </span>
+                </li>
+
               </ul>
             </div>
           </div>
@@ -171,7 +179,7 @@ export default function Pricing() {
             </div>
 
             <Link href={`/${locale}/sign-up`}>
-              <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
+              <Button className={`w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-base lg:text-lg  py-6 rounded-sm transition-all duration-200 ${isArabic ? "alexandria-font" : "satoshi-bold"}`}>
                 {t("business.button")}
               </Button>
             </Link>
@@ -198,9 +206,16 @@ export default function Pricing() {
                 </li>
 
                 <li className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-purple-400" />
+                  <Pencil className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
                     {t("business.features.retouch")}
+                  </span>
+                </li>
+
+                <li className="flex items-center gap-3">
+                  <Instagram className="w-5 h-5 text-purple-400" />
+                  <span className="text-base font-normal">
+                    {t("business.features.social")}
                   </span>
                 </li>
               </ul>
@@ -237,7 +252,7 @@ export default function Pricing() {
             </div>
 
             <Link href={`/${locale}/sign-up`}>
-              <Button className="w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-lg py-6 rounded-sm transition-all duration-200">
+              <Button className={`w-full bg-white text-black hover:bg-[#864dd5] hover:text-white  cursor-pointer capitalize font-bold text-base lg:text-lg  py-6 rounded-sm transition-all duration-200 ${isArabic ? "alexandria-font" : "satoshi-bold"}`}>
                 {t("enterprise.button")}
               </Button>
             </Link>
@@ -264,9 +279,16 @@ export default function Pricing() {
                 </li>
 
                 <li className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-purple-400" />
+                  <Pencil className="w-5 h-5 text-purple-400" />
                   <span className="text-base font-normal">
                     {t("enterprise.features.retouch")}
+                  </span>
+                </li>
+
+                <li className="flex items-center gap-3">
+                  <Instagram className="w-5 h-5 text-purple-400" />
+                  <span className="text-base font-normal">
+                    {t("enterprise.features.social")}
                   </span>
                 </li>
               </ul>
