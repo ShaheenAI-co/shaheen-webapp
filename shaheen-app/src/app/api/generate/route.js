@@ -64,7 +64,7 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
 async function testGeminiConnection() {
   try {
     console.log("Testing Gemini API connection...");
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
     const result = await model.generateContent("Hello, test message");
     console.log("Gemini API connection successful");
     return true;
@@ -91,11 +91,26 @@ export async function POST(request) {
     const requestBody = await request.json();
     console.log("Request body received:", requestBody);
 
-    const { input_image_url, size, post_id } = requestBody;
+    const {
+      input_image_url,
+      size,
+      post_id,
+      post_title,
+      product_name,
+      product_description,
+      product_category,
+    } = requestBody;
 
     // Validate required fields
-    console.log("Validating fields:", { input_image_url, size, post_id });
-
+    console.log("Validating fields:", {
+      input_image_url,
+      size,
+      post_id,
+      post_title,
+      product_name,
+      product_description,
+      product_category,
+    });
     if (!input_image_url || !size || !post_id) {
       console.log("Missing required fields:", {
         input_image_url,
@@ -159,24 +174,61 @@ export async function POST(request) {
       throw new Error("Failed to connect to Google Gemini API");
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
-    const promptGenerationText = `Analyze this image and create 2 different detailed image generation prompts for image customization. 
-    
-    Image URL: ${input_image_url}
-    Target Size: ${size}
-    
-    Create 2 distinct prompts that each describe:
-    1. The original image content and style
-    2. How to enhance and customize the image
-    3. Maintain the same composition and style
-    4. Ensure the output is suitable for ${size} dimensions
-    
-    Return the response in this exact JSON format:
-    {
-      "prompt1": "First detailed prompt description",
-      "prompt2": "Second detailed prompt description"
-    }`;
+    const promptGenerationText = `
+
+**Your Role:** You are an expert Visual Prompt Engineer. Your task is to analyze an input image and its associated context, then generate two **distinctly different** and highly detailed prompts for an image generation model. The goal is to provide the user with two unique creative directions for customizing their original image.
+
+**Your Process:**
+
+1.  **Analyze the Inputs:**
+
+      * **Image (${input_image_url}):** Carefully examine the source image. Identify the primary subject, composition (framing, layout), color palette, lighting, and overall artistic style (e.g., photorealistic, illustration, minimalist).
+      * **Context (${post_title}, ${product_name}, etc.):** Analyze the text context to understand the product's theme, intended mood, and key selling points. Extract keywords and concepts (e.g., "luxury," "natural," "tech," "comfort").
+
+2.  **Strategize Two Different Creative Directions:**
+    This is the most critical step. You must create two prompts that are conceptually different. Do not just change a few words.
+
+      * **Prompt 1: The "Refined Reality" Prompt.** This prompt should aim to create a polished, idealized version of the original image. The goal is a subtle but significant enhancement.
+          * **Focus on:** Photorealism, perfect lighting (e.g., "soft golden hour light," "clean studio lighting"), enhanced textures, rich colors, and adding subtle, context-appropriate background elements that improve the scene without changing it dramatically. The mood should be a more professional and high-quality version of the original.
+      * **Prompt 2: The "Thematic & Artistic" Prompt.** This prompt should re-imagine the image with a strong artistic or narrative twist based on the product context. The goal is a creative, eye-catching interpretation.
+          * **Focus on:** A specific artistic style (e.g., "cinematic," "vintage film," "ethereal fantasy," "dramatic chiaroscuro"), a completely different setting or mood (e.g., changing the time of day, location), and incorporating conceptual elements from the product description (e.g., if a perfume has "ocean notes," add "ethereal splashes of water suspended in the air").
+
+3.  **Construct the Prompts:**
+    For each prompt, follow this structure:
+
+      * **Start with the Core:** Begin by describing the main subject and composition from the original image to ground the AI. Use keywords from the product name.
+      * **Inject the Enhancement/Style:** Clearly describe the new lighting, atmosphere, colors, and specific style you chose for that creative direction. Use vivid, descriptive adjectives.
+      * **Add Contextual Details:** Weave in elements derived from the product description and category to make the image more thematic and relevant.
+      * **Technical Specifications:** Conclude with technical details like "hyper-detailed," "photorealistic," "4K," and ensure the prompt is tailored for the ${size} by mentioning aspect ratio or dimensions where appropriate.
+
+4.  **Final Output:**
+
+      * Return **only** the JSON object in the specified format.
+      * Do not include any explanations, apologies, or text outside of the JSON structure.
+
+### **Example of Your Thought Process (for your internal reasoning only):**
+
+  * **Input Image:** A simple photo of a blue ceramic mug on a plain white table.
+  * **Context:** product_name: "Oceanic Serenity Mug", product_description: "Hold the calm of the ocean in your hands. Perfect for your morning meditation."
+  * **Strategy:**
+      * **Prompt 1 (Refined Reality):** I'll make it a perfect product shot. Clean, bright, maybe add a hint of a cozy morning routine.
+      * **Prompt 2 (Thematic & Artistic):** I'll lean into the "Oceanic Serenity" theme. I'll place the mug in a fantastical, ocean-inspired setting.
+  * **Resulting Prompts:**
+      * **Prompt 1 (Generated):** "A flawless, high-end product photograph of the 'Oceanic Serenity Mug' on a clean, white marble tabletop. Bathed in soft, natural morning light from a nearby window, highlighting the mug's deep blue glaze and subtle textures. In the soft-focus background, add a neatly folded linen napkin and a single, fresh green leaf. The image should feel calm, clean, and aspirational. Photorealistic, hyper-detailed, 4K, suitable for ${size}."
+      * **Prompt 2 (Generated):** "A creative, cinematic shot of the 'Oceanic Serenity Mug' resting on a wet, dark rock by the ocean at sunrise. Gentle waves are blurred in motion in the background, and the rising sun casts a warm glow on the scene. Ethereal, magical wisps of steam rise from the mug, subtly forming the shape of a gentle wave. The mood is tranquil, magical, and deeply connected to nature. Dramatic lighting, anamorphic lens style, suitable for ${size}."
+
+-----
+
+***Final Output Command:*** Now, using the instructions above, analyze the provided variables and generate the JSON output.
+
+
+{
+  "prompt1": "First detailed prompt description",
+  "prompt2": "Second detailed prompt description"
+}
+`;
 
     console.log("Sending prompt to Gemini:", promptGenerationText);
 
@@ -268,7 +320,7 @@ export async function POST(request) {
 
           try {
             const vmResponse = await fetch(
-              "https://dwu9yzawgx36z6-5151.proxy.runpod.net/generate",
+              "https://x4y78t6tm65bgq-5151.proxy.runpod.net/generate",
               {
                 method: "POST",
                 headers: {
@@ -278,7 +330,6 @@ export async function POST(request) {
                 signal: controller.signal,
               }
             );
-
             clearTimeout(timeoutId); // Clear timeout on successful response
 
             console.log("VM response received:", {

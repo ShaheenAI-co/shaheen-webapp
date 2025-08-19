@@ -60,3 +60,43 @@ export const insertPostToSupabase = async (
     throw error;
   }
 };
+
+export const getPostById = async (postId) => {
+  try {
+    console.log("Fetching post details for post_id:", postId);
+
+    const supabase = await supabaseClient();
+
+    console.log("Supabase client created successfully");
+
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .eq("post_id", postId)
+      .single();
+
+    if (error) {
+      console.error("Supabase fetch error details:", {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code,
+      });
+      throw error;
+    }
+
+    if (!data) {
+      console.log("No post found for post_id:", postId);
+      return null;
+    }
+
+    console.log("Post details fetched successfully:", data);
+    return data;
+  } catch (error) {
+    console.error(
+      "Failed to fetch post details from Supabase - Full error:",
+      error
+    );
+    throw error;
+  }
+};

@@ -196,6 +196,10 @@ const page = () => {
         input_image_url: originalImageUrl,
         size: formattedSize,
         post_id: postId,
+        post_title: postTitle,
+        product_name: productInfo.title,
+        product_description: productInfo.description,
+        product_category: productInfo.category,
       };
       console.log("API payload being sent:", apiPayload);
 
