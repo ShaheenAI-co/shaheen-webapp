@@ -6,9 +6,14 @@ import SrcInput from "./SrcInput";
 import ProfileBtn from "./ProfileBtn";
 import { useClerk } from "@clerk/nextjs";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const Topbar = ({ icon, title, onMenuClick }) => {
   const { signOut } = useClerk();
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
+  const isArabic = locale === "ar";
+
   const handleLogout = async () => {
     try {
       await signOut();
@@ -17,8 +22,10 @@ const Topbar = ({ icon, title, onMenuClick }) => {
     }
   };
   return (
-    <div className="flex justify-between z-10 items-center gap-4 pb-6 px-6 pt-4  bg-[#0f0f0f]  ">
-      <div className="flex items-center gap-2">
+    <div
+      className={`flex justify-between z-10 items-center gap-4 pb-6 px-6 pt-4 bg-[#0f0f0f] `}
+    >
+      <div className={`flex items-center gap-2 `}>
         {/* Menu button for small screens */}
         <button
           onClick={onMenuClick}
@@ -28,13 +35,14 @@ const Topbar = ({ icon, title, onMenuClick }) => {
           <Menu size={20} />
         </button>
         <Image src={icon} alt="Logo" width={20} height={20} />
-        <h1 className="text-xl font-bold satoshi-bold text-white/35 capitalize">
+        <h1
+          className={`text-xl font-bold satoshi-bold text-white/35 capitalize ${isArabic ? "alexandria-font" : ""}`}
+        >
           {title}
         </h1>
       </div>
 
       <div className="flex items-center gap-4">
-        <NotificationBtn />
         <ProfileBtn onClick={handleLogout} />
       </div>
     </div>

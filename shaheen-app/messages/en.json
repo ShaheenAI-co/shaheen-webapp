@@ -76,8 +76,51 @@
     "button": "Get Started"
   },
 
+  "Pricing": {
+    "title": "Plan made for teams of all sizes",
+    "subtitle": "From startup to enterprise, choose the right plan to elevate your business",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "month": "/ month",
+    "year": "/ year",
+    "startup": {
+      "name": "Startup",
+      "description": "For freelancers and small teams",
+      "button": "get startup plan",
+      "featuresTitle": "Plan includes :",
+      "features": {
+        "post": "10 free posts available",
+        "schedule": "10 free posts scheduled",
+        "retouch": "free retouch"
+      }
+    },
+    "business": {
+      "name": "Business",
+      "description": "Perfect for growing businesses",
+      "button": "get business plan",
+      "featuresTitle": "Plan includes :",
+      "features": {
+        "post": "10 free posts available",
+        "schedule": "10 free posts scheduled",
+        "retouch": "free retouch"
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "description": "Best for high volume marketing teams",
+      "button": "get enterprise plan",
+      "featuresTitle": "Plan includes :",
+      "features": {
+        "post": "10 free posts available",
+        "schedule": "10 free posts scheduled",
+        "retouch": "free retouch"
+      }
+    }
+  },
+
   "Faq": {
     "Heading": "Frequently Asked Questions",
+    "Subheading": "Still have questions ? We have answers",
     "Q-1": "How do I start ?",
     "A-1": "Just sign up for a new account, then upload a photo of your product. Our AI will handle the rest.",
     "Q-2": "Do I need design experience ?",
@@ -180,6 +223,65 @@
       "downloadInvoice": "Download Invoice",
       "manageBilling": "Manage Billing"
     }
+  },
+  "Dashboard": {
+    "welcomeBack": "Welcome back",
+    "createNewPost": "Create New Post",
+    "totalProjects": "Total Projects",
+    "totalBrands": "Total Brands",
+    "schedulePost": "Schedule Post",
+    "scheduledPosts": "Scheduled Posts",
+    "noScheduledPost": "No scheduled post"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "posts": "Posts",
+    "brands": "Brands",
+    "aiAdvertisement": "AI Advertisement",
+    "videoAd": "Video Ad",
+    "retouch": "Retouch",
+    "schedulePost": "Schedule Post",
+    "settings": "Settings",
+    "comingSoon": "Coming Soon"
+  },
+  "ProfileBtn": {
+    "signedInAs": "Signed in as",
+    "loading": "Loading...",
+    "signOut": "Sign Out",
+    "openAccountMenu": "Open account menu"
+  },
+  "AIAdvertisement": {
+    "selectPostSize": "select post size",
+    "selectPostSizeDesc": "select from one of the post sizes",
+    "postSize": "Post Size",
+    "landscapeSize": "Landscape Size",
+    "storySize": "Story Size",
+    "portraitSize": "Portrait Size",
+    "productInfo": "product info",
+    "productInfoDesc": "enter the product info",
+    "postTitle": "post title",
+    "postTitlePlaceholder": "eg. new product",
+    "productName": "product name",
+    "productNamePlaceholder": "eg. Nike Air Max",
+    "productCategory": "product category",
+    "productCategoryPlaceholder": "eg. Shoes",
+    "productDescription": "product description",
+    "imageUpload": "image upload",
+    "imageUploadDesc": "upload the product image",
+    "generate": "Generate",
+    "generating": "Generating...",
+    "pleaseFillAllFields": "Please fill in all fields and select an image before generating.",
+    "startingGeneration": "Starting generation process...",
+    "uploadingImageToS3": "Uploading image to S3...",
+    "imageUploadedSuccessfully": "Image uploaded successfully. Creating post...",
+    "postCreated": "Post created. Generating AI content...",
+    "callingAIGenerationAPI": "Calling AI generation API...",
+    "generationCompleted": "Generation completed successfully! Generated {count} images.",
+    "generationFailed": "Generation failed: {error}",
+    "s3UploadFailed": "S3 upload failed: {error}",
+    "failedToCreatePost": "Failed to create post in database",
+    "postIdMissing": "Post ID is missing from database response",
+    "generationAPIError": "Generation API error: {status} - {error}"
   },
   "PrivacyPolicy": {
     "title": "Privacy Policy",
@@ -286,6 +388,79 @@
       "email": "Email",
       "address": "Address",
       "phone": "Phone"
+    }
+  },
+  "CompareTable": {
+    "title": "How does Shaheen compare?",
+    "subtitle": "See how Shaheen stacks up against traditional digital marketing agencies and global platforms",
+    "criterion": "Criterion",
+    "shaheen": "Shaheen (AI Platform)",
+    "agencies": "Digital Marketing Agencies",
+    "platforms": "Global Content Management Platforms",
+    "features": {
+      "price": {
+        "name": "Price",
+        "description": "Cost comparison across different platforms",
+        "shaheen": "Subscription with competitive prices depending on the plan",
+        "agencies": "High monthly contract cost / project depending on scope of work",
+        "platforms": "Low-cost subscriptions for tools that do not include content production"
+      },
+      "speed": {
+        "name": "Speed",
+        "description": "How quickly content can be created and published",
+        "shaheen": "Create designs and schedule automatically within minutes",
+        "agencies": "Dependent on team availability and client approvals",
+        "platforms": "Fast in scheduling; content creation is up to the user"
+      },
+      "accuracy": {
+        "name": "Accuracy",
+        "description": "Quality and precision of outputs",
+        "shaheen": "High precision and ability to edit outputs by the client if desired",
+        "agencies": "Depends on team experience and internal quality control",
+        "platforms": "Good publishing accuracy"
+      },
+      "credibility": {
+        "name": "Credibility",
+        "description": "Reporting and transparency capabilities",
+        "shaheen": "Instant report dashboards based on platform data",
+        "agencies": "Periodic reports following each agency's methodology and available data",
+        "platforms": "Official dashboards that are difficult to understand"
+      },
+      "professionalism": {
+        "name": "Professionalism",
+        "description": "Level of professional service and output quality",
+        "shaheen": "Well-studied processes and consistent outputs",
+        "agencies": "Strategic management and human creativity with an account manager",
+        "platforms": "Professional interfaces for content management only"
+      },
+      "experience": {
+        "name": "Experience",
+        "description": "Built-in expertise and knowledge",
+        "shaheen": "Experience integrated into the product for optimal outputs",
+        "agencies": "Accumulated and specialized sectoral experiences",
+        "platforms": "High user experience"
+      },
+      "localMarket": {
+        "name": "Understanding of the local market",
+        "description": "Local market knowledge and cultural understanding",
+        "shaheen": "Built for the Arabic language and local market needs",
+        "agencies": "Varies depending on whether the agency is local or international",
+        "platforms": "General global focus not specialized in the needs of the local market"
+      },
+      "language": {
+        "name": "Language",
+        "description": "Language support and localization",
+        "shaheen": "Proper Arabic in texts and ad designs",
+        "agencies": "Depends on the team composition (Arab/non-Arab)",
+        "platforms": "English interface support"
+      },
+      "reliability": {
+        "name": "Reliability",
+        "description": "Service stability and support",
+        "shaheen": "SaaS service with technical support and continuous availability",
+        "agencies": "Linked to contracts and staff; may be affected by resources",
+        "platforms": "Stable cloud infrastructure with technical support"
+      }
     }
   }
 }

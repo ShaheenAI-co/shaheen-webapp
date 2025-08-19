@@ -1,6 +1,12 @@
-import { CircleUserRoundIcon } from "lucide-react"
+"use client";
+import { CircleUserRoundIcon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
+import { getUserByClerkId } from "../../../../../../lib/supabase/users";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,34 +15,82 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
-export default function Component({onClick}) {
+export default function Component({ onClick }) {
+  const { user, isLoaded } = useUser();
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const t = useTranslations("ProfileBtn");
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
+  const isArabic = locale === "ar";
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (isLoaded && user) {
+        try {
+          const data = await getUserByClerkId(user.id);
+          setUserData(data);
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+          // Fallback to Clerk user data if Supabase fails
+          setUserData({
+            first_name: user.firstName || "User",
+            last_name: user.lastName || "",
+          });
+        } finally {
+          setLoading(false);
+        }
+      } else if (isLoaded) {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [isLoaded, user]);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" variant="outline" className="bg-[#191919] hover:bg-[#7f4af3] rounded-md border-none hover:transition-all duration-300 hover:text-white cursor-pointer" aria-label="Open account menu">
+        <Button
+          size="icon"
+          variant="outline"
+          className="bg-[#191919] hover:bg-[#7f4af3] rounded-md border-none hover:transition-all duration-300 hover:text-white cursor-pointer"
+          aria-label={t("openAccountMenu")}
+        >
           <CircleUserRoundIcon size={16} aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-64 bg-[#0C0C0C] border-[#272729]  text-white">
         <DropdownMenuLabel className="flex flex-col">
-          <span>Signed in as</span>
-          <span className="text-white text-xs font-normal">
-            k.kennedy@originui.com
+          <span className="text-gray-400 font-bold text-base ">
+            {t("signedInAs")}
+          </span>
+          <span className="text-white  text-sm">
+            {loading
+              ? t("loading")
+              : `${userData?.first_name || ""} ${userData?.last_name || ""}`.trim() ||
+                user?.emailAddresses?.[0]?.emailAddress ||
+                "User"}
           </span>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+        {/* <DropdownMenuSeparator /> */}
+        {/* <DropdownMenuGroup>
           <DropdownMenuItem>Option 1</DropdownMenuItem>
           <DropdownMenuItem>Option 2</DropdownMenuItem>
           <DropdownMenuItem>Option 3</DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <button className={`w-full bg-red-500`} onClick={onClick} >Logout</button>
-          </DropdownMenuItem>
+        </DropdownMenuGroup> */}
+        {/* <DropdownMenuSeparator /> */}
+        <DropdownMenuItem className="flex !bg-transparent hover:!bg-transparent focus:!bg-transparent justify-center [&:focus]:!bg-transparent">
+          <button
+            className={`w-full bg-red-500 rounded-md py-2 font-bold cursor-pointer hover:bg-red-600 transition-all duration-300 hover:text-white`}
+            onClick={onClick}
+          >
+            {t("signOut")}
+          </button>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

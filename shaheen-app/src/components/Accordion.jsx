@@ -12,7 +12,7 @@ export default function AccordionComponent() {
   const t = useTranslations("Faq");
   const pathname = usePathname(); // give you the url path
   const locale = pathname.split("/")[1] || "en"; // check the first part after /
-
+  const isArabic = locale === "ar";
   const items = [
     {
       id: "1",
@@ -42,11 +42,14 @@ export default function AccordionComponent() {
   ];
   return (
     <div className="space-y-4 px-5  lg:w-[1200px] flex flex-col gap-6 lg:mx-auto my-40">
-
       <div className="flex flex-col items-center text-center  gap-4">
-        <h2 className="text-2xl lg:text-5xl font-bold satoshi-bold leading-tight max-sm:w-[300px]  max-w-[500px]  capitalize ">Frequently Asked Questions</h2>
+        <h2
+          className={`text-2xl lg:text-5xl font-bold  leading-tight ${isArabic ? "alexandria-font " : "satoshi-bold"} max-sm:w-[300px]  max-w-[500px]  capitalize `}
+        >
+          {t("Heading")}
+        </h2>
         <p className=" max-w-[500px] max-sm:w-[300px] text-base md:text-lg font-normal text-muted-foreground ">
-          Still have questions ? We have answers
+          {t("Subheading")}
         </p>
       </div>
 
