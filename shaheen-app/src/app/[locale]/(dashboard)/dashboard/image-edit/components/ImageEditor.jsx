@@ -374,13 +374,20 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
             </Button>
             {isMobile &&
               selectedElement && ( // Mobile Sidebar
-                <Sheet >
+                <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="outline" size="sm" className="border-white text-white ">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-white text-white "
+                    >
                       <Settings className="h-3 w-3  sm:h-4 sm:w-4" />
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-80 px-4 py-8 overflow-y-auto bg-[#0f0f0f]">
+                  <SheetContent
+                    side="right"
+                    className="w-80 px-4 py-8 overflow-y-auto bg-[#0f0f0f]"
+                  >
                     <TextControls
                       textElement={selectedElement}
                       onUpdate={(updates) =>
@@ -392,7 +399,6 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null }) => {
                 </Sheet>
               )}
           </div>
-          
         </div>
       </header>
 

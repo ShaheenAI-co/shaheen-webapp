@@ -17,9 +17,6 @@ const Content = () => {
 
       <AccordionComponent />
       <FinalCta />
-
-
-
     </div>
   );
 };

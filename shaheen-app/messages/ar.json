@@ -70,9 +70,51 @@
   },
 
   "FinalCta": {
-    "title": "كان ممكن تنشر من زمان خلينا نبدأ",
+    "title": "كان ممكن تنشر من زمان خلينا نبدا الحين",
     "subtitle": "خل ذكاءنا الاصطناعي يكتب وأنت ركز على تطوير براندك",
     "button": "ابدأ الآن"
+  },
+
+  "Pricing": {
+    "title": "خطط مصممة لفرق بجميع الأحجام",
+    "subtitle": "من الشركات الناشئة إلى المؤسسات، اختر الخطة المناسبة لرفع مستوى عملك",
+    "monthly": "شهري",
+    "yearly": "سنوي",
+    "month": "/ شهر",
+    "year": "/ سنة",
+    "startup": {
+      "name": "الشركة الناشئة",
+      "description": "للمستقلين والفرق الصغيرة",
+      "button": "احصل على خطة الشركة الناشئة",
+      "featuresTitle": "جميع ميزات الخطة المجانية بالإضافة إلى:",
+      "features": {
+        "seats": "20 مقعد مجاني متاح",
+        "storage": "12 جيجابايت من التخزين السحابي",
+        "tools": "أدوات محسنة"
+      }
+    },
+    "business": {
+      "name": "الأعمال",
+      "description": "مثالية للشركات النامية",
+      "button": "احصل على خطة الأعمال",
+      "featuresTitle": "جميع ميزات الخطة المجانية بالإضافة إلى:",
+      "features": {
+        "seats": "20 مقعد مجاني متاح",
+        "storage": "12 جيجابايت من التخزين السحابي",
+        "tools": "أدوات محسنة"
+      }
+    },
+    "enterprise": {
+      "name": "المؤسسة",
+      "description": "الأفضل لفرق التسويق عالية الحجم",
+      "button": "احصل على خطة المؤسسة",
+      "featuresTitle": "جميع ميزات الخطة المجانية بالإضافة إلى:",
+      "features": {
+        "seats": "20 مقعد مجاني متاح",
+        "storage": "12 جيجابايت من التخزين السحابي",
+        "tools": "أدوات محسنة"
+      }
+    }
   },
   "Faq": {
     "Heading": "الأسئلة الشائعة",
@@ -178,6 +220,59 @@
       "downloadInvoice": "تحميل الفاتورة",
       "manageBilling": "إدارة الفوترة"
     }
+  },
+  "Dashboard": {
+    "welcomeBack": "أهلاً بعودتك",
+    "createNewPost": "إنشاء منشور جديد",
+    "totalProjects": "إجمالي المشاريع",
+    "totalBrands": "إجمالي العلامات التجارية",
+    "schedulePost": "جدولة المنشور",
+    "scheduledPosts": "المنشورات المجدولة",
+    "noScheduledPost": "لا توجد منشورات مجدولة"
+  },
+  "Sidebar": {
+    "dashboard": "لوحة التحكم",
+    "posts": "المنشورات",
+    "brands": "العلامات التجارية",
+    "aiAdvertisement": "إعلان ذكي",
+    "videoAd": "إعلان فيديو",
+    "retouch": "تحسين",
+    "schedulePost": "جدولة المنشور",
+    "settings": "الإعدادات",
+    "comingSoon": "قريباً"
+  },
+  "AIAdvertisement": {
+    "selectPostSize": "اختر حجم المنشور",
+    "selectPostSizeDesc": "اختر من أحجام المنشورات المتاحة",
+    "postSize": "منشور انستغرام مربع",
+    "landscapeSize": "منشور انستغرام طولي",
+    "storySize": "منشور انستغرام استوري",
+    "portraitSize": "منشور انستغرام عمودي",
+    "productInfo": "معلومات المنتج",
+    "productInfoDesc": "أدخل معلومات المنتج",
+    "postTitle": "عنوان المنشور",
+    "postTitlePlaceholder": "مثال: منتج جديد",
+    "productName": "اسم المنتج",
+    "productNamePlaceholder": "",
+    "productCategory": "فئة المنتج",
+    "productCategoryPlaceholder": "مثال: أحذية",
+    "productDescription": "وصف المنتج",
+    "imageUpload": "رفع الصورة",
+    "imageUploadDesc": "ارفع صورة المنتج",
+    "generate": "إنشاء",
+    "generating": "جاري الإنشاء...",
+    "pleaseFillAllFields": "يرجى ملء جميع الحقول واختيار صورة قبل الإنشاء.",
+    "startingGeneration": "بدء عملية الإنشاء...",
+    "uploadingImageToS3": "جاري رفع الصورة إلى S3...",
+    "imageUploadedSuccessfully": "تم رفع الصورة بنجاح. جاري إنشاء المنشور...",
+    "postCreated": "تم إنشاء المنشور. جاري إنشاء المحتوى بالذكاء الاصطناعي...",
+    "callingAIGenerationAPI": "جاري استدعاء واجهة برمجة التطبيقات للذكاء الاصطناعي...",
+    "generationCompleted": "تم الإنشاء بنجاح! تم إنشاء {count} صور.",
+    "generationFailed": "فشل الإنشاء: {error}",
+    "s3UploadFailed": "فشل رفع S3: {error}",
+    "failedToCreatePost": "فشل في إنشاء المنشور في قاعدة البيانات",
+    "postIdMissing": "معرف المنشور مفقود من استجابة قاعدة البيانات",
+    "generationAPIError": "خطأ في واجهة برمجة التطبيقات للإنشاء: {status} - {error}"
   },
   "PrivacyPolicy": {
     "title": "سياسة الخصوصية",

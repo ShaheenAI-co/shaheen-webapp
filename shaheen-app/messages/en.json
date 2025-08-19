@@ -76,6 +76,48 @@
     "button": "Get Started"
   },
 
+  "Pricing": {
+    "title": "Plan made for teams of all sizes",
+    "subtitle": "From startup to enterprise, choose the right plan to elevate your business",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "month": "/ month",
+    "year": "/ year",
+    "startup": {
+      "name": "Startup",
+      "description": "For freelancers and small teams",
+      "button": "get startup plan",
+      "featuresTitle": "All free plan features plus :",
+      "features": {
+        "seats": "20 free seats available",
+        "storage": "12GB of cloud storage",
+        "tools": "Supercharged tools"
+      }
+    },
+    "business": {
+      "name": "Business",
+      "description": "Perfect for growing businesses",
+      "button": "get business plan",
+      "featuresTitle": "All free plan features plus :",
+      "features": {
+        "seats": "20 free seats available",
+        "storage": "12GB of cloud storage",
+        "tools": "Supercharged tools"
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "description": "Best for high volume marketing teams",
+      "button": "get enterprise plan",
+      "featuresTitle": "All free plan features plus :",
+      "features": {
+        "seats": "20 free seats available",
+        "storage": "12GB of cloud storage",
+        "tools": "Supercharged tools"
+      }
+    }
+  },
+
   "Faq": {
     "Heading": "Frequently Asked Questions",
     "Q-1": "How do I start ?",
@@ -180,6 +222,59 @@
       "downloadInvoice": "Download Invoice",
       "manageBilling": "Manage Billing"
     }
+  },
+  "Dashboard": {
+    "welcomeBack": "Welcome back",
+    "createNewPost": "Create New Post",
+    "totalProjects": "Total Projects",
+    "totalBrands": "Total Brands",
+    "schedulePost": "Schedule Post",
+    "scheduledPosts": "Scheduled Posts",
+    "noScheduledPost": "No scheduled post"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "posts": "Posts",
+    "brands": "Brands",
+    "aiAdvertisement": "AI Advertisement",
+    "videoAd": "Video Ad",
+    "retouch": "Retouch",
+    "schedulePost": "Schedule Post",
+    "settings": "Settings",
+    "comingSoon": "Coming Soon"
+  },
+  "AIAdvertisement": {
+    "selectPostSize": "select post size",
+    "selectPostSizeDesc": "select from one of the post sizes",
+    "postSize": "Post Size",
+    "landscapeSize": "Landscape Size",
+    "storySize": "Story Size",
+    "portraitSize": "Portrait Size",
+    "productInfo": "product info",
+    "productInfoDesc": "enter the product info",
+    "postTitle": "post title",
+    "postTitlePlaceholder": "eg. new product",
+    "productName": "product name",
+    "productNamePlaceholder": "eg. Nike Air Max",
+    "productCategory": "product category",
+    "productCategoryPlaceholder": "eg. Shoes",
+    "productDescription": "product description",
+    "imageUpload": "image upload",
+    "imageUploadDesc": "upload the product image",
+    "generate": "Generate",
+    "generating": "Generating...",
+    "pleaseFillAllFields": "Please fill in all fields and select an image before generating.",
+    "startingGeneration": "Starting generation process...",
+    "uploadingImageToS3": "Uploading image to S3...",
+    "imageUploadedSuccessfully": "Image uploaded successfully. Creating post...",
+    "postCreated": "Post created. Generating AI content...",
+    "callingAIGenerationAPI": "Calling AI generation API...",
+    "generationCompleted": "Generation completed successfully! Generated {count} images.",
+    "generationFailed": "Generation failed: {error}",
+    "s3UploadFailed": "S3 upload failed: {error}",
+    "failedToCreatePost": "Failed to create post in database",
+    "postIdMissing": "Post ID is missing from database response",
+    "generationAPIError": "Generation API error: {status} - {error}"
   },
   "PrivacyPolicy": {
     "title": "Privacy Policy",

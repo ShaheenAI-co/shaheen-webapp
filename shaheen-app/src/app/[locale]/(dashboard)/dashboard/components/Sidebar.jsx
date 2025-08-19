@@ -19,49 +19,9 @@ import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import SidebarBtn from "./SidebarBtn";
 
-const dashPages = [
-  {
-    name: "dashboard",
-    href: "/dashboard",
-    icon: "/icons/Home.svg",
-  },
-  {
-    name: "posts",
-    href: "/dashboard/posts",
-    icon: "/icons/Paper_File.svg",
-  },
-  {
-    name: "brands",
-    href: "/dashboard",
-    icon: "/icons/Folder_File_Project.svg",
-  },
-];
-
-const features = [
-  {
-    name: "AI advertisement",
-    href: "/dashboard/generate/AI-Adv",
-    icon: "/icons/Image_.svg",
-  },
-  {
-    name: "video ad",
-    href: "/dashboard",
-    icon: "/icons/Video_Player.svg",
-  },
-  {
-    name: "social media ads",
-    href: "/dashboard",
-    icon: "/icons/Social.svg",
-  },
-  {
-    name: "retouch",
-    href: "/dashboard/retouch",
-    icon: "/icons/Brush.svg",
-  },
-];
-
 export default function Sidebar({ isOpen, onClose }) {
   const t = useTranslations("Logo");
+  const sidebarT = useTranslations("Sidebar");
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
   const isArabic = locale === "ar";
@@ -70,6 +30,44 @@ export default function Sidebar({ isOpen, onClose }) {
   const handleActivePage = (page) => {
     setActivePage(page);
   };
+
+  const dashPages = [
+    {
+      name: sidebarT("dashboard"),
+      href: `/${locale}/dashboard`,
+      icon: "/icons/Home.svg",
+    },
+    {
+      name: sidebarT("posts"),
+      href: `/${locale}/dashboard/posts`,
+      icon: "/icons/Paper_File.svg",
+    },
+    {
+      name: sidebarT("brands"),
+      href: `/${locale}/dashboard`,
+      icon: "/icons/Folder_File_Project.svg",
+      comingSoon: true,
+    },
+  ];
+
+  const features = [
+    {
+      name: sidebarT("aiAdvertisement"),
+      href: `/${locale}/dashboard/generate/AI-Adv`,
+      icon: "/icons/Image_.svg",
+    },
+    {
+      name: sidebarT("videoAd"),
+      href: `/${locale}/dashboard`,
+      icon: "/icons/Video_Player.svg",
+      comingSoon: true,
+    },
+    {
+      name: sidebarT("retouch"),
+      href: `/${locale}/dashboard/retouch`,
+      icon: "/icons/Brush.svg",
+    },
+  ];
 
   return (
     <>
@@ -83,7 +81,13 @@ export default function Sidebar({ isOpen, onClose }) {
 
       <div
         className={`w-[250px] h-screen bg-[#09090A] fixed px-5 pt-5 pb-6 flex flex-col justify-between transition-all duration-300 z-50 ${
-          isOpen ? "left-0" : "left-[-100%] lg:left-0"
+          isOpen
+            ? isArabic
+              ? "right-0"
+              : "left-0"
+            : isArabic
+              ? "right-[-100%] lg:right-0"
+              : "left-[-100%] lg:left-0"
         }`}
       >
         {/* SIDEBAR */}
@@ -126,7 +130,9 @@ export default function Sidebar({ isOpen, onClose }) {
           {/* Close button for mobile */}
           <button
             onClick={onClose}
-            className="lg:hidden absolute top-4 right-4 p-2 text-white hover:bg-white/10 rounded-md transition-colors"
+            className={`lg:hidden absolute top-4 p-2 text-white hover:bg-white/10 rounded-md transition-colors ${
+              isArabic ? "left-4" : "right-4"
+            }`}
             aria-label="Close sidebar"
           >
             <X size={20} />
@@ -145,6 +151,8 @@ export default function Sidebar({ isOpen, onClose }) {
                   icon={page.icon}
                   name={page.name}
                   onClick={() => handleActivePage(page.name)}
+                  comingSoon={page.comingSoon}
+                  isArabic={isArabic}
                 />
               ))}
             </div>
@@ -160,6 +168,8 @@ export default function Sidebar({ isOpen, onClose }) {
                   icon={page.icon}
                   name={page.name}
                   onClick={() => handleActivePage(page.name)}
+                  comingSoon={page.comingSoon}
+                  isArabic={isArabic}
                 />
               ))}
             </div>
@@ -170,10 +180,11 @@ export default function Sidebar({ isOpen, onClose }) {
             <SidebarBtn
               activePage={activePage}
               handleActivePage={handleActivePage}
-              href="/dashboard/schedule"
+              href={`/${locale}/dashboard/schedule`}
               icon="/icons/Calendar.svg"
-              name="Schedule_Post"
-              onClick={() => handleActivePage("Schedule_Post")}
+              name={sidebarT("schedulePost")}
+              onClick={() => handleActivePage(sidebarT("schedulePost"))}
+              isArabic={isArabic}
             />
           </div>
         </div>
@@ -183,9 +194,10 @@ export default function Sidebar({ isOpen, onClose }) {
           <SidebarBtn
             activePage={activePage}
             handleActivePage={handleActivePage}
-            href="/dashboard/settings"
+            href={`/${locale}/dashboard/settings`}
             icon="/icons/Settings_icon.svg"
-            name="settings"
+            name={sidebarT("settings")}
+            isArabic={isArabic}
           />
         </div>
       </div>

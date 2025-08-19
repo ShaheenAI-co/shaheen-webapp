@@ -7,37 +7,40 @@ import ImageUpload from "@/components/ImageUpload";
 import { insertPostToSupabase } from "../../../../../../../lib/supabase/post";
 import { useUser } from "@clerk/nextjs";
 import { useRouter, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { Loader2 } from "lucide-react";
-
-const postSize = [
-  {
-    title: "Post Size",
-    icon: "",
-    size: "1080 x 1080",
-  },
-  {
-    title: "Landscape Size",
-    icon: "",
-    size: "1200 x 628",
-  },
-  {
-    title: "Story Size",
-    icon: "",
-    size: "1080 x 1920",
-  },
-  {
-    title: "Portrait Size",
-    icon: "",
-    size: "1080 x 1350",
-  },
-];
 
 const page = () => {
   const { user, isLoaded } = useUser();
   const router = useRouter();
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
+  const t = useTranslations("AIAdvertisement");
+  const isArabic = locale === "ar";
+
+  const postSize = [
+    {
+      title: t("postSize"),
+      icon: "",
+      size: "1080 x 1080",
+    },
+    {
+      title: t("landscapeSize"),
+      icon: "",
+      size: "1200 x 628",
+    },
+    {
+      title: t("storySize"),
+      icon: "",
+      size: "1080 x 1920",
+    },
+    {
+      title: t("portraitSize"),
+      icon: "",
+      size: "1080 x 1350",
+    },
+  ];
 
   const [post, setPost] = useState("");
   const [postTitle, setPostTitle] = useState("");
@@ -47,6 +50,7 @@ const page = () => {
   const [productInfo, setProductInfo] = useState({
     title: "",
     description: "",
+    category: "",
   });
 
   const handlePostSize = (value) => {
@@ -62,47 +66,47 @@ const page = () => {
     setSelectedFile(files[0]?.file || null);
   };
 
-  const handleEditImage = async () => {
-    if (!selectedFile) {
-      setGenerationStatus("Please select an image first.");
-      return;
-    }
+  // const handleEditImage = async () => {
+  //   if (!selectedFile) {
+  //     setGenerationStatus("Please select an image first.");
+  //     return;
+  //   }
 
-    setIsGenerating(true);
-    setGenerationStatus("Uploading image for editing...");
+  //   setIsGenerating(true);
+  //   setGenerationStatus("Uploading image for editing...");
 
-    try {
-      // Upload image to S3
-      const formData = new FormData();
-      formData.append("file", selectedFile);
+  //   try {
+  //     // Upload image to S3
+  //     const formData = new FormData();
+  //     formData.append("file", selectedFile);
 
-      const s3Response = await fetch("/api/s3-upload", {
-        method: "POST",
-        body: formData,
-      });
+  //     const s3Response = await fetch("/api/s3-upload", {
+  //       method: "POST",
+  //       body: formData,
+  //     });
 
-      const s3Result = await s3Response.json();
+  //     const s3Result = await s3Response.json();
 
-      if (!s3Result.success) {
-        throw new Error(`S3 upload failed: ${s3Result.error}`);
-      }
+  //     if (!s3Result.success) {
+  //       throw new Error(`S3 upload failed: ${s3Result.error}`);
+  //     }
 
-      const imageUrl = s3Result.s3Url;
-      setGenerationStatus(
-        "Image uploaded successfully. Redirecting to editor..."
-      );
+  //     const imageUrl = s3Result.s3Url;
+  //     setGenerationStatus(
+  //       "Image uploaded successfully. Redirecting to editor..."
+  //     );
 
-      // Navigate to image-edit page with the image URL
-      router.push(
-        `/${locale}/dashboard/generate/AI-Adv/generated_images?post_id=f88f242f-022d-4195-9ebb-f73da5db34e4`
-      );
-    } catch (error) {
-      console.error("Image upload error:", error);
-      setGenerationStatus(`Image upload failed: ${error.message}`);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
+  //     // Navigate to image-edit page with the image URL
+  //     router.push(
+  //       `/${locale}/dashboard/generate/AI-Adv/generated_images?post_id=f88f242f-022d-4195-9ebb-f73da5db34e4`
+  //     );
+  //   } catch (error) {
+  //     console.error("Image upload error:", error);
+  //     setGenerationStatus(`Image upload failed: ${error.message}`);
+  //   } finally {
+  //     setIsGenerating(false);
+  //   }
+  // };
 
   const handleGenerate = async () => {
     if (
@@ -112,18 +116,16 @@ const page = () => {
       !productInfo.description ||
       !selectedFile
     ) {
-      setGenerationStatus(
-        "Please fill in all fields and select an image before generating."
-      );
+      setGenerationStatus(t("pleaseFillAllFields"));
       return;
     }
 
     setIsGenerating(true);
-    setGenerationStatus("Starting generation process...");
+    setGenerationStatus(t("startingGeneration"));
 
     try {
       // Step 1: Upload image to S3
-      setGenerationStatus("Uploading image to S3...");
+      setGenerationStatus(t("uploadingImageToS3"));
       const formData = new FormData();
       formData.append("file", selectedFile);
 
@@ -135,11 +137,11 @@ const page = () => {
       const s3Result = await s3Response.json();
 
       if (!s3Result.success) {
-        throw new Error(`S3 upload failed: ${s3Result.error}`);
+        throw new Error(t("s3UploadFailed", { error: s3Result.error }));
       }
 
       const originalImageUrl = s3Result.s3Url;
-      setGenerationStatus("Image uploaded successfully. Creating post...");
+      setGenerationStatus(t("imageUploadedSuccessfully"));
 
       // Step 2: Create post in Supabase
       const postData = {
@@ -165,7 +167,7 @@ const page = () => {
 
       if (!supabaseResult || supabaseResult.length === 0) {
         console.error("Supabase result validation failed:", { supabaseResult });
-        throw new Error("Failed to create post in database");
+        throw new Error(t("failedToCreatePost"));
       }
 
       const postId = supabaseResult[0].post_id;
@@ -178,13 +180,13 @@ const page = () => {
           postId,
           supabaseResult,
         });
-        throw new Error("Post ID is missing from database response");
+        throw new Error(t("postIdMissing"));
       }
 
-      setGenerationStatus("Post created. Generating AI content...");
+      setGenerationStatus(t("postCreated"));
 
       // Step 3: Call generate API
-      setGenerationStatus("Calling AI generation API...");
+      setGenerationStatus(t("callingAIGenerationAPI"));
 
       // Format size for API (remove spaces and ensure proper format)
       const formattedSize = post.replace(/\s/g, "");
@@ -215,18 +217,21 @@ const page = () => {
         const errorText = await generateResponse.text();
         console.error("Generate API error response:", errorText);
         throw new Error(
-          `Generation API error: ${generateResponse.status} - ${errorText}`
+          t("generationAPIError", {
+            status: generateResponse.status,
+            error: errorText,
+          })
         );
       }
 
       const generateResult = await generateResponse.json();
 
       if (!generateResult.success) {
-        throw new Error(`Generation failed: ${generateResult.error}`);
+        throw new Error(t("generationFailed", { error: generateResult.error }));
       }
 
       setGenerationStatus(
-        `Generation completed successfully! Generated ${generateResult.total_generated} images.`
+        t("generationCompleted", { count: generateResult.total_generated })
       );
 
       router.push(
@@ -234,21 +239,26 @@ const page = () => {
       );
     } catch (error) {
       console.error("Generation error:", error);
-      setGenerationStatus(`Generation failed: ${error.message}`);
+      setGenerationStatus(t("generationFailed", { error: error.message }));
     } finally {
       setIsGenerating(false);
     }
   };
 
   return (
-    <div className=" py-6 bg-[#0f0f0f] min-h-screen">
+    <div
+      className=" py-6 bg-[#0f0f0f] min-h-screen"
+      dir={isArabic ? "rtl" : "ltr"}
+    >
       {/* CONTENT */}
       <div className="mt-6 px-8">
         {/* POST SIZE */}
         <div className="flex flex-col gap-6   bg-white/5 border border-white/10 rounded-2xl px-4 py-6  ">
           <div className="w-full flex flex-col gap-2   ">
-            <h3 className="font-bold text-lg capitalize">select post size</h3>
-            <p className="text-white/35">select from one of the post sizes</p>
+            <h3 className="font-bold text-lg capitalize">
+              {t("selectPostSize")}
+            </h3>
+            <p className="text-white/35">{t("selectPostSizeDesc")}</p>
           </div>
 
           <div className="w-full flex flex-col md:flex-row items-center gap-6 justify-center  flex-wrap">
@@ -268,19 +278,19 @@ const page = () => {
         {/* PRODUCT INFO */}
         <div className="flex flex-col gap-4   bg-white/5 border border-white/10 rounded-2xl px-4 py-6 mt-6 ">
           <div className="w-full flex flex-col gap-2   ">
-            <h3 className="font-bold text-lg capitalize">product info</h3>
-            <p className="text-white/35">enter the product info</p>
+            <h3 className="font-bold text-lg capitalize">{t("productInfo")}</h3>
+            <p className="text-white/35">{t("productInfoDesc")}</p>
           </div>
 
           <div className="flex flex-col gap-6">
             <div className="flex justify-between items-center flex-wrap gap-4">
               {/* POST TITLE */}
               <div className="flex items-center gap-2">
-                <h4 className="capitalize">post title</h4>
+                <h4 className="capitalize">{t("postTitle")}</h4>
                 <input
                   className="bg-[#0F0F0F] w-[300px] px-4 py-3 rounded-lg outline-purple-500"
                   type="text"
-                  placeholder="eg. new product"
+                  placeholder={t("postTitlePlaceholder")}
                   value={postTitle}
                   onChange={(e) => setPostTitle(e.target.value)}
                 />
@@ -288,11 +298,11 @@ const page = () => {
 
               {/* PRODUCT NAME */}
               <div className="flex items-center gap-2">
-                <h4 className="capitalize">product name</h4>
+                <h4 className="capitalize">{t("productName")}</h4>
                 <input
                   className="bg-[#0F0F0F] w-[300px] px-4 py-3 rounded-lg outline-purple-500"
                   type="text"
-                  placeholder="eg. Nike Air Max"
+                  placeholder={t("productNamePlaceholder")}
                   value={productInfo.title}
                   onChange={(e) =>
                     setProductInfo({ ...productInfo, title: e.target.value })
@@ -302,11 +312,11 @@ const page = () => {
 
               {/* PRODUCT CATEGORY */}
               <div className="flex items-center gap-2">
-                <h4 className="capitalize">product category</h4>
+                <h4 className="capitalize">{t("productCategory")}</h4>
                 <input
                   className="bg-[#0F0F0F] w-[300px] px-4 py-3 rounded-lg outline-purple-500"
                   type="text"
-                  placeholder="eg. Shoes"
+                  placeholder={t("productCategoryPlaceholder")}
                   value={productInfo.category}
                   onChange={(e) =>
                     setProductInfo({ ...productInfo, category: e.target.value })
@@ -317,7 +327,7 @@ const page = () => {
 
             {/* PRODUCT DESCRIPTION */}
             <div className="flex flex-col gap-4">
-              <h4 className="capitalize">product description</h4>
+              <h4 className="capitalize">{t("productDescription")}</h4>
               <textarea
                 name=""
                 id=""
@@ -337,8 +347,8 @@ const page = () => {
         {/* IMAGE UPLOAD */}
         <div className="flex flex-col gap-6    bg-white/5 border border-white/10 rounded-2xl px-4 py-6 mt-6 ">
           <div className="w-full flex flex-col gap-2   ">
-            <h3 className="font-bold text-lg capitalize">image upload</h3>
-            <p className="text-white/35">upload the product image</p>
+            <h3 className="font-bold text-lg capitalize">{t("imageUpload")}</h3>
+            <p className="text-white/35">{t("imageUploadDesc")}</p>
           </div>
 
           <div className="flex flex-col w-full  justify-center items-center gap-4">
@@ -358,20 +368,7 @@ const page = () => {
           )}
 
           <div className="flex justify-center gap-4 mt-6">
-            <Button
-              className="bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={handleEditImage}
-              disabled={isGenerating || !selectedFile}
-            >
-              {isGenerating ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Uploading...
-                </>
-              ) : (
-                "Edit Image"
-              )}
-            </Button>
+            {/* GENERATE BUTTON */}
             <Button
               className="bg-purple-500 text-white px-4 py-3 rounded-lg hover:bg-purple-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleGenerate}
@@ -380,10 +377,10 @@ const page = () => {
               {isGenerating ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Generating...
+                  {t("generating")}
                 </>
               ) : (
-                "Generate"
+                t("generate")
               )}
             </Button>
           </div>
