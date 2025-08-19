@@ -358,6 +358,23 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
         }
       });
 
+      // Ensure custom web fonts are loaded before rendering to canvas
+      try {
+        if (document.fonts && document.fonts.status !== "loaded") {
+          const uniqueFamilies = Array.from(
+            new Set(textElements.map((el) => el.fontFamily).filter(Boolean))
+          );
+          const fontLoadPromises = uniqueFamilies.map((family) => {
+            // Attempt to load with a reasonable default size
+            return document.fonts.load(`24px ${family}`);
+          });
+          await Promise.allSettled(fontLoadPromises);
+          await document.fonts.ready;
+        }
+      } catch (e) {
+        console.warn("Font preloading failed or unsupported:", e);
+      }
+
       const canvas = await html2canvas(workspaceRef.current, {
         backgroundColor: null,
         scale: 2,

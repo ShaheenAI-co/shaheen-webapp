@@ -21,6 +21,10 @@ import {
 } from "lucide-react";
 
 const FONT_OPTIONS = [
+  // Custom fonts registered via @font-face
+  { value: '"Alexandria", sans-serif', label: "Alexandria" },
+
+  // System / common web fonts
   { value: "Inter, sans-serif", label: "Inter" },
   { value: "Arial, sans-serif", label: "Arial" },
   { value: "Helvetica, sans-serif", label: "Helvetica" },
