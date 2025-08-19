@@ -53,11 +53,11 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div
-      className={`flex bg-[#141414] overflow-scroll ${isArabic ? "flex-row-reverse" : "flex-row"}`}
+      className={`flex bg-[#141414] overflow-x-hidden ${isArabic ? "flex-row-reverse" : "flex-row"}`}
     >
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <main
-        className={`flex-1 bg-[#0f0f0f] ${isArabic ? "lg:mr-[250px] mr-0" : "lg:ml-[250px] ml-0"}`}
+        className={`flex-1 bg-[#0f0f0f] min-w-0 ${isArabic ? "lg:mr-[250px] mr-0" : "lg:ml-[250px] ml-0"}`}
       >
         <Topbar
           icon={pageInfo.icon}

@@ -251,48 +251,48 @@ const page = () => {
 
   return (
     <div
-      className=" py-6 bg-[#0f0f0f] min-h-screen"
+      className="py-6 bg-[#0f0f0f] min-h-screen"
       dir={isArabic ? "rtl" : "ltr"}
     >
       {/* CONTENT */}
-      <div className="mt-6 px-8">
+      <div className="mt-6 px-4 sm:px-6 lg:px-8">
         {/* POST SIZE */}
-        <div className="flex flex-col gap-6   bg-white/5 border border-white/10 rounded-2xl px-4 py-6  ">
-          <div className="w-full flex flex-col gap-2   ">
+        <div className="flex flex-col gap-6 bg-white/5 border border-white/10 rounded-2xl px-3 sm:px-4 py-6">
+          <div className="w-full flex flex-col gap-2">
             <h3 className="font-bold text-lg capitalize">
               {t("selectPostSize")}
             </h3>
             <p className="text-white/35">{t("selectPostSizeDesc")}</p>
           </div>
 
-          <div className="w-full flex flex-col md:flex-row items-center gap-6 justify-center  flex-wrap">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 justify-items-center">
             {postSize.map((item, index) => (
               <div
                 key={index}
-                className={`w-[200px] h-[200px]   border-2 border-white/30 gradient-purple-dark opacity-60 flex flex-col gap-3 items-center justify-center rounded-2xl cursor-pointer hover:scale-105 hover:opacity-100 transition-all duration-300 ${post === item.size ? "opacity-100 scale-105" : ""}`}
+                className={`w-full max-w-[200px] h-[200px] border-2 border-white/30 gradient-purple-dark opacity-60 flex flex-col gap-3 items-center justify-center rounded-2xl cursor-pointer hover:scale-105 hover:opacity-100 transition-all duration-300 ${post === item.size ? "opacity-100 scale-105" : ""}`}
                 onClick={() => handlePostSize(item.size)}
               >
-                <h4 className="font-medium capitalize">{item.title}</h4>
-                <p>{item.size}</p>
+                <h4 className="font-medium capitalize text-center px-2">{item.title}</h4>
+                <p className="text-center">{item.size}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* PRODUCT INFO */}
-        <div className="flex flex-col gap-4   bg-white/5 border border-white/10 rounded-2xl px-4 py-6 mt-6 ">
-          <div className="w-full flex flex-col gap-2   ">
+        <div className="flex flex-col gap-4 bg-white/5 border border-white/10 rounded-2xl px-3 sm:px-4 py-6 mt-6">
+          <div className="w-full flex flex-col gap-2">
             <h3 className="font-bold text-lg capitalize">{t("productInfo")}</h3>
             <p className="text-white/35">{t("productInfoDesc")}</p>
           </div>
 
           <div className="flex flex-col gap-6">
-            <div className="flex justify-between items-center flex-wrap gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
               {/* POST TITLE */}
-              <div className="flex items-center gap-2">
-                <h4 className="capitalize">{t("postTitle")}</h4>
+              <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center gap-2">
+                <h4 className="capitalize whitespace-nowrap">{t("postTitle")}</h4>
                 <input
-                  className="bg-[#0F0F0F] w-[300px] px-4 py-3 rounded-lg outline-purple-500"
+                  className="bg-[#0F0F0F] w-full sm:w-auto lg:w-full px-4 py-3 rounded-lg outline-purple-500"
                   type="text"
                   placeholder={t("postTitlePlaceholder")}
                   value={postTitle}
@@ -301,10 +301,10 @@ const page = () => {
               </div>
 
               {/* PRODUCT NAME */}
-              <div className="flex items-center gap-2">
-                <h4 className="capitalize">{t("productName")}</h4>
+              <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center gap-2">
+                <h4 className="capitalize whitespace-nowrap">{t("productName")}</h4>
                 <input
-                  className="bg-[#0F0F0F] w-[300px] px-4 py-3 rounded-lg outline-purple-500"
+                  className="bg-[#0F0F0F] w-full sm:w-auto lg:w-full px-4 py-3 rounded-lg outline-purple-500"
                   type="text"
                   placeholder={t("productNamePlaceholder")}
                   value={productInfo.title}
@@ -315,10 +315,10 @@ const page = () => {
               </div>
 
               {/* PRODUCT CATEGORY */}
-              <div className="flex items-center gap-2">
-                <h4 className="capitalize">{t("productCategory")}</h4>
+              <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center gap-2">
+                <h4 className="capitalize whitespace-nowrap">{t("productCategory")}</h4>
                 <input
-                  className="bg-[#0F0F0F] w-[300px] px-4 py-3 rounded-lg outline-purple-500"
+                  className="bg-[#0F0F0F] w-full sm:w-auto lg:w-full px-4 py-3 rounded-lg outline-purple-500"
                   type="text"
                   placeholder={t("productCategoryPlaceholder")}
                   value={productInfo.category}
@@ -349,13 +349,13 @@ const page = () => {
         </div>
 
         {/* IMAGE UPLOAD */}
-        <div className="flex flex-col gap-6    bg-white/5 border border-white/10 rounded-2xl px-4 py-6 mt-6 ">
-          <div className="w-full flex flex-col gap-2   ">
+        <div className="flex flex-col gap-6 bg-white/5 border border-white/10 rounded-2xl px-3 sm:px-4 py-6 mt-6">
+          <div className="w-full flex flex-col gap-2">
             <h3 className="font-bold text-lg capitalize">{t("imageUpload")}</h3>
             <p className="text-white/35">{t("imageUploadDesc")}</p>
           </div>
 
-          <div className="flex flex-col w-full  justify-center items-center gap-4">
+          <div className="flex flex-col w-full justify-center items-center gap-4">
             <ImageUpload onFileChange={handleFileChange} />
           </div>
 

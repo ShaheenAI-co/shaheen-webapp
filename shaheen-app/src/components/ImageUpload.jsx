@@ -103,8 +103,8 @@ export default function ImageUpload({ onFileChange }) {
   const fileName = files[0]?.file.name || null;
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="relative">
+    <div className="flex flex-col gap-2 w-full">
+      <div className="relative w-full">
         {/* Drop area */}
         <div
           onDragEnter={handleDragEnter}
@@ -112,7 +112,7 @@ export default function ImageUpload({ onFileChange }) {
           onDragOver={handleDragOver}
           onDrop={handleDrop}
           data-dragging={isDragging || undefined}
-          className="border-input w-[600px] data-[dragging=true]:bg-accent/50 has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 relative flex min-h-62 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-4 transition-colors has-[input:focus]:ring-[3px]"
+          className="border-input w-full max-w-[600px] mx-auto data-[dragging=true]:bg-accent/50 has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 relative flex min-h-62 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-4 transition-colors has-[input:focus]:ring-[3px]"
         >
           <input
             {...getInputProps()}
