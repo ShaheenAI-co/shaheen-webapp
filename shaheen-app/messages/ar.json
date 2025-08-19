@@ -241,6 +241,12 @@
     "settings": "الإعدادات",
     "comingSoon": "قريباً"
   },
+  "ProfileBtn": {
+    "signedInAs": "تم تسجيل الدخول كـ",
+    "loading": "جاري التحميل...",
+    "signOut": "تسجيل الخروج",
+    "openAccountMenu": "فتح قائمة الحساب"
+  },
   "AIAdvertisement": {
     "selectPostSize": "اختر حجم المنشور",
     "selectPostSizeDesc": "اختر من أحجام المنشورات المتاحة",

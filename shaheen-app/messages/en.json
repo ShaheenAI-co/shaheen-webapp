@@ -243,6 +243,12 @@
     "settings": "Settings",
     "comingSoon": "Coming Soon"
   },
+  "ProfileBtn": {
+    "signedInAs": "Signed in as",
+    "loading": "Loading...",
+    "signOut": "Sign Out",
+    "openAccountMenu": "Open account menu"
+  },
   "AIAdvertisement": {
     "selectPostSize": "select post size",
     "selectPostSizeDesc": "select from one of the post sizes",

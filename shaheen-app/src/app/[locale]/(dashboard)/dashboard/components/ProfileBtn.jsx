@@ -2,6 +2,8 @@
 import { CircleUserRoundIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 import { getUserByClerkId } from "../../../../../../lib/supabase/users";
 
 import { Button } from "@/components/ui/button";
@@ -19,6 +21,10 @@ export default function Component({ onClick }) {
   const { user, isLoaded } = useUser();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const t = useTranslations("ProfileBtn");
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
+  const isArabic = locale === "ar";
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -51,7 +57,7 @@ export default function Component({ onClick }) {
           size="icon"
           variant="outline"
           className="bg-[#191919] hover:bg-[#7f4af3] rounded-md border-none hover:transition-all duration-300 hover:text-white cursor-pointer"
-          aria-label="Open account menu"
+          aria-label={t("openAccountMenu")}
         >
           <CircleUserRoundIcon size={16} aria-hidden="true" />
         </Button>
@@ -59,11 +65,11 @@ export default function Component({ onClick }) {
       <DropdownMenuContent className="max-w-64 bg-[#0C0C0C] border-[#272729]  text-white">
         <DropdownMenuLabel className="flex flex-col">
           <span className="text-gray-400 font-bold text-base ">
-            Signed in as
+            {t("signedInAs")}
           </span>
           <span className="text-white  text-sm">
             {loading
-              ? "Loading..."
+              ? t("loading")
               : `${userData?.first_name || ""} ${userData?.last_name || ""}`.trim() ||
                 user?.emailAddresses?.[0]?.emailAddress ||
                 "User"}
@@ -81,7 +87,7 @@ export default function Component({ onClick }) {
             className={`w-full bg-red-500 rounded-md py-2 font-bold cursor-pointer hover:bg-red-600 transition-all duration-300 hover:text-white`}
             onClick={onClick}
           >
-            Sign Out
+            {t("signOut")}
           </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
