@@ -5,7 +5,7 @@ import { TextOverlay } from "./TextOverlay";
 import { TextControls } from "./TextControls";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Download, Plus, Type, Settings, Menu, Sparkle } from "lucide-react";
+import { Download, Plus, Type, Settings, Menu, Sparkle, Pencil } from "lucide-react";
 import html2canvas from "html2canvas";
 import { useMediaQuery } from "react-responsive";
 import { useRouter, usePathname } from "next/navigation";
@@ -434,23 +434,25 @@ export const ImageEditor = ({
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] flex flex-col">
+      
       {/* Responsive Header - Stacks vertically on mobile, horizontal on desktop */}
       <header className="px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 flex-shrink-0">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+
           {/* Left side - Logo and title */}
           <div className="flex items-center gap-2 lg:gap-3">
-            {isMobile && (
+            {/* {isMobile && (
               <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm" className="lg:hidden">
-                    <Menu className="h-4 w-4" />
+                  <Button variant="ghost" size="sm" className="lg:hidden ">
+                    <Menu className="h-4 w-4 " />
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-80 overflow-y-auto">
                   <SidebarContent />
                 </SheetContent>
               </Sheet>
-            )}
+            )} */}
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary">
               <Type className="h-4 w-4 text-white" />
             </div>
@@ -521,9 +523,9 @@ export const ImageEditor = ({
                     <Button
                       variant="outline"
                       size="sm"
-                      className="border-white text-white "
+                      className="border-white text-black "
                     >
-                      <Settings className="h-3 w-3  sm:h-4 sm:w-4" />
+                      <Pencil className="h-3 w-3  sm:h-4 sm:w-4" />
                     </Button>
                   </SheetTrigger>
                   <SheetContent
