@@ -206,6 +206,7 @@ export default function Sidebar({ isOpen, onClose }) {
             name={sidebarT("settings")}
             onClose={onClose}
             isArabic={isArabic}
+            comingSoon={true}
           />
         </div>
       </div>
