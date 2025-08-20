@@ -8,7 +8,6 @@ import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useSignUp } from "@clerk/nextjs";
 
-
 const SignupForm = () => {
   const t = useTranslations("Signup");
   const pathname = usePathname();
@@ -24,6 +23,7 @@ const SignupForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rewritePassword, setRewritePassword] = useState("");
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,7 +32,11 @@ const SignupForm = () => {
     e.preventDefault();
     if (!isLoaded) return;
     if (password !== rewritePassword) {
-      setError("Passwords do not match.");
+      setError(t("Errors.PasswordsDoNotMatch"));
+      return;
+    }
+    if (!acceptTerms) {
+      setError(t("Errors.TermsNotAccepted"));
       return;
     }
 
@@ -60,7 +64,7 @@ const SignupForm = () => {
       } else if (err.message) {
         setError(err.message);
       } else {
-        setError("An error occurred during signup. Please try again.");
+        setError(t("Errors.GeneralError"));
       }
     } finally {
       setIsLoading(false);
@@ -172,6 +176,48 @@ const SignupForm = () => {
               className="bg-[#1A1A1A] text-white border-none placeholder:text-[#615F5F] h-10 md:h-12 text-base md:text-base"
               required
             />
+          </div>
+
+          {/* Terms of Service Checkbox */}
+          <div
+            className="flex items-start space-x-2 mb-6"
+            dir={isArabic ? "rtl" : "ltr"}
+          >
+            <input
+              type="checkbox"
+              id="acceptTerms"
+              checked={acceptTerms}
+              onChange={(e) => setAcceptTerms(e.target.checked)}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1"
+            />
+            <Label
+              htmlFor="acceptTerms"
+              className="text-white text-sm md:text-base leading-relaxed"
+            >
+              {isArabic ? (
+                <>
+                  أوافق على{" "}
+                  <Link
+                    href={`/${locale}/terms-of-service`}
+                    className="text-blue-500 hover:underline"
+                    target="_blank"
+                  >
+                    شروط الخدمة
+                  </Link>
+                </>
+              ) : (
+                <>
+                  I agree to the{" "}
+                  <Link
+                    href={`/${locale}/terms-of-service`}
+                    className="text-blue-500 hover:underline"
+                    target="_blank"
+                  >
+                    Terms of Service
+                  </Link>
+                </>
+              )}
+            </Label>
           </div>
 
           <div id="clerk-captcha"></div>

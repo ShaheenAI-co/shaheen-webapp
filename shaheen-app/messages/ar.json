@@ -47,7 +47,13 @@
     "PasswordPlaceholder": "لازم تكون ٨ خانات على الأقل",
     "SignupBtn": "إنشاء الحساب",
     "ExtraText": "عندك حساب ؟",
-    "ExternalLink": "سجل دخولك"
+    "ExternalLink": "سجل دخولك",
+    "AcceptTerms": "أوافق على شروط الخدمة",
+    "Errors": {
+      "PasswordsDoNotMatch": "كلمات المرور غير متطابقة.",
+      "TermsNotAccepted": "يجب عليك الموافقة على شروط الخدمة للمتابعة.",
+      "GeneralError": "حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى."
+    }
   },
   "LoginBanner": {
     "Text": ""

@@ -47,7 +47,13 @@
     "PasswordPlaceholder": "must be 8 characters",
     "SignupBtn": "Signup",
     "ExtraText": "Already have an account ? ",
-    "ExternalLink": "Login"
+    "ExternalLink": "Login",
+    "AcceptTerms": "I agree to the Terms of Service",
+    "Errors": {
+      "PasswordsDoNotMatch": "Passwords do not match.",
+      "TermsNotAccepted": "You must accept the Terms of Service to continue.",
+      "GeneralError": "An error occurred during signup. Please try again."
+    }
   },
   "LoginBanner": {
     "Text": ""

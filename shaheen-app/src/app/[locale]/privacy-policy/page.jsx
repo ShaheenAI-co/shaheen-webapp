@@ -178,7 +178,7 @@ export default function PrivacyPolicy() {
             <p className="text-gray-300 leading-relaxed">
               {t("contact.intro")}
             </p>
-            <div className="mt-4 p-4 bg-gray-800 rounded-lg">
+            {/* <div className="mt-4 p-4 bg-gray-800 rounded-lg">
               <p className="text-gray-300">
                 <strong>{t("contact.email")}:</strong> privacy@shaheen.ai
                 <br />
@@ -186,7 +186,7 @@ export default function PrivacyPolicy() {
                 <br />
                 <strong>{t("contact.phone")}:</strong> [Your Contact Number]
               </p>
-            </div>
+            </div> */}
           </section>
         </div>
       </div>
