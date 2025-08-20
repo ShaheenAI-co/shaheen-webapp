@@ -90,7 +90,7 @@ const SigninForm = () => {
 
         <form className="space-y-3 md:space-y-4" onSubmit={handleEmailSignIn}>
           {/* Google Sign In Button */}
-          <Button
+          {/* <Button
             type="button"
             onClick={handleGoogleSignIn}
             disabled={!isLoaded}
@@ -116,10 +116,10 @@ const SigninForm = () => {
               />
             </svg>
             <span className="text-sm md:text-base">Google</span>
-          </Button>
+          </Button> */}
 
           {/* Divider */}
-          <div className="relative mt-2">
+          {/* <div className="relative mt-2">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-white" />
             </div>
@@ -128,7 +128,7 @@ const SigninForm = () => {
                 {t("seperatorText")}
               </span>
             </div>
-          </div>
+          </div> */}
 
           {/* Email Field */}
           <div

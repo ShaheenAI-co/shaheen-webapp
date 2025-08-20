@@ -34,8 +34,8 @@ const HeroHeading = () => {
           prevIndex === images.length - 1 ? 0 : prevIndex + 1
         );
         setIsTransitioning(false);
-      }, 300); // Half of the transition duration
-    }, 3000); // Change every 10 seconds
+      }, 500); // Increased to 500ms for smoother transition
+    }, 4000); // Increased to 4 seconds for better timing
 
     return () => clearInterval(interval);
   }, [images.length]);
@@ -67,14 +67,6 @@ const HeroHeading = () => {
               {t("CTA")}
             </Button>
           </Link>
-          <Link href={`/${locale}/sign-up`}>
-            <Button
-              variant="secondary"
-              className="cursor-pointer capitalize border border-white bg-transparent text-white hover:bg-transparent "
-            >
-              learn more
-            </Button>
-          </Link>
         </div>
       </div>
 
@@ -82,8 +74,8 @@ const HeroHeading = () => {
         <img
           src={images[currentImageIndex]}
           alt=""
-          className={`md:w-[500px] w-[200px] md:h-[500px] h-[200px] rounded-lg object-cover transition-opacity duration-600 ease-in-out animate-bounce ${
-            isTransitioning ? "opacity-0" : "opacity-100"
+          className={`md:w-[500px] w-[200px] md:h-[500px] h-[200px] rounded-lg object-cover transition-all duration-700 ease-in-out ${
+            isTransitioning ? "opacity-0 scale-95" : "opacity-100 scale-100"
           }`}
           style={{
             animation: "floatUpDown 4s ease-in-out infinite",
