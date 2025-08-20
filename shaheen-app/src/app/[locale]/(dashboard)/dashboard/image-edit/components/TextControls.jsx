@@ -195,7 +195,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete, t }) => {
 
         {/* Position */}
         <div className="grid grid-cols-2 gap-2">
-          {/* <div>
+          <div className="hidden">
             <Label htmlFor="pos-x" className="text-xs text-white">
               {t("xPosition")}
             </Label>
@@ -208,7 +208,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete, t }) => {
               className="mt-1"
             />
           </div>
-          <div>
+          <div className="hidden">
             <Label htmlFor="pos-y" className="text-xs text-white">
               {t("yPosition")}
             </Label>
@@ -220,7 +220,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete, t }) => {
               min={0}
               className="mt-1"
             />
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
