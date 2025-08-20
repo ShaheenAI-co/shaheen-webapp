@@ -42,6 +42,7 @@ export default function Sidebar({ isOpen, onClose }) {
       name: sidebarT("posts"),
       href: `/${locale}/dashboard/posts`,
       icon: "/icons/Paper_File.svg",
+      comingSoon: true,
     },
     {
       name: sidebarT("brands"),

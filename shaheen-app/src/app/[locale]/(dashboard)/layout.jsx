@@ -5,6 +5,7 @@ import Sidebar from "./dashboard/components/Sidebar";
 import Topbar from "./dashboard/components/Topbar";
 import { GradientBars } from "@/components/ui/gradient-bars";
 import { useTranslations } from "next-intl";
+import FreeTierBanner from "@/components/FreeTierBanner";
 
 export default function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -59,6 +60,9 @@ export default function DashboardLayout({ children }) {
       <main
         className={`flex-1 bg-[#0f0f0f] min-w-0 ${isArabic ? "lg:mr-[250px] mr-0" : "lg:ml-[250px] ml-0"}`}
       >
+        {/* Free Tier Banner */}
+        <FreeTierBanner />
+
         <Topbar
           icon={pageInfo.icon}
           title={pageInfo.title}

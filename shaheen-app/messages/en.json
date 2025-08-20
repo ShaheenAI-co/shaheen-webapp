@@ -533,6 +533,10 @@
   "productCarousel": {
     "title": "Generate on brand content for all your business needs"
   },
+  "FreeTierBanner": {
+    "message": "You are currently using the free version",
+    "closeText": "Close"
+  },
   "Footer": {
     "copyright": "© Shaheen.ai 2025",
     "termsOfService": "Terms of Service",

@@ -531,6 +531,10 @@
   "productCarousel": {
     "title": "أنشئ محتوى موحد لجميع احتياجات براندك"
   },
+  "FreeTierBanner": {
+    "message": "أنت حالياً تستخدم النسخة  المجانية",
+    "closeText": "إغلاق"
+  },
   "Footer": {
     "copyright": "© شاهين 2025",
     "termsOfService": "شروط الخدمة",
