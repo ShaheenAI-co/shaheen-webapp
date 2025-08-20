@@ -327,7 +327,7 @@ export async function POST(request) {
 
           try {
             const vmResponse = await fetch(
-              "https://q8y36dt5ainfsw-5151.proxy.runpod.net/generate",
+              "https://62a3qb7n18lfp3-5151.proxy.runpod.net/generate",
               {
                 method: "POST",
                 headers: {
