@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Lock } from "lucide-react";
 
 const SidebarBtn = ({
   activePage,
@@ -10,10 +11,20 @@ const SidebarBtn = ({
   icon,
   name,
   onClick,
+  onClose,
   comingSoon = false,
   isArabic = false,
 }) => {
   const t = useTranslations("Sidebar");
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+    if (onClose) {
+      onClose();
+    }
+  };
 
   return (
     <div
@@ -30,14 +41,15 @@ const SidebarBtn = ({
           >
             {name}
           </p>
-          <span
+          <Lock size={16} className="text-gray-400" />
+          {/* <span
             className={`absolute top-1/2 transform -translate-y-1/2  text-xs text-purple-500 px-2 py-1 rounded-full font-medium ${isArabic ? "left-2" : "right-2"}`}
           >
             {t("comingSoon")}
-          </span>
+          </span> */}
         </div>
       ) : (
-        <Link href={href} onClick={onClick}>
+        <Link href={href} onClick={handleClick}>
           <button
             className={`flex  gap-2 px-4 text-[#8F8F8F] hover:text-white cursor-pointer py-3 items-center `}
           >

@@ -1,10 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ImageEditor } from "./components/ImageEditor";
 
 const page = () => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
+  const t = useTranslations("ImageEdit");
   const [imageUrl, setImageUrl] = useState(null);
   const [productInfo, setProductInfo] = useState(null);
 
@@ -20,7 +24,9 @@ const page = () => {
 
     if (productInfoFromParams) {
       try {
-        const parsedProductInfo = JSON.parse(decodeURIComponent(productInfoFromParams));
+        const parsedProductInfo = JSON.parse(
+          decodeURIComponent(productInfoFromParams)
+        );
         setProductInfo(parsedProductInfo);
         console.log("Product info from params:", parsedProductInfo);
       } catch (error) {
@@ -36,10 +42,12 @@ const page = () => {
 
   return (
     <div>
-      <ImageEditor 
-        imageUrl={imageUrl} 
+      <ImageEditor
+        imageUrl={imageUrl}
         onImageChange={handleImageChange}
         productInfo={productInfo}
+        t={t}
+        locale={locale}
       />
     </div>
   );

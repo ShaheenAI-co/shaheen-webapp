@@ -10,7 +10,13 @@ import html2canvas from "html2canvas";
 import { useMediaQuery } from "react-responsive";
 import { useRouter, usePathname } from "next/navigation";
 
-export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo = null }) => {
+export const ImageEditor = ({
+  imageUrl = null,
+  onImageChange = null,
+  productInfo = null,
+  t,
+  locale,
+}) => {
   const [uploadedImage, setUploadedImage] = useState(imageUrl);
   const [textElements, setTextElements] = useState([]); // to store all the text layers
   const [selectedTextId, setSelectedTextId] = useState(null); // points to the current selected text layer
@@ -25,7 +31,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const router = useRouter();
   const pathname = usePathname();
-  const locale = pathname.split("/")[1] || "en";
+  const currentLocale = locale || pathname.split("/")[1] || "en";
 
   // Update uploadedImage when imageUrl prop changes
   useEffect(() => {
@@ -40,7 +46,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
 
   const generateAIText = async () => {
     if (!uploadedImage || !productInfo) {
-      console.error("No image or product info available for AI text generation");
+      console.error(t("noImageOrProductInfo"));
       return;
     }
 
@@ -56,7 +62,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
         },
         body: JSON.stringify({
           imageUrl: uploadedImage,
-          productInfo: productInfo
+          productInfo: productInfo,
         }),
       });
 
@@ -92,10 +98,9 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
       setSelectedTextId(newTextElement.id);
 
       console.log("AI text element added successfully:", newTextElement);
-
     } catch (error) {
       console.error("AI text generation error:", error);
-      alert(`Failed to generate AI text: ${error.message}`);
+      alert(`${t("failedToGenerateText")} ${error.message}`);
     } finally {
       setIsGeneratingText(false);
     }
@@ -105,7 +110,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
     // function create a text element
     const newElement = {
       id: `text-${Date.now()}`,
-      text: "Add your text here",
+      text: t("addYourTextHere"),
       x: 100,
       y: 100,
       fontSize: 24,
@@ -117,7 +122,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
     };
     setTextElements((prev) => [...prev, newElement]);
     setSelectedTextId(newElement.id);
-  }, []);
+  }, [t]);
 
   const updateTextElement = useCallback((id, updates) => {
     setTextElements(
@@ -200,12 +205,12 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
   const SidebarContent = () => (
     <div className="space-y-4 sm:space-y-6">
       {!uploadedImage ? (
-        <ImageUpload onImageUpload={handleImageUpload} />
+        <ImageUpload onImageUpload={handleImageUpload} t={t} />
       ) : (
         <div className="space-y-4 sm:space-y-6">
           <div>
             <h3 className="text-sm font-medium text-white mb-2 sm:mb-3">
-              Image
+              {t("image")}
             </h3>
             <div className="relative group">
               <img
@@ -219,7 +224,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
                 size="sm"
                 className="absolute top-1 right-1 sm:top-2 sm:right-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs sm:text-sm"
               >
-                Remove
+                {t("remove")}
               </Button>
             </div>
           </div>
@@ -228,7 +233,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
           {productInfo && (
             <div>
               <h3 className="text-sm font-medium text-white mb-2 sm:mb-3">
-                AI Text Generation
+                {t("aiTextGeneration")}
               </h3>
               <Button
                 onClick={generateAIText}
@@ -240,17 +245,17 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
                 {isGeneratingText ? (
                   <>
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    Generating...
+                    {t("generating")}
                   </>
                 ) : (
                   <>
                     <Sparkle className="h-4 w-4" />
-                    Generate AI Text
+                    {t("generateAiText")}
                   </>
                 )}
               </Button>
               <p className="text-xs text-white/60 mt-2">
-                Generate Arabic marketing text with AI
+                {t("generateArabicText")}
               </p>
             </div>
           )}
@@ -265,13 +270,14 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
                 deleteTextElement(selectedElement.id);
                 if (isMobile) setSidebarOpen(false);
               }}
+              t={t}
             />
           )}
 
           {textElements.length > 0 && (
             <div>
               <h3 className="text-sm font-medium text-white mb-2 sm:mb-3">
-                Text Layers
+                {t("textLayers")}
               </h3>
               <div className="space-y-2">
                 {textElements.map((element) => (
@@ -302,7 +308,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
 
   const saveAndNavigate = useCallback(async () => {
     if (!workspaceRef.current || !uploadedImage) {
-      console.error("No image to save");
+      console.error(t("noImageToSave"));
       return;
     }
 
@@ -408,7 +414,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
       const uploadResult = await uploadResponse.json();
 
       if (!uploadResult.success) {
-        throw new Error(`Upload failed: ${uploadResult.error}`);
+        throw new Error(`${t("uploadFailed")}: ${uploadResult.error}`);
       }
 
       const editedImageUrl = uploadResult.s3Url;
@@ -416,15 +422,15 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
 
       // Navigate to Final-image page with the edited image URL
       router.push(
-        `/${locale}/dashboard/generate/Final-Image?imageUrl=${encodeURIComponent(editedImageUrl)}&originalImageUrl=${encodeURIComponent(uploadedImage)}`
+        `/${currentLocale}/dashboard/generate/Final-Image?imageUrl=${encodeURIComponent(editedImageUrl)}&originalImageUrl=${encodeURIComponent(uploadedImage)}`
       );
     } catch (error) {
       console.error("Save error:", error);
-      alert("Failed to save image. Please try again.");
+      alert(t("failedToSave"));
     } finally {
       setIsSaving(false);
     }
-  }, [uploadedImage, router, locale]);
+  }, [uploadedImage, router, currentLocale, t]);
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] flex flex-col">
@@ -449,7 +455,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
               <Type className="h-4 w-4 text-white" />
             </div>
             <h1 className="text-base sm:text-lg lg:text-xl font-semibold text-white">
-              {isMobile ? "Text Editor" : "Image Text Editor"}
+              {isMobile ? t("mobileTitle") : t("title")}
             </h1>
           </div>
 
@@ -463,9 +469,9 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
               className="gap-1 bg-[#7F4BF3] hover:bg-[#ad8cf5] text-white lg:gap-2 text-xs sm:text-sm"
             >
               <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
-              {!isMobile && "Add Text"}
+              {!isMobile && t("addText")}
             </Button>
-            
+
             {/* AI Text Generation Button - Only show when product info is available */}
             {productInfo && (
               <Button
@@ -478,17 +484,17 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
                 {isGeneratingText ? (
                   <>
                     <div className="h-3 w-3 sm:h-4 sm:w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    {!isMobile && "Generating..."}
+                    {!isMobile && t("generating")}
                   </>
                 ) : (
                   <>
                     <Sparkle className="h-3 w-3 sm:h-4 sm:w-4" />
-                    {!isMobile && "AI Text"}
+                    {!isMobile && t("aiText")}
                   </>
                 )}
               </Button>
             )}
-            
+
             <Button
               onClick={saveAndNavigate}
               disabled={!uploadedImage || isSaving}
@@ -499,12 +505,12 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
               {isSaving ? (
                 <>
                   <div className="h-3 w-3 sm:h-4 sm:w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  {!isMobile && "Saving..."}
+                  {!isMobile && t("saving")}
                 </>
               ) : (
                 <>
                   <Download className="h-3 w-3 sm:h-4 sm:w-4" />
-                  {!isMobile && "Save"}
+                  {!isMobile && t("save")}
                 </>
               )}
             </Button>
@@ -530,6 +536,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
                         updateTextElement(selectedElement.id, updates)
                       }
                       onDelete={() => deleteTextElement(selectedElement.id)}
+                      t={t}
                     />
                   </SheetContent>
                 </Sheet>
@@ -599,8 +606,8 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
                 <Type className="h-10 w-10 sm:h-12 sm:w-12 lg:h-16 lg:w-16 text-workspace-foreground/30 mx-auto mb-3 sm:mb-4" />
                 <p className="text-sm sm:text-base lg:text-lg text-workspace-foreground/70 mb-4 sm:mb-6">
                   {isMobile
-                    ? "Upload an image to start"
-                    : "Upload an image to start editing"}
+                    ? t("uploadImageToStartMobile")
+                    : t("uploadImageToStart")}
                 </p>
                 {isMobile && (
                   <Button
@@ -610,7 +617,7 @@ export const ImageEditor = ({ imageUrl = null, onImageChange = null, productInfo
                     size="sm"
                   >
                     <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                    Upload Image
+                    {t("uploadImage")}
                   </Button>
                 )}
               </div>

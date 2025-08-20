@@ -2,10 +2,9 @@ import { useCallback, useState } from "react";
 import { Upload, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 //import { toast } from "sonner";
-import { useMediaQuery } from 'react-responsive';
+import { useMediaQuery } from "react-responsive";
 
-
-export const ImageUpload = ({ onImageUpload }) => {
+export const ImageUpload = ({ onImageUpload, t }) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
@@ -64,7 +63,7 @@ export const ImageUpload = ({ onImageUpload }) => {
     <div className="space-y-4">
       <div>
         <h3 className="text-sm font-medium text-white capitalize mb-3">
-          your image
+          {t("yourImage")}
         </h3>
         <div
           onDrop={handleDrop}
@@ -105,15 +104,13 @@ export const ImageUpload = ({ onImageUpload }) => {
                 className={`${isMobile ? "text-xs" : "text-sm"} font-medium text-white mb-1`}
               >
                 {isDragOver
-                  ? "Drop your image here"
+                  ? t("dropImageHere")
                   : isMobile
-                    ? "Tap to upload image"
-                    : "Drag & drop an image here"}
+                    ? t("uploadImageMobile")
+                    : t("uploadImageDesktop")}
               </p>
               {!isMobile && (
-                <p className="text-xs text-white">
-                  or click to browse files
-                </p>
+                <p className="text-xs text-white">{t("orClickToBrowse")}</p>
               )}
             </div>
 
@@ -122,12 +119,11 @@ export const ImageUpload = ({ onImageUpload }) => {
               size={isMobile ? "sm" : "default"}
               className="pointer-events-none text-black"
             >
-              Choose File
+              {t("chooseFile")}
             </Button>
           </div>
         </div>
       </div>
-
     </div>
   );
 };

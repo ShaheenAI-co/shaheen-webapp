@@ -40,11 +40,13 @@ const FONT_OPTIONS = [
   { value: "Impact, sans-serif", label: "Impact" },
 ];
 
-export const TextControls = ({ textElement, onUpdate, onDelete }) => {
+export const TextControls = ({ textElement, onUpdate, onDelete, t }) => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-white">Text Properties</h3>
+        <h3 className="text-sm font-medium text-white">
+          {t("textProperties")}
+        </h3>
         <button
           onClick={onDelete}
           variant="destructive"
@@ -59,20 +61,22 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
         {/* Text Content */}
         <div>
           <Label htmlFor="text-content" className="text-xs text-white">
-            Text
+            {t("text")}
           </Label>
           <Input
             id="text-content"
             value={textElement.text}
             onChange={(e) => onUpdate({ text: e.target.value })}
-            placeholder="Enter text"
+            placeholder={t("enterText")}
             className="mt-1"
           />
         </div>
 
         {/* Font Family */}
         <div>
-          <Label className="text-xs text-white mb-2 block">Font Family</Label>
+          <Label className="text-xs text-white mb-2 block">
+            {t("fontFamily")}
+          </Label>
           <Select
             value={textElement.fontFamily}
             onValueChange={(value) => onUpdate({ fontFamily: value })}
@@ -100,7 +104,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
         {/* Font Size */}
         <div>
           <Label className="text-xs text-white mb-2 block">
-            Font Size: {textElement.fontSize}px
+            {t("fontSize")}: {textElement.fontSize}px
           </Label>
           <Slider
             value={[textElement.fontSize]}
@@ -115,7 +119,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
         {/* Color */}
         <div>
           <Label htmlFor="text-color" className="text-xs text-white">
-            Color
+            {t("color")}
           </Label>
           <div className="flex items-center gap-2 mt-1">
             <Input
@@ -136,7 +140,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
 
         {/* Style Controls */}
         <div>
-          <Label className="text-xs text-white mb-2 block">Style</Label>
+          <Label className="text-xs text-white mb-2 block">{t("style")}</Label>
           <div className="flex items-center gap-1">
             <Toggle
               pressed={textElement.fontWeight === "bold"}
@@ -161,7 +165,9 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
 
         {/* Text Alignment */}
         <div>
-          <Label className="text-xs text-white mb-2 block">Alignment</Label>
+          <Label className="text-xs text-white mb-2 block">
+            {t("alignment")}
+          </Label>
           <div className="flex items-center gap-1">
             <Toggle
               pressed={textElement.textAlign === "left"}
@@ -191,7 +197,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
         <div className="grid grid-cols-2 gap-2">
           <div>
             <Label htmlFor="pos-x" className="text-xs text-white">
-              X Position
+              {t("xPosition")}
             </Label>
             <Input
               id="pos-x"
@@ -204,7 +210,7 @@ export const TextControls = ({ textElement, onUpdate, onDelete }) => {
           </div>
           <div>
             <Label htmlFor="pos-y" className="text-xs text-white">
-              Y Position
+              {t("yPosition")}
             </Label>
             <Input
               id="pos-y"

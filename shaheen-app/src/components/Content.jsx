@@ -9,16 +9,15 @@ import FinalCta from "./FinalCta";
 import CompareTable from "./compareTable";
 import ProductCarousel from "./productCarousel";
 
-
 const Content = () => {
   return (
     <div className="w-full  flex flex-col  gap-8 px-6 md:px-[64px] lg:py-54 py-20 bg-[#06040D]  text-2xl font-bold">
       {/*<AnimatedText />*/}
       <HowItWork />
-      <ProductCarousel />
+      {/* <ProductCarousel /> */}
       <FeaturesBento />
       <CompareTable />
-     
+
       <Pricing />
       <AccordionComponent />
       <FinalCta />

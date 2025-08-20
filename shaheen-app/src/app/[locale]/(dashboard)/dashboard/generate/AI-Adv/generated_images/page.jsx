@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { fetchImageUrlsByPostId } from "../../../../../../../../lib/supabase/generated_asset";
 import { getPostById } from "../../../../../../../../lib/supabase/post";
+import { useTranslations } from "next-intl";
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
@@ -15,7 +16,8 @@ const GeneratedImages = () => {
   const router = useRouter();
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
-
+  const t = useTranslations("GeneratedImages");
+  const isArabic = locale === "ar";
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,7 +28,7 @@ const GeneratedImages = () => {
         const postId = searchParams.get("post_id");
 
         if (!postId) {
-          setError("No post ID provided. Please go back and try again.");
+          setError(t("noPostIdError"));
           setLoading(false);
           return;
         }
@@ -36,7 +38,7 @@ const GeneratedImages = () => {
         // Fetch both images and post details in parallel
         const [fetchedImages, fetchedPostDetails] = await Promise.all([
           fetchImageUrlsByPostId(postId),
-          getPostById(postId)
+          getPostById(postId),
         ]);
 
         setImages(fetchedImages);
@@ -55,14 +57,14 @@ const GeneratedImages = () => {
         );
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Failed to fetch data. Please try again.");
+        setError(t("fetchError"));
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   const handleImageSelect = (selectedImageUrl) => {
     if (!postDetails) {
@@ -75,7 +77,7 @@ const GeneratedImages = () => {
       title: postDetails.product_description?.product_title || "",
       description: postDetails.product_description?.product_desc || "",
       category: postDetails.product_description?.product_category || "",
-      postTitle: postDetails.post_title || ""
+      postTitle: postDetails.post_title || "",
     };
 
     // Navigate to image-edit page with both image URL and product info
@@ -88,10 +90,8 @@ const GeneratedImages = () => {
       <div className="mt-6 px-8">
         <div className="flex flex-col gap-6   bg-white/5 border border-white/10 rounded-2xl px-4 py-6  ">
           <div className="w-full flex flex-col gap-2   ">
-            <h3 className="font-bold text-lg capitalize">generated images</h3>
-            <p className="text-white/35">
-              select from one of the generated images
-            </p>
+            <h3 className={`font-bold text-lg capitalize ${isArabic ? "alexandria-font font-bold " : "satoshi-bold"}`}>{t("title")}</h3>
+            <p className="text-white/35">{t("subtitle")}</p>
           </div>
 
           {/* IMAGES CONTAINER */}
@@ -100,7 +100,7 @@ const GeneratedImages = () => {
             <div className="w-full flex items-center justify-center py-12">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#6123B8] mx-auto mb-4"></div>
-                <p className="text-white/70">Loading generated images...</p>
+                <p className="text-white/70">{t("loading")}</p>
               </div>
             </div>
           )}
@@ -113,7 +113,7 @@ const GeneratedImages = () => {
                   onClick={() => window.history.back()}
                   className="bg-[#6123B8] text-white px-6 py-2 rounded-lg hover:bg-[#6123B8]/80 transition-all duration-300"
                 >
-                  Go Back
+                  {t("goBack")}
                 </button>
               </div>
             </div>
@@ -122,14 +122,12 @@ const GeneratedImages = () => {
           {!loading && !error && images.length === 0 && (
             <div className="w-full flex items-center justify-center py-12">
               <div className="text-center">
-                <p className="text-white/70 mb-4">
-                  No images found for this post.
-                </p>
+                <p className="text-white/70 mb-4">{t("noImagesFound")}</p>
                 <button
                   onClick={() => window.history.back()}
                   className="bg-[#6123B8] text-white px-6 py-2 rounded-lg hover:bg-[#6123B8]/80 transition-all duration-300"
                 >
-                  Go Back
+                  {t("goBack")}
                 </button>
               </div>
             </div>
@@ -153,7 +151,7 @@ const GeneratedImages = () => {
                     onClick={() => handleImageSelect(image)}
                     className="bg-[#6123B8] cursor-pointer hover:bg-[#6123B8]/80 transition-all duration-300 text-white px-4 py-3  rounded-b-2xl  w-full"
                   >
-                    select
+                    {t("select")}
                   </button>
                 </div>
               ))}

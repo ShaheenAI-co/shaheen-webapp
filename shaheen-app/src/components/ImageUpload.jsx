@@ -3,6 +3,7 @@
 import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from "lucide-react";
 import { useFileUpload } from "@/Hooks/use-file-upload";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 // Utility function to convert HEIC to JPEG using canvas
 const convertHeicToJpeg = async (file) => {
@@ -55,6 +56,7 @@ const isHeicFile = (file) => {
 export default function ImageUpload({ onFileChange }) {
   const maxSizeMB = 20;
   const maxSize = maxSizeMB * 1024 * 1024; // 20MB default
+  const t = useTranslations("ImageUpload");
 
   const [
     { files, isDragging, errors },
@@ -117,13 +119,13 @@ export default function ImageUpload({ onFileChange }) {
           <input
             {...getInputProps()}
             className="sr-only"
-            aria-label="Upload image file"
+            aria-label={t("uploadImage")}
           />
           {previewUrl ? (
             <div className="absolute inset-0 flex items-center justify-center p-4">
               <img
                 src={previewUrl}
-                alt={files[0]?.file?.name || "Uploaded image"}
+                alt={files[0]?.file?.name || t("uploadedImage")}
                 className="mx-auto max-h-full rounded object-contain"
               />
             </div>
@@ -135,9 +137,9 @@ export default function ImageUpload({ onFileChange }) {
               >
                 <ImageIcon className="size-4 opacity-60" />
               </div>
-              <p className="mb-1.5 text-sm font-medium">Drop your image here</p>
+              <p className="mb-1.5 text-sm font-medium">{t("dropImageHere")}</p>
               <p className="text-muted-foreground text-xs">
-                SVG, PNG, JPG, GIF (max. {maxSizeMB}MB)
+                {t("fileTypes", { maxSize: maxSizeMB })}
               </p>
 
               <Button
@@ -149,7 +151,7 @@ export default function ImageUpload({ onFileChange }) {
                   className="-ms-1 size-4 opacity-60"
                   aria-hidden="true"
                 />
-                Select image
+                {t("selectImage")}
               </Button>
             </div>
           )}
@@ -161,7 +163,7 @@ export default function ImageUpload({ onFileChange }) {
               type="button"
               className="focus-visible:border-ring focus-visible:ring-ring/50 z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white transition-[color,box-shadow] outline-none hover:bg-black/80 focus-visible:ring-[3px]"
               onClick={() => removeFile(files[0]?.id)}
-              aria-label="Remove image"
+              aria-label={t("removeImage")}
             >
               <XIcon className="size-4" aria-hidden="true" />
             </button>

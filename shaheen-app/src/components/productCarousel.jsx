@@ -7,6 +7,7 @@ import {
   CarouselNavigation,
   CarouselItem,
 } from "./carousel";
+import Image from "next/image";
 
 const productCarousel = () => {
   const t = useTranslations("productCarousel");
@@ -17,7 +18,7 @@ const productCarousel = () => {
       {/* HEADER */}
       <div className="flex flex-col items-center text-center gap-4">
         <h2
-          className={`text-2xl lg:text-5xl font-bold  leading-tight ${isArabic ? "alexandria-font " : "satoshi-bold"} max-sm:w-[300px] max-w-[500px] capitalize`}
+          className={`text-2xl lg:text-5xl font-bold  leading-tight ${isArabic ? "alexandria-font " : "satoshi-bold"} max-sm:w-[300px] max-w-[700px] capitalize`}
         >
           {t("title")}
         </h2>
@@ -25,42 +26,61 @@ const productCarousel = () => {
 
       {/* CAROUSEL */}
 
-      <div className="relative w-full px-4">
+      <div className="relative w-full border border-red-500 px-4">
         <Carousel>
-          <CarouselContent className="-ml-4">
-            <CarouselItem className="basis-1/3 pl-4">
+          <CarouselContent className="-ml-2">
+            {/* IMG 1 */}
+            <CarouselItem className="basis-1/4 max-sm:basis-10/12 pl-4">
               <div className="flex aspect-square items-center justify-center border border-zinc-200 dark:border-zinc-800">
-                1
+                <img
+                  src="/images/perfume.png"
+                  alt="product"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </CarouselItem>
-            <CarouselItem className="basis-1/3 pl-4">
+
+            {/* IMG 2 */}
+            <CarouselItem className="basis-1/4 max-sm:basis-10/12 pl-4">
               <div className="flex aspect-square items-center justify-center border border-zinc-200 dark:border-zinc-800">
-                2
+                <img
+                  src="/images/bag.png"
+                  alt="product"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </CarouselItem>
-            <CarouselItem className="basis-1/3 pl-4">
+
+            {/* IMG 3 */}
+            <CarouselItem className="basis-1/4 max-sm:basis-10/12 pl-4">
               <div className="flex aspect-square items-center justify-center border border-zinc-200 dark:border-zinc-800">
-                3
+                <img
+                  src="/images/productV3.png"
+                  alt="product"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </CarouselItem>
-            <CarouselItem className="basis-1/3 pl-4">
+
+            {/* IMG 4 */}
+            <CarouselItem className="basis-1/4 max-sm:basis-10/12 pl-4">
               <div className="flex aspect-square items-center justify-center border border-zinc-200 dark:border-zinc-800">
-                4
+                <img
+                  src="/images/bagV2.png"
+                  alt="product"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </CarouselItem>
-            <CarouselItem className="basis-1/3 pl-4">
+
+            {/* IMG 5 */}
+            <CarouselItem className="basis-1/4 max-sm:basis-10/12 pl-4">
               <div className="flex aspect-square items-center justify-center border border-zinc-200 dark:border-zinc-800">
-                5
-              </div>
-            </CarouselItem>
-            <CarouselItem className="basis-1/3 pl-4">
-              <div className="flex aspect-square items-center justify-center border border-zinc-200 dark:border-zinc-800">
-                6
-              </div>
-            </CarouselItem>
-            <CarouselItem className="basis-1/3 pl-4">
-              <div className="flex aspect-square items-center justify-center border border-zinc-200 dark:border-zinc-800">
-                7
+                <img
+                  src="/images/Elegant-Perfume.png"
+                  alt="product"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </CarouselItem>
           </CarouselContent>

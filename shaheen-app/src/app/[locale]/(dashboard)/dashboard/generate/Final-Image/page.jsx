@@ -1,19 +1,24 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
 import { Sparkle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { useInstagramAuth } from "@/Hooks/useInstagramAuth";
 import { instagramPosting } from "@/lib/instagram-posting";
 
 const page = () => {
+  const t = useTranslations("FinalImage");
   const searchParams = useSearchParams();
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [imageUrl, setImageUrl] = useState("");
   const [originalImageUrl, setOriginalImageUrl] = useState(null);
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "en";
+  const isArabic = locale === "ar";
 
   // Instagram posting state
   const { isConnected, supabaseAccounts, user } = useInstagramAuth();
@@ -35,11 +40,8 @@ const page = () => {
     if (urlFromParams) {
       const decodedUrl = decodeURIComponent(urlFromParams);
       setImageUrl(decodedUrl);
-      console.log(
-        "Final Image: Received edited image URL:",
-        decodedUrl
-      );
-      
+      console.log("Final Image: Received edited image URL:", decodedUrl);
+
       // Preload the image to check if it's accessible
       const preloadImage = new window.Image();
       preloadImage.onload = () => {
@@ -54,11 +56,13 @@ const page = () => {
         setImageError(true);
       };
       preloadImage.src = decodedUrl;
-      
+
       // Add a timeout fallback in case the image takes too long to load
       const timeoutId = setTimeout(() => {
         if (isImageLoading) {
-          console.log("Final Image: Image loading timeout, setting loading to false");
+          console.log(
+            "Final Image: Image loading timeout, setting loading to false"
+          );
           setIsImageLoading(false);
         }
       }, 10000); // 10 second timeout
@@ -89,7 +93,7 @@ const page = () => {
   // Handle caption generation
   const handleGenerateCaption = async () => {
     if (!imageUrl || imageUrl === "/images/bagV2.png") {
-      setPostMessage("No image to generate caption for");
+      setPostMessage(t("noImageToGenerateCaption"));
       return;
     }
 
@@ -97,18 +101,18 @@ const page = () => {
     setPostMessage("");
 
     try {
-      const response = await fetch('/api/generate-caption', {
-        method: 'POST',
+      const response = await fetch("/api/generate-caption", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           imageUrl: imageUrl,
           productInfo: {
             title: "Product Image",
             description: "Generated product image",
-            category: "General"
-          }
+            category: "General",
+          },
         }),
       });
 
@@ -117,13 +121,13 @@ const page = () => {
       if (data.success) {
         setCaption(data.caption);
         setHashtags(data.hashtags || []);
-        setPostMessage("Caption generated successfully! ✨");
+        setPostMessage(t("captionGeneratedSuccessfully"));
       } else {
-        throw new Error(data.error || 'Failed to generate caption');
+        throw new Error(data.error || "Failed to generate caption");
       }
     } catch (error) {
-      console.error('Error generating caption:', error);
-      setPostMessage(`Error generating caption: ${error.message}`);
+      console.error("Error generating caption:", error);
+      setPostMessage(`${t("errorGeneratingCaption")} ${error.message}`);
     } finally {
       setIsGeneratingCaption(false);
     }
@@ -132,12 +136,12 @@ const page = () => {
   // Handle Instagram posting
   const handleInstagramPost = async () => {
     if (!isConnected || !selectedAccount) {
-      setPostMessage("Please connect your Instagram account first");
+      setPostMessage(t("pleaseConnectInstagramFirst"));
       return;
     }
 
     if (!imageUrl || imageUrl === "/images/bagV2.png") {
-      setPostMessage("No image to post");
+      setPostMessage(t("noImageToPost"));
       return;
     }
 
@@ -173,11 +177,9 @@ const page = () => {
         }
       );
 
-      setPostMessage(
-        `Posted to Instagram successfully! 🎉 Media ID: ${result.mediaId}`
-      );
+      setPostMessage(`${t("postedToInstagramSuccessfully")} ${result.mediaId}`);
     } catch (error) {
-      setPostMessage(`Error posting to Instagram: ${error.message}`);
+      setPostMessage(`${t("errorPostingToInstagram")} ${error.message}`);
     } finally {
       setIsPosting(false);
     }
@@ -213,7 +215,7 @@ const page = () => {
       console.log("Image exported successfully");
     } catch (error) {
       console.error("Error exporting image:", error);
-      alert("Failed to export image. Please try again.");
+      alert(t("failedToExportImage"));
     }
   };
 
@@ -222,7 +224,7 @@ const page = () => {
     if (imageUrl) {
       setIsImageLoading(true);
       setImageError(false);
-      
+
       const retryImage = new window.Image();
       retryImage.onload = () => {
         console.log("Final Image: Image retry successful");
@@ -247,7 +249,7 @@ const page = () => {
             onClick={handleExportImage}
             className="bg-[#6123B8] font-bold capitalize text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg text-sm sm:text-base hover:bg-[#4a1a8a] transition-colors"
           >
-            export
+            {t("export")}
           </button>
         </div>
 
@@ -259,7 +261,7 @@ const page = () => {
               <div className="w-full h-[350px] sm:h-[490px] lg:h-[600px] max-w-full bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg animate-pulse flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-                  <p className="text-white/70 text-sm">Loading image...</p>
+                  <p className="text-white/70 text-sm">{t("loadingImage")}</p>
                 </div>
               </div>
             ) : imageError ? (
@@ -269,12 +271,14 @@ const page = () => {
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
                   </svg>
                 </div>
-                <p className="text-white/50 text-sm">Failed to load image.</p>
+                <p className="text-white/50 text-sm">
+                  {t("failedToLoadImage")}
+                </p>
                 <button
                   onClick={retryImageLoad}
                   className="bg-[#6123B8] font-semibold capitalize text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg text-sm sm:text-base"
                 >
-                  Retry
+                  {t("retry")}
                 </button>
               </div>
             ) : imageUrl ? (
@@ -306,7 +310,9 @@ const page = () => {
                       <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
                     </svg>
                   </div>
-                  <p className="text-white/50 text-sm">No image available</p>
+                  <p className="text-white/50 text-sm">
+                    {t("noImageAvailable")}
+                  </p>
                 </div>
               </div>
             )}
@@ -317,13 +323,12 @@ const page = () => {
             {/* Content container - Responsive width and padding */}
             <div className="w-full max-w-[500px] p-4 sm:p-8 lg:p-12 bg-[#0F0F0F] rounded-lg flex flex-col items-center">
               {/* HEADING SECTION - Responsive text sizes and spacing */}
-              <div className="flex flex-col gap-4 sm:gap-6 lg:gap-8">
-                <h1 className="text-white text-2xl sm:text-3xl lg:text-5xl satoshi-bold capitalize text-center leading-tight">
-                  your product is ready to post
+              <div className="flex flex-col gap-4 sm:gap-6 lg:gap-6">
+                <h1 className={`text-white text-2xl sm:text-3xl lg:text-5xl capitalize text-center  ${isArabic ? "alexandria-font font-bold " : "satoshi-bold"}`}>
+                  {t("title")}
                 </h1>
-                <p className="text-white/50 text-center leading-relaxed px-4 sm:px-8 lg:px-12 text-sm sm:text-base">
-                  Need changes? You can go back or generate another version
-                  anytime
+                <p className="text-white/50 text-center leading-relaxed px-4 sm:px-8 lg:px-12 text-base sm:text-lg">
+                  {t("subtitle")}
                 </p>
               </div>
 
@@ -332,7 +337,7 @@ const page = () => {
                 {/* CAPTION SECTION - Responsive width and spacing */}
                 <div className="flex flex-col gap-2 w-full justify-center items-center">
                   <p className="capitalize text-sm sm:text-base">
-                    post caption
+                    {t("postCaption")}
                   </p>
                   <textarea
                     value={caption}
@@ -340,35 +345,37 @@ const page = () => {
                     cols="30"
                     rows="3"
                     className="bg-[#2E2042] rounded-lg p-3 sm:p-4 w-full max-w-[400px] text-sm sm:text-base text-white"
-                    placeholder="Enter your caption here..."
+                    placeholder={t("captionPlaceholder")}
                   />
                   <button
                     onClick={handleGenerateCaption}
                     disabled={isGeneratingCaption || !imageUrl}
-                    className="gap-1 bg-[#FF6B35] hover:bg-[#ff8a5c] text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-sm sm:text-base transition-colors"
+                    className="gap-1 bg-[#FF6B35] hover:bg-[#ff8a5c] text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex md:mt-4 items-center justify-center text-sm sm:text-base transition-colors"
                   >
                     {isGeneratingCaption ? (
                       <>
                         <div className="h-3 w-3 sm:h-4 sm:w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                        {!isMobile && "Generating..."}
+                        {!isMobile && t("generating")}
                       </>
                     ) : (
-                                              <>
-                          <Sparkle className="h-3 w-3 sm:h-4 sm:w-4" />
-                          {!isMobile && "AI Text"}
-                        </>
+                      <>
+                        <Sparkle className="h-3 w-3 sm:h-4 sm:w-4" />
+                        {!isMobile && t("aiText")}
+                      </>
                     )}
                   </button>
-                  
+
                   {/* Display generated hashtags */}
                   {hashtags.length > 0 && (
                     <div className="flex flex-wrap gap-2 justify-center">
-                      <p className="text-white/70 text-sm">Suggested hashtags:</p>
+                      <p className="text-white/70 text-sm">
+                        {t("suggestedHashtags")}
+                      </p>
                       {hashtags.map((tag, index) => (
                         <span
                           key={index}
                           className="bg-purple-600/20 text-purple-300 px-2 py-1 rounded-md text-xs border border-purple-500/30 cursor-pointer hover:bg-purple-600/30 transition-colors"
-                          onClick={() => setCaption(prev => prev + ' ' + tag)}
+                          onClick={() => setCaption((prev) => prev + " " + tag)}
                         >
                           {tag}
                         </span>
@@ -381,7 +388,7 @@ const page = () => {
                 {isConnected && supabaseAccounts.length > 0 && (
                   <div className="flex flex-col gap-2 w-full justify-center items-center">
                     <p className="capitalize text-white/70 text-sm sm:text-base">
-                      instagram account
+                      {t("instagramAccount")}
                     </p>
                     <select
                       value={selectedAccount}
@@ -416,13 +423,13 @@ const page = () => {
                 {/* BUTTONS SECTION - Responsive layout: stacked on mobile, side-by-side on larger screens */}
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 w-full justify-center items-center">
                   <button className="bg-[#6123B8] font-semibold capitalize text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg text-sm sm:text-base w-full sm:w-auto">
-                    publish now
+                    {t("publishNow")}
                   </button>
-                  <button 
+                  <button
                     onClick={() => window.history.back()}
-                    className="border border-[#6123B8] font-semibold capitalize text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg text-sm sm:text-base w-full sm:w-auto hover:bg-[#6123B8] hover:text-white transition-colors"
+                    className="border border-[#6123B8] font-semibold capitalize text-white px-3 sm:px-4 cursor-pointer py-2 sm:py-3 rounded-lg text-sm sm:text-base w-full sm:w-auto  hover:text-white transition-colors"
                   >
-                    regenerate
+                    {t("regenerate")}
                   </button>
                 </div>
 
@@ -433,18 +440,22 @@ const page = () => {
                     disabled={isPosting || !selectedAccount}
                     className="bg-gradient-to-r from-purple-500 to-pink-500 font-semibold capitalize text-white px-4 sm:px-6 cursor-pointer py-2 sm:py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base w-full sm:w-auto justify-center"
                   >
-                    {isPosting ? <>📸 Posting...</> : <>📸 Post to Instagram</>}
+                    {isPosting ? (
+                      <>📸 {t("posting")}</>
+                    ) : (
+                      <>📸 {t("postToInstagram")}</>
+                    )}
                   </button>
                 ) : (
                   <div className="text-center">
                     <p className="text-white/50 text-xs sm:text-sm mb-2">
-                      Connect Instagram to post directly
+                      {t("connectInstagramToPost")}
                     </p>
                     <a
                       href="/en/dashboard"
                       className="text-purple-400 hover:text-purple-300 text-xs sm:text-sm underline"
                     >
-                      Go to Dashboard to connect
+                      {t("goToDashboardToConnect")}
                     </a>
                   </div>
                 )}

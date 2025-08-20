@@ -9,6 +9,7 @@ import {
   Brush,
   FileImage,
   X,
+  Lock,
 } from "lucide-react";
 
 import { Home } from "lucide-react";
@@ -66,6 +67,7 @@ export default function Sidebar({ isOpen, onClose }) {
       name: sidebarT("retouch"),
       href: `/${locale}/dashboard/retouch`,
       icon: "/icons/Brush.svg",
+      comingSoon: true,
     },
   ];
 
@@ -96,8 +98,8 @@ export default function Sidebar({ isOpen, onClose }) {
           <div>
             <div className="px-4 border-b border-white/5 pt-2 pb-3">
               <header
-                className={`z-10 flex items-center gap-2 ${
-                  isArabic ? "flex-row-reverse alexandria-font" : ""
+                className={`z-10 flex  gap-2 ${
+                  isArabic ? "flex-row-reverse justify-end " : "justify-start"
                 }`}
               >
                 <Image
@@ -151,6 +153,7 @@ export default function Sidebar({ isOpen, onClose }) {
                   icon={page.icon}
                   name={page.name}
                   onClick={() => handleActivePage(page.name)}
+                  onClose={onClose}
                   comingSoon={page.comingSoon}
                   isArabic={isArabic}
                 />
@@ -168,6 +171,7 @@ export default function Sidebar({ isOpen, onClose }) {
                   icon={page.icon}
                   name={page.name}
                   onClick={() => handleActivePage(page.name)}
+                  onClose={onClose}
                   comingSoon={page.comingSoon}
                   isArabic={isArabic}
                 />
@@ -184,7 +188,9 @@ export default function Sidebar({ isOpen, onClose }) {
               icon="/icons/Calendar.svg"
               name={sidebarT("schedulePost")}
               onClick={() => handleActivePage(sidebarT("schedulePost"))}
+              onClose={onClose}
               isArabic={isArabic}
+              comingSoon={true}
             />
           </div>
         </div>
@@ -197,6 +203,7 @@ export default function Sidebar({ isOpen, onClose }) {
             href={`/${locale}/dashboard/settings`}
             icon="/icons/Settings_icon.svg"
             name={sidebarT("settings")}
+            onClose={onClose}
             isArabic={isArabic}
           />
         </div>

@@ -100,3 +100,37 @@ export const getPostById = async (postId) => {
     throw error;
   }
 };
+
+export const getPostCountByClerkId = async (clerkId) => {
+  try {
+    console.log("Fetching post count for clerk_id:", clerkId);
+
+    const supabase = await supabaseClient();
+
+    console.log("Supabase client created successfully");
+
+    const { count, error } = await supabase
+      .from("posts")
+      .select("*", { count: "exact", head: true })
+      .eq("clerk_id", clerkId);
+
+    if (error) {
+      console.error("Supabase count error details:", {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code,
+      });
+      throw error;
+    }
+
+    console.log("Post count fetched successfully:", count);
+    return count || 0;
+  } catch (error) {
+    console.error(
+      "Failed to fetch post count from Supabase - Full error:",
+      error
+    );
+    return 0; // Return 0 as fallback
+  }
+};

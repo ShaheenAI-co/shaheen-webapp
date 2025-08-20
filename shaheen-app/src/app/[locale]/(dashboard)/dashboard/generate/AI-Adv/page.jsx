@@ -10,6 +10,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { Loader2 } from "lucide-react";
+import { TextShimmerBasic } from "../../components/ShineText";
 
 const page = () => {
   const { user, isLoaded } = useUser();
@@ -256,10 +257,14 @@ const page = () => {
     >
       {/* CONTENT */}
       <div className="mt-6 px-4 sm:px-6 lg:px-8">
+
+
         {/* POST SIZE */}
         <div className="flex flex-col gap-6 bg-white/5 border border-white/10 rounded-2xl px-3 sm:px-4 py-6">
           <div className="w-full flex flex-col gap-2">
-            <h3 className="font-bold text-lg capitalize">
+            <h3
+              className={` text-lg capitalize ${isArabic ? "alexandria-font font-bold " : "satoshi-bold"}`}
+            >
               {t("selectPostSize")}
             </h3>
             <p className="text-white/35">{t("selectPostSizeDesc")}</p>
@@ -269,11 +274,23 @@ const page = () => {
             {postSize.map((item, index) => (
               <div
                 key={index}
-                className={`w-full max-w-[200px] h-[200px] border-2 border-white/30 gradient-purple-dark opacity-60 flex flex-col gap-3 items-center justify-center rounded-2xl cursor-pointer hover:scale-105 hover:opacity-100 transition-all duration-300 ${post === item.size ? "opacity-100 scale-105" : ""}`}
+                className={`w-full max-w-[200px] h-[200px]  border-2 border-white/30 gradient-purple-dark opacity-60 flex flex-col gap-3 items-center justify-center rounded-2xl cursor-pointer hover:scale-105 hover:opacity-100 transition-all duration-300 ${post === item.size ? "opacity-100 scale-105" : ""} ${isArabic ? "alexandria-font font-bold " : "satoshi-bold"}`}
                 onClick={() => handlePostSize(item.size)}
               >
-                <h4 className="font-medium capitalize text-center px-2">{item.title}</h4>
-                <p className="text-center">{item.size}</p>
+                <h4 className="font-medium capitalize text-center px-2">
+                  {item.title}
+                </h4>
+                <p className="text-center">
+                  {isArabic ? (
+                    <span className="flex items-center justify-center gap-1">
+                      <span>{item.size.split(" x ")[0]}</span>
+                      <span className="text-center">×</span>
+                      <span>{item.size.split(" x ")[1]}</span>
+                    </span>
+                  ) : (
+                    item.size
+                  )}
+                </p>
               </div>
             ))}
           </div>
@@ -282,7 +299,11 @@ const page = () => {
         {/* PRODUCT INFO */}
         <div className="flex flex-col gap-4 bg-white/5 border border-white/10 rounded-2xl px-3 sm:px-4 py-6 mt-6">
           <div className="w-full flex flex-col gap-2">
-            <h3 className="font-bold text-lg capitalize">{t("productInfo")}</h3>
+            <h3
+              className={`text-lg capitalize ${isArabic ? "alexandria-font font-bold " : "satoshi-bold"}`}
+            >
+              {t("productInfo")}
+            </h3>
             <p className="text-white/35">{t("productInfoDesc")}</p>
           </div>
 
@@ -290,7 +311,9 @@ const page = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
               {/* POST TITLE */}
               <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center gap-2">
-                <h4 className="capitalize whitespace-nowrap">{t("postTitle")}</h4>
+                <h4 className="capitalize whitespace-nowrap">
+                  {t("postTitle")}
+                </h4>
                 <input
                   className="bg-[#0F0F0F] w-full sm:w-auto lg:w-full px-4 py-3 rounded-lg outline-purple-500"
                   type="text"
@@ -302,7 +325,9 @@ const page = () => {
 
               {/* PRODUCT NAME */}
               <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center gap-2">
-                <h4 className="capitalize whitespace-nowrap">{t("productName")}</h4>
+                <h4 className="capitalize whitespace-nowrap">
+                  {t("productName")}
+                </h4>
                 <input
                   className="bg-[#0F0F0F] w-full sm:w-auto lg:w-full px-4 py-3 rounded-lg outline-purple-500"
                   type="text"
@@ -316,7 +341,9 @@ const page = () => {
 
               {/* PRODUCT CATEGORY */}
               <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center gap-2">
-                <h4 className="capitalize whitespace-nowrap">{t("productCategory")}</h4>
+                <h4 className="capitalize whitespace-nowrap">
+                  {t("productCategory")}
+                </h4>
                 <input
                   className="bg-[#0F0F0F] w-full sm:w-auto lg:w-full px-4 py-3 rounded-lg outline-purple-500"
                   type="text"
@@ -351,7 +378,11 @@ const page = () => {
         {/* IMAGE UPLOAD */}
         <div className="flex flex-col gap-6 bg-white/5 border border-white/10 rounded-2xl px-3 sm:px-4 py-6 mt-6">
           <div className="w-full flex flex-col gap-2">
-            <h3 className="font-bold text-lg capitalize">{t("imageUpload")}</h3>
+            <h3
+              className={`text-lg capitalize ${isArabic ? "alexandria-font font-bold " : "satoshi-bold"}`}
+            >
+              {t("imageUpload")}
+            </h3>
             <p className="text-white/35">{t("imageUploadDesc")}</p>
           </div>
 
@@ -366,7 +397,7 @@ const page = () => {
                 {isGenerating && (
                   <Loader2 className="h-4 w-4 animate-spin text-purple-400" />
                 )}
-                <p className="text-sm text-white/80">{generationStatus}</p>
+                <p className="text-sm text-white/80"> <TextShimmerBasic /></p>
               </div>
             </div>
           )}
@@ -387,8 +418,10 @@ const page = () => {
                 t("generate")
               )}
             </Button>
+           
           </div>
         </div>
+
       </div>
     </div>
   );
