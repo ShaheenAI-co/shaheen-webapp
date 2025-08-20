@@ -10,7 +10,7 @@ export default function Home() {
       className="min-h-screen flex flex-col gap-20 mt-25 md:mt-51  p-4 md:p-8"
     >
       <div className="flex flex-col items-center text-center  gap-4">
-        <h2 className="text-2xl lg:text-5xl font-bold satoshi-bold leading-tight max-sm:w-[300px]  max-w-[500px]  capitalize ">
+        <h2 className={`text-2xl lg:text-5xl font-bold ${isArabic ? "alexandria-font " : "satoshi-bold"} leading-tight max-sm:w-[300px]  max-w-[500px]  capitalize `}>
           {t("title")}
         </h2>
         <p className=" max-w-[500px] max-sm:w-[300px] text-base md:text-lg font-normal text-muted-foreground ">
@@ -91,7 +91,7 @@ export default function Home() {
             {t("imageEditing.description")}
           </p>
           <img
-                src="/images/imageEdit.jpeg"
+                src="/images/imagePen.png"
                 alt="AI Advertisement Feature"
                 className="w-full h-auto max-w-full object-contain rounded-sm"
               />
@@ -107,11 +107,11 @@ export default function Home() {
           <p className="text-gray-300 font-normal text-base">
             {t("retouching.description")}
           </p>
-          {/* <img
-                src="/images/brush.jpeg"
+          <img
+                src="/images/image-Ai.png"
                 alt="AI Advertisement Feature"
                 className="w-full h-auto max-w-full object-contain"
-              /> */}
+              />
         </div>
 
         {/* Card 6 - Multilingual Support */}

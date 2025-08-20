@@ -17,7 +17,12 @@ const Footer = () => {
           <p>{t("copyright")}</p>
         </div>
         <div className="flex gap-6 capitalize max-sm:justify-center text-sm flex-wrap">
-          <p>{t("termsOfService")}</p>
+          <Link
+            href={`/${locale}/terms-of-service`}
+            className="hover:text-purple-200 transition-colors"
+          >
+            {t("termsOfService")}
+          </Link>
           <Link
             href={`/${locale}/privacy-policy`}
             className="hover:text-purple-200 transition-colors"

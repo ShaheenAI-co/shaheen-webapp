@@ -674,5 +674,203 @@
       "title": "Video Ad Creation",
       "description": "Transform images into scroll-stopping video ads with animations and text overlays"
     }
+  },
+  "TermsOfService": {
+    "title": "Terms of Service – Shaheen AI Platform",
+    "lastUpdated": "Last updated",
+    "legalDefinition": {
+      "title": "1. Legal Definition",
+      "content": "Shaheen AI Platform (\"Shaheen\", \"Platform\", \"we\", \"us\" or \"ours\") is a digital product owned and operated by:",
+      "company": "Shaheen Art Design Foundation",
+      "unifiedNumber": "Unified Number: 7033318523",
+      "address": "Address: Kingdom of Saudi Arabia – Eastern Region – Dammam City – Al-Mohammadiyah District",
+      "agreement": "This document (\"Terms of Service\" or \"Agreement\") constitutes a legally binding agreement between the Platform and the User (\"User\", \"Client\", \"you\") regarding your use of our digital services and products. Your access to or use of the services constitutes your complete and unconditional agreement to comply with the provisions of these terms."
+    },
+    "definitions": {
+      "title": "2. Definitions",
+      "platform": {
+        "title": "1. \"Platform\":",
+        "content": "Refers to the Shaheen AI Platform and all its affiliated products, services, software, interfaces, and systems."
+      },
+      "user": {
+        "title": "2. \"User\":",
+        "content": "Any individual or entity that creates an account or uses Shaheen services in any form."
+      },
+      "content": {
+        "title": "3. \"Content\":",
+        "content": "Includes all data, texts, images, videos, designs, files, or any other materials entered or produced through the platform."
+      },
+      "data": {
+        "title": "4. \"Data\":",
+        "content": "Includes personal information, business information, and data resulting from user interactions with the platform."
+      },
+      "models": {
+        "title": "5. \"Models\":",
+        "content": "AI models owned by Shaheen that are developed or improved using data."
+      }
+    },
+    "accountCreation": {
+      "title": "3. Account Creation Terms",
+      "ageRequirement": {
+        "title": "1.",
+        "content": "The user must be of legal age to enter into binding contracts (18 years or older)."
+      },
+      "accurateInfo": {
+        "title": "2.",
+        "content": "The user commits to providing accurate, correct, and complete information during registration and maintaining its continuous updates."
+      },
+      "accountSuspension": {
+        "title": "3.",
+        "content": "Shaheen reserves the right to suspend or cancel any account proven to provide misleading information or use the platform in violation of these terms or local and international laws."
+      }
+    },
+    "serviceScope": {
+      "title": "4. Service Scope",
+      "aiTools": {
+        "title": "1.",
+        "content": "Shaheen Platform provides AI-powered tools and services for generating visual and written content, managing and scheduling posts, and analyzing performance."
+      },
+      "serviceChanges": {
+        "title": "2.",
+        "content": "Services may expand or change according to technical and commercial developments without prior notice."
+      },
+      "technicalLimitations": {
+        "title": "3.",
+        "content": "The user acknowledges that services may contain technical or functional limitations related to the technology used or company policies."
+      }
+    },
+    "customerDataUsage": {
+      "title": "5. Customer Data Usage",
+      "dataConsent": {
+        "title": "1.",
+        "content": "The user expressly acknowledges and agrees that all data and content entered or produced through the platform may be used by Shaheen for the purpose of:",
+        "purposes": [
+          "Improving and training the platform's AI models.",
+          "Developing new products and services.",
+          "Conducting market and technical research and analysis."
+        ]
+      },
+      "dataMerging": {
+        "title": "2.",
+        "content": "The platform reserves the right to merge user data with other data (after removing any personally identifiable information where appropriate) to create larger training datasets."
+      },
+      "dataSharing": {
+        "title": "3.",
+        "content": "Personal data will not be sold to third parties, but may be shared with technical providers or business partners for operational and developmental purposes, in accordance with applicable data protection standards."
+      }
+    },
+    "intellectualProperty": {
+      "title": "6. Intellectual Property Rights",
+      "platformRights": {
+        "title": "1.",
+        "content": "All intellectual property rights related to the platform, including models, codes, designs, interfaces, trademarks, are exclusively owned by Shaheen."
+      },
+      "userLicense": {
+        "title": "2.",
+        "content": "The user grants Shaheen a global, non-exclusive, and perpetual license to use the entered or produced data and content for the purpose of operating and developing services."
+      },
+      "restrictions": {
+        "title": "3.",
+        "content": "The user is not entitled to copy, resell, or attempt to disassemble or reverse engineer any part of the platform."
+      }
+    },
+    "paymentRefund": {
+      "title": "7. Payment and Refund Policy",
+      "trialPeriod": {
+        "title": "1.",
+        "content": "The platform provides a limited-time or usage free trial period, during which the client is enabled to test the services."
+      },
+      "noRefunds": {
+        "title": "2.",
+        "content": "Once the trial period ends and transitions to a paid plan, the user is not entitled to request any cash refund for any reason."
+      },
+      "finalPayments": {
+        "title": "3.",
+        "content": "All paid fees are final and non-refundable, whether the service was used or not."
+      },
+      "priceChanges": {
+        "title": "4.",
+        "content": "The platform has the right to modify subscription prices or offer new plans, provided that users are notified before applying new fees."
+      }
+    },
+    "userObligations": {
+      "title": "8. User Obligations",
+      "lawfulUse": {
+        "title": "1.",
+        "content": "The user commits to using the platform only for lawful purposes."
+      },
+      "prohibitedContent": {
+        "title": "2.",
+        "content": "The user is prohibited from entering or publishing any illegal, offensive, or rights-violating content."
+      },
+      "harmfulContent": {
+        "title": "3.",
+        "content": "Using the platform to generate harmful content, spam messages, or unethical content or content that violates local and international laws is prohibited."
+      },
+      "userResponsibility": {
+        "title": "4.",
+        "content": "The user bears full legal responsibility alone for the content resulting from their use of the platform."
+      }
+    },
+    "liabilityLimits": {
+      "title": "9. Liability Limitations",
+      "asIs": {
+        "title": "1.",
+        "content": "The platform is provided \"as is\" and \"as available,\" without any express or implied warranties regarding performance or results."
+      },
+      "noLiability": {
+        "title": "2.",
+        "content": "Shaheen bears no responsibility for any direct, indirect, incidental, or consequential damages that may arise from use or inability to use the services."
+      },
+      "aiAccuracy": {
+        "title": "3.",
+        "content": "The user acknowledges that AI results may not be 100% accurate, and bears sole responsibility for reviewing and using those results."
+      }
+    },
+    "policyChanges": {
+      "title": "10. Policy Modifications",
+      "rightToModify": {
+        "title": "1.",
+        "content": "The platform reserves the right to modify or update this policy at any time."
+      },
+      "notification": {
+        "title": "2.",
+        "content": "Users will be notified of substantial modifications via email or notification within the platform."
+      },
+      "continuedUse": {
+        "title": "3.",
+        "content": "Continued use of the platform after publishing any modification constitutes final and binding acceptance of the changes."
+      }
+    },
+    "lawJurisdiction": {
+      "title": "11. Law and Jurisdiction",
+      "saudiLaw": {
+        "title": "1.",
+        "content": "This policy is subject to and interpreted according to the laws of the Kingdom of Saudi Arabia, without prejudice to international laws applicable to e-commerce."
+      },
+      "saudiCourts": {
+        "title": "2.",
+        "content": "Saudi courts have exclusive jurisdiction to resolve any dispute arising from this agreement."
+      }
+    },
+    "generalProvisions": {
+      "title": "12. General Provisions",
+      "severability": {
+        "title": "1.",
+        "content": "If any provision of this agreement is found to be invalid, the remaining provisions remain in full force."
+      },
+      "entireAgreement": {
+        "title": "2.",
+        "content": "This agreement constitutes the entire understanding between the platform and the user, and supersedes any previous agreements or understandings."
+      },
+      "noWaiver": {
+        "title": "3.",
+        "content": "Any failure by Shaheen to enforce any provision does not constitute a waiver of its rights."
+      }
+    },
+    "userAcknowledgement": {
+      "title": "🔒 User Acknowledgement:",
+      "content": "By using or registering on the Shaheen platform, you acknowledge that you have read and understood this policy and agree to comply with all its provisions without restriction or condition."
+    }
   }
 }
