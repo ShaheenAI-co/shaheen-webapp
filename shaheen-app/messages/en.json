@@ -641,5 +641,38 @@
   "ImageB_A": {
     "title": "Turn a Single Photo of Your Product into a Ready to Post Social Media Post",
     "before": "before"
+  },
+  "FeaturesBento": {
+    "title": "what makes shaheen unique",
+    "subtitle": "Supercharge your brand with AI-powered content creation, social media integration, and multilingual support",
+    "aiAdvertisement": {
+      "title": "AI Advertisement Generation",
+      "description": "Upload your product image and let our AI craft high-converting marketing posts complete with headlines, descriptions, and visuals ready to share across all platforms.",
+      "subtitle": "Smart Content Creation"
+    },
+    "socialMedia": {
+      "title": "Social Media Integration",
+      "description": "Direct posting to Instagram, Twitter, and TikTok with optimized content for each platform"
+    },
+    "scheduling": {
+      "title": "Smart Scheduling",
+      "description": "Schedule posts in advance with calendar view and automated publishing"
+    },
+    "imageEditing": {
+      "title": "Advanced Image Editor",
+      "description": "Professional editing tools with text overlays, filters, and adjustments"
+    },
+    "retouching": {
+      "title": "AI Image Retouching",
+      "description": "Automatic image enhancement with before/after comparison and professional filters"
+    },
+    "multilingual": {
+      "title": "Arabic Language Support",
+      "description": "Full Arabic language interface with RTL support and localized content generation"
+    },
+    "videoAds": {
+      "title": "Video Ad Creation",
+      "description": "Transform images into scroll-stopping video ads with animations and text overlays"
+    }
   }
 }
